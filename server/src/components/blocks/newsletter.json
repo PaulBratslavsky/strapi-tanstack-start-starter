@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_blocks_newsletters",
+  "info": {
+    "displayName": "Newsletter"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "text": {
+      "type": "text"
+    },
+    "placeholder": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "formId": {
+      "type": "string"
+    }
+  }
+}
