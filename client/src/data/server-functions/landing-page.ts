@@ -1,12 +1,11 @@
-import type { TStrapiResponse, TLandingPage } from '@/types'
+import type { TLandingPage } from '@/types'
 import { createServerFn } from '@tanstack/react-start'
-import { api } from '../data-api'
-import { getStrapiURL } from '@/lib/utils'
+import { sdk } from "../strapi-sdk"
+
 
 export const getLandingPageData = createServerFn({
   method: 'GET',
-}).handler(async (): Promise<TStrapiResponse<TLandingPage>> => {
-  const baseUrl = getStrapiURL()
-  const url = new URL('/api/landing-page', baseUrl)
-  return await api.get<TLandingPage>(url.href)
+}).handler(async (): Promise<{ data: TLandingPage }> => {
+  const response = await sdk.single("landing-page").find()
+  return { data: response.data as TLandingPage };
 })

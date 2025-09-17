@@ -1,12 +1,13 @@
-import type { TStrapiResponse, TGlobal } from '@/types'
+import type { TStrapiResponseSingle, TGlobal } from '@/types'
 import { createServerFn } from '@tanstack/react-start'
-import { api } from '../data-api'
-import { getStrapiURL } from '@/lib/utils'
+import { sdk } from "../strapi-sdk"
+
+const getGlobal = async () => sdk.single("global").find() as Promise<TStrapiResponseSingle<TGlobal>>
 
 export const getGlobalData = createServerFn({
   method: 'GET',
-}).handler(async (): Promise<TStrapiResponse<TGlobal>> => {
-  const baseUrl = getStrapiURL()
-  const url = new URL('/api/global', baseUrl)
-  return await api.get<TGlobal>(url.href)
+}).handler(async (): Promise<TStrapiResponseSingle<TGlobal>> => {
+  const response = await getGlobal()
+  console.log(response)
+  return response;
 })

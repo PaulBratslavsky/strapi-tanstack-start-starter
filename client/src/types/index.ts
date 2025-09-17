@@ -73,8 +73,31 @@ export type TMetaData = {
   publishedAt: string
 }
 
+export type TStrapiResponseSingle<T> = {
+  data: T
+  meta?: {
+    pagination?: {
+      page: number
+      pageSize: number
+      pageCount: number
+      total: number
+    }
+  }
+}
+
+export type TStrapiResponseCollection<T> = {
+  data: T[]
+  meta?: {
+    pagination?: {
+      page: number
+      pageSize: number
+      pageCount: number
+      total: number
+    }
+  }
+}
+
 export type TStrapiResponse<T = null> = {
-  success: boolean
   data?: T
   error?: {
     status: number
@@ -83,12 +106,11 @@ export type TStrapiResponse<T = null> = {
     details?: Record<string, string[]>
   }
   meta?: {
-    pagination: {
+    pagination?: {
       page: number
       pageSize: number
       pageCount: number
       total: number
     }
   }
-  status: number
 }
