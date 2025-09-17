@@ -1,16 +1,24 @@
-import qs from 'qs'
-import type { TStrapiResponse } from '@/types'
+import type { TStrapiResponseCollection } from '@/types'
 import type { IArticleDetail } from '@/components/custom/article-detail'
 import { createServerFn } from '@tanstack/react-start'
-import { api } from '../data-api'
-import { getStrapiURL } from '@/lib/utils'
+import { sdk } from '@/data/strapi-sdk'
+
+const articles = sdk.collection('articles')
+const getArticles = async () => articles.find() as Promise<TStrapiResponseCollection<IArticleDetail>>
+const getArticlesBySlug = async (slug: string) => articles.find({
+  filters: {
+    slug: {
+      $eq: slug,
+    },
+  },
+}) as Promise<TStrapiResponseCollection<IArticleDetail>>
 
 export const getArticlesData = createServerFn({
   method: 'GET',
-}).handler(async (): Promise<TStrapiResponse<IArticleDetail[]>> => {
-  const baseUrl = getStrapiURL()
-  const url = new URL('/api/articles', baseUrl)
-  return await api.get<IArticleDetail[]>(url.href)
+}).handler(async (): Promise<TStrapiResponseCollection<IArticleDetail>> => {
+  const response = await getArticles()
+  console.log(response)
+  return response
 })
 
 export const getArticlesDataBySlug = createServerFn({
@@ -18,18 +26,8 @@ export const getArticlesDataBySlug = createServerFn({
 })
   .validator((slug: string) => slug)
   .handler(
-    async ({ data: slug }): Promise<TStrapiResponse<IArticleDetail[]>> => {
-      const baseUrl = getStrapiURL()
-      const url = new URL('/api/articles', baseUrl)
-
-      url.search = qs.stringify({
-        filters: {
-          slug: {
-            $eq: slug,
-          },
-        },
-      })
-
-      return await api.get<IArticleDetail[]>(url.href)
+    async ({ data: slug }): Promise<TStrapiResponseCollection<IArticleDetail>> => {
+      const response = await getArticlesBySlug(slug)
+      return response
     },
   )
