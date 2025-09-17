@@ -1,6 +1,6 @@
 import type { TStrapiResponseSingle, TGlobal } from '@/types'
 import { createServerFn } from '@tanstack/react-start'
-import { sdk } from "../strapi-sdk"
+import { sdk } from "@/data/strapi-sdk"
 
 const getGlobal = async () => sdk.single("global").find() as Promise<TStrapiResponseSingle<TGlobal>>
 
