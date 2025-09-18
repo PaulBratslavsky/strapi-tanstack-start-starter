@@ -1,10 +1,10 @@
-import type { IArticleDetail } from '../custom/article-detail'
 import { Link } from '@tanstack/react-router'
+import type { IArticleDetail } from '../custom/article-detail'
 
 export interface IFeaturedArticles {
   __component: 'blocks.featured-articles'
   id: number
-  articles: IArticleDetail[]
+  articles: Array<IArticleDetail>
 }
 
 const styles = {

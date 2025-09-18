@@ -1,16 +1,16 @@
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
-import type { TImage, TLink } from '../../types'
+import { Link } from '@tanstack/react-router'
 import { StrapiImage } from '../custom/strapi-image'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
-import { Link } from '@tanstack/react-router'
+import type { TImage, TLink } from '../../types'
 
 export interface IHero {
   __component: 'blocks.hero'
   id: number
   heading: string
   text: string
-  links: TLink[]
+  links: Array<TLink>
   image: TImage
   badge?: string
 }

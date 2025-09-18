@@ -1,10 +1,10 @@
-import type { TCard } from "../../types";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import type { TCard } from "../../types";
 
 export interface ICardGrid {
   __component: "blocks.card-grid";
   id: number;
-  cards: TCard[];
+  cards: Array<TCard>;
 }
 
 const styles = {

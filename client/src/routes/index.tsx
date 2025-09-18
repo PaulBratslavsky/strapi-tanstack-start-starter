@@ -5,13 +5,12 @@ import { BlockRenderer } from '@/components/blocks/block-renderer'
 export const Route = createFileRoute('/')({
   loader: async () => {
     const landingPageData = await strapiApi.landingPage.getLandingPageData()
-    return { blocks: landingPageData.data?.blocks }
+    return { blocks: landingPageData.data.blocks }
   },
   component: App,
 })
 
 function App() {
   const { blocks } = Route.useLoaderData()
-  if (!blocks) return null
   return <BlockRenderer blocks={blocks} />
 }

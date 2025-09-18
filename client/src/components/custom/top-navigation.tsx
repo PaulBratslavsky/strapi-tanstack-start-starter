@@ -1,6 +1,8 @@
 import { Menu } from 'lucide-react'
-import type { THeader, TLink } from '../../types'
 import { Link } from '@tanstack/react-router'
+import { ThemeToggle } from './theme-toggle'
+import { StrapiImage } from './strapi-image'
+import type { THeader, TLink } from '../../types'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -17,10 +19,6 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 
-import { ThemeToggle } from './theme-toggle'
-
-import { StrapiImage } from './strapi-image'
-
 interface ITopNavigationProps {
   header?: THeader
 }
@@ -28,7 +26,7 @@ interface ITopNavigationProps {
 export function TopNavigation({ header }: Readonly<ITopNavigationProps>) {
   if (!header) return null
   const { logo, navItems, cta } = header
-  const imageUrl = logo?.image?.url
+  const imageUrl = logo.image.url
   return (
     <section className="container mx-auto py-4">
       {/* Desktop Menu */}

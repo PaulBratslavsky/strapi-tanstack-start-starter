@@ -1,7 +1,7 @@
-import type { TImage } from '../../types'
 import { getStrapiMedia } from '../../lib/utils'
 import { Card, CardContent } from '../ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import type { TImage } from '../../types'
 
 export interface IPersonCard {
   __component: 'blocks.person-card'

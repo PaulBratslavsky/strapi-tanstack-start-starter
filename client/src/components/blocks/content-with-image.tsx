@@ -1,9 +1,9 @@
-import type { TLink, TImage } from '../../types'
 import { Link } from '@tanstack/react-router'
 import { StrapiImage } from '../custom/strapi-image'
 import { Button } from '../ui/button'
 import { MarkdownContent } from '../custom/markdown-content'
 import { cn } from '../../lib/utils'
+import type { TImage, TLink } from '../../types'
 
 export interface IContentWithImage {
   __component: 'blocks.content-with-image'
@@ -52,7 +52,7 @@ export function ContentWithImage(props: Readonly<IContentWithImage>) {
   const { reversed, heading, content, link, image } = props
   const isExternal = Boolean(link?.isExternal)
   const buttonVariant = link?.type === 'PRIMARY' ? 'default' : 'outline'
-  const alt = image?.alternativeText || heading || 'Content image'
+  const alt = image.alternativeText || heading || 'Content image'
 
   return (
     <section
@@ -66,7 +66,7 @@ export function ContentWithImage(props: Readonly<IContentWithImage>) {
 
             <MarkdownContent content={content} styles={markdownStyles} />
 
-            {link?.href && link?.label && (
+            {link?.href && link.label && (
               <Button variant={buttonVariant} size="lg" asChild>
                 <Link
                   to={link.href}
@@ -79,7 +79,7 @@ export function ContentWithImage(props: Readonly<IContentWithImage>) {
             )}
           </div>
 
-          <StrapiImage src={image?.url} alt={alt} className={styles.image} />
+          <StrapiImage src={image.url} alt={alt} className={styles.image} />
         </div>
       </div>
     </section>

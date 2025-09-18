@@ -1,10 +1,18 @@
-import { Hero, type IHero } from './hero'
-import { SectionHeading, type ISectionHeading } from './section-heading'
-import { CardGrid, type ICardGrid } from './card-grid'
-import { ContentWithImage, type IContentWithImage } from './content-with-image'
-import { MarkdownText, type IMarkdownText } from './markdown-text'
-import { PersonCard, type IPersonCard } from './person-card'
-import { FeaturedArticles, type IFeaturedArticles } from './featured-articles'
+import { Hero } from './hero'
+import { SectionHeading } from './section-heading'
+import { CardGrid } from './card-grid'
+import { ContentWithImage } from './content-with-image'
+import { MarkdownText } from './markdown-text'
+import { PersonCard } from './person-card'
+import { FeaturedArticles } from './featured-articles'
+
+import type { IMarkdownText } from './markdown-text'
+import type { IPersonCard } from './person-card'
+import type { IContentWithImage } from './content-with-image'
+import type { ISectionHeading } from './section-heading'
+import type { ICardGrid } from './card-grid'
+import type { IHero } from './hero'
+import type { IFeaturedArticles } from './featured-articles'
 
 export type Block =
   | IHero
@@ -16,7 +24,7 @@ export type Block =
   | IFeaturedArticles
 
 interface BlockRendererProps {
-  blocks: Block[]
+  blocks: Array<Block>
 }
 
 export function BlockRenderer({ blocks }: Readonly<BlockRendererProps>) {
