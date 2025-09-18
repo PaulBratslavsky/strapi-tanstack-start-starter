@@ -78,6 +78,7 @@ public/uploads/*
 .tsbuildinfo
 .eslintcache
 .vscode
+notes/*
 
 ############################
 # Node.js

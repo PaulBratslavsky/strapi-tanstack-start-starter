@@ -1,13 +1,23 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { strapiApi } from '../../data/server-functions'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { z } from 'zod'
+import { strapiApi } from '@/data/server-functions'
 
-import { Card, CardContent, CardHeader } from '../../components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
 import { StrapiImage } from '@/components/custom/strapi-image'
+import { Search } from '@/components/custom/search'
+
+const articlesSearchSchema = z.object({
+  query: z.string().optional(),
+  page: z.number().catch(1),
+})
 
 export const Route = createFileRoute('/articles/')({
-  loader: async () => {
-    const articlesData = await strapiApi.articles.getArticlesData()
+  validateSearch: articlesSearchSchema,
+  loaderDeps: ({ search }) => ({ search }),
+  loader: async ({ deps }) => {
+    const { query } = deps.search
+    const articlesData = await strapiApi.articles.getArticlesData({ data: query })
     return { articlesData }
   },
   component: Articles,
@@ -19,6 +29,7 @@ const styles = {
   header: 'text-center mb-12',
   title: 'text-4xl font-bold text-foreground mb-4',
   subtitle: 'text-xl text-muted-foreground max-w-2xl mx-auto',
+  search: 'container mx-auto py-4',
 
   emptyWrap: 'text-center py-12',
   emptyText: 'text-muted-foreground text-lg',
@@ -41,7 +52,7 @@ const styles = {
 
 function Articles() {
   const { articlesData } = Route.useLoaderData()
-  const articles = articlesData?.data || []
+  const articles = articlesData.data
 
   return (
     <div className={styles.root}>
@@ -51,6 +62,9 @@ function Articles() {
           <p className={styles.subtitle}>
             Discover insights, tutorials, and stories from our team
           </p>
+          <div className={styles.search}>
+            <Search />
+          </div>
         </div>
 
         {articles.length === 0 ? (

@@ -6,14 +6,13 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanstackDevtools } from '@tanstack/react-devtools'
 
-import { ThemeProvider } from '@/components/custom/theme-provider'
-
 import globalCss from '../global.css?url'
 import customCss from '../custom.css?url'
 
 import { TopNavigation } from '../components/custom/top-navigation'
 import { strapiApi } from '../data/server-functions'
 import { NotFound } from '../components/custom/not-found'
+import { ThemeProvider } from '@/components/custom/theme-provider'
 
 export const Route = createRootRouteWithContext<{
   strapiApi: typeof strapiApi
@@ -21,7 +20,7 @@ export const Route = createRootRouteWithContext<{
   loader: async () => {
     const globalData = await strapiApi.global.getGlobalData()
     return {
-      header: globalData?.data?.header,
+      header: globalData.data.header,
     }
   },
   notFoundComponent: () => {
@@ -51,7 +50,6 @@ export const Route = createRootRouteWithContext<{
       },
     ],
   }),
-
 
   shellComponent: RootDocument,
 })

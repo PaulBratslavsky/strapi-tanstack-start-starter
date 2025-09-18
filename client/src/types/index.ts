@@ -1,4 +1,4 @@
-import { Block } from "../components/blocks/block-renderer"
+import type { Block } from "../components/blocks/block-renderer"
 
 export type TLink = {
   id: number
@@ -39,7 +39,7 @@ export type TLogo = {
 export type THeader = {
   id: number
   logo: TLogo
-  navItems: TLink[]
+  navItems: Array<TLink>
   cta: TLink
 }
 
@@ -61,7 +61,7 @@ export type TLandingPage = {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  blocks: Block[];
+  blocks: Array<Block>;
 }
 
 export type TMetaData = {
@@ -86,7 +86,7 @@ export type TStrapiResponseSingle<T> = {
 }
 
 export type TStrapiResponseCollection<T> = {
-  data: T[]
+  data: Array<T>
   meta?: {
     pagination?: {
       page: number
@@ -103,7 +103,7 @@ export type TStrapiResponse<T = null> = {
     status: number
     name: string
     message: string
-    details?: Record<string, string[]>
+    details?: Record<string, Array<string>>
   }
   meta?: {
     pagination?: {
