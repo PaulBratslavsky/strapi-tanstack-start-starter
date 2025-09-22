@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
 import { StrapiImage } from '@/components/custom/strapi-image'
 import { Search } from '@/components/custom/search'
+import { PaginationComponent } from '@/components/custom/pagination-component'
 
 const articlesSearchSchema = z.object({
   query: z.string().optional(),
@@ -16,8 +17,13 @@ export const Route = createFileRoute('/articles/')({
   validateSearch: articlesSearchSchema,
   loaderDeps: ({ search }) => ({ search }),
   loader: async ({ deps }) => {
-    const { query } = deps.search
-    const articlesData = await strapiApi.articles.getArticlesData({ data: query })
+    const { query, page } = deps.search
+    const articlesData = await strapiApi.articles.getArticlesData({
+      data: {
+        query,
+        page,
+      },
+    })
     return { articlesData }
   },
   component: Articles,
@@ -53,6 +59,9 @@ const styles = {
 function Articles() {
   const { articlesData } = Route.useLoaderData()
   const articles = articlesData.data
+  const totalPages = articlesData.meta?.pagination?.pageCount || 1
+
+  console.dir(totalPages)
 
   return (
     <div className={styles.root}>
@@ -121,6 +130,7 @@ function Articles() {
           </div>
         )}
       </div>
+      <PaginationComponent pageCount={totalPages} />
     </div>
   )
 }

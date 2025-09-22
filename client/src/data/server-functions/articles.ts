@@ -3,15 +3,17 @@ import type { TStrapiResponseCollection } from '@/types'
 import type { IArticleDetail } from '@/components/custom/article-detail'
 import { sdk } from '@/data/strapi-sdk'
 
+const PAGE_SIZE = 3;
+
 const articles = sdk.collection('articles')
-const getArticles = async (queryString ?: string) =>
+
+const getArticles = async (queryString?: string, page?: number) =>
   articles.find({
     sort: ['createdAt:desc'],
-    filters: {
-      $or: [
-        { title: { $containsi: queryString } },
-        { content: { $containsi: queryString } },
-      ],
+    pagination: {
+      page: page || 1,
+      pageSize: PAGE_SIZE
+      ,
     },
     ...(queryString && {
       filters: {
@@ -22,7 +24,8 @@ const getArticles = async (queryString ?: string) =>
       },
     }),
   }) as Promise<TStrapiResponseCollection<IArticleDetail>>
-const getArticlesBySlug = async (slug: string) =>
+
+  const getArticlesBySlug = async (slug: string) =>
   articles.find({
     filters: {
       slug: {
@@ -34,9 +37,9 @@ const getArticlesBySlug = async (slug: string) =>
 export const getArticlesData = createServerFn({
   method: 'GET',
 })
-  .validator((queryString?: string) => queryString)
-  .handler(async ({ data: queryString }): Promise<TStrapiResponseCollection<IArticleDetail>> => {
-    const response = await getArticles(queryString)
+  .validator((input?: { query?: string; page?: number }) => input)
+  .handler(async ({ data }): Promise<TStrapiResponseCollection<IArticleDetail>> => {
+    const response = await getArticles(data?.query, data?.page)
     console.log(response)
     return response
   })
