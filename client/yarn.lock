@@ -1014,16 +1014,9 @@
     "@radix-ui/react-use-callback-ref" "1.1.1"
     "@radix-ui/react-use-controllable-state" "1.2.2"
 
-"@radix-ui/react-slot@1.2.3":
+"@radix-ui/react-slot@1.2.3", "@radix-ui/react-slot@^1.2.3":
   version "1.2.3"
   resolved "https://registry.npmjs.org/@radix-ui/react-slot/-/react-slot-1.2.3.tgz"
-  integrity sha512-aeNmHnBxbi2St0au6VBVC7JXFlhLlOnvIIlePNniyUNAClzmtAUEY8/pBiK3iHjufOlwA+c20/8jngo7xcrg8A==
-  dependencies:
-    "@radix-ui/react-compose-refs" "1.1.2"
-
-"@radix-ui/react-slot@^1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@radix-ui/react-slot/-/react-slot-1.2.3.tgz#502d6e354fc847d4169c3bc5f189de777f68cfe1"
   integrity sha512-aeNmHnBxbi2St0au6VBVC7JXFlhLlOnvIIlePNniyUNAClzmtAUEY8/pBiK3iHjufOlwA+c20/8jngo7xcrg8A==
   dependencies:
     "@radix-ui/react-compose-refs" "1.1.2"
@@ -1459,6 +1452,11 @@
   dependencies:
     ws "^8.18.3"
 
+"@tanstack/devtools-event-client@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.npmjs.org/@tanstack/devtools-event-client/-/devtools-event-client-0.2.5.tgz"
+  integrity sha512-iVdqw879KETXyyPHc3gQR5Ld0GjlPLk7bKenBUhzr3+z1FiQZvsbfgYfRRokTSPcgwANAV7aA2Uv05nx5xWT8A==
+
 "@tanstack/devtools-ui@0.2.2":
   version "0.2.2"
   resolved "https://registry.npmjs.org/@tanstack/devtools-ui/-/devtools-ui-0.2.2.tgz"
@@ -1505,6 +1503,15 @@
     typescript-eslint "^8.40.0"
     vue-eslint-parser "^10.2.0"
 
+"@tanstack/form-core@1.23.0":
+  version "1.23.0"
+  resolved "https://registry.npmjs.org/@tanstack/form-core/-/form-core-1.23.0.tgz"
+  integrity sha512-aBJnO5iA1TtMK/SSpAvd/y6cVsBgbu5Br2FftvW6r7TkHCcZ/lB2DMx3G2dk6SG7sW0g8s6F7iaMjrvqBGooDw==
+  dependencies:
+    "@tanstack/devtools-event-client" "^0.2.5"
+    "@tanstack/store" "^0.7.5"
+    uuid "^13.0.0"
+
 "@tanstack/history@1.131.2":
   version "1.131.2"
   resolved "https://registry.npmjs.org/@tanstack/history/-/history-1.131.2.tgz"
@@ -1521,6 +1528,16 @@
   integrity sha512-Ig8ZYqUPJ+nwRvF/RpkQHPbgEkrL3b2PjeYBgXgT5OemyRUlmG12UutvMBV+bJuBsSOKHrNf29IvzC0Vw9Bt1A==
   dependencies:
     "@tanstack/devtools" "0.3.0"
+
+"@tanstack/react-form@^1.23.0":
+  version "1.23.0"
+  resolved "https://registry.npmjs.org/@tanstack/react-form/-/react-form-1.23.0.tgz"
+  integrity sha512-wZ/cBjqj5dgWG79TQOsilbs8WzdouJj3iXw1DAZvQ4nejobsTGl0huU7SZZ0mnFtdNHbre1bFSdWyw+GqFcIhQ==
+  dependencies:
+    "@tanstack/form-core" "1.23.0"
+    "@tanstack/react-store" "^0.7.5"
+    decode-formdata "^0.9.0"
+    devalue "^5.3.2"
 
 "@tanstack/react-query@^5.87.1":
   version "5.87.1"
@@ -1600,12 +1617,12 @@
     "@tanstack/start-server-functions-client" "1.131.35"
     "@tanstack/start-server-functions-server" "1.131.2"
 
-"@tanstack/react-store@^0.7.0":
-  version "0.7.4"
-  resolved "https://registry.npmjs.org/@tanstack/react-store/-/react-store-0.7.4.tgz"
-  integrity sha512-DyG1e5Qz/c1cNLt/NdFbCA7K1QGuFXQYT6EfUltYMJoQ4LzBOGnOl5IjuxepNcRtmIKkGpmdMzdFZEkevgU9bQ==
+"@tanstack/react-store@^0.7.0", "@tanstack/react-store@^0.7.5":
+  version "0.7.7"
+  resolved "https://registry.npmjs.org/@tanstack/react-store/-/react-store-0.7.7.tgz"
+  integrity sha512-qqT0ufegFRDGSof9D/VqaZgjNgp4tRPHZIJq2+QIHkMUtHjaJ0lYrrXjeIUJvjnTbgPfSD1XgOMEt0lmANn6Zg==
   dependencies:
-    "@tanstack/store" "0.7.4"
+    "@tanstack/store" "0.7.7"
     use-sync-external-store "^1.5.0"
 
 "@tanstack/router-core@1.131.35":
@@ -1780,10 +1797,10 @@
   dependencies:
     "@tanstack/router-core" "1.131.35"
 
-"@tanstack/store@0.7.4", "@tanstack/store@^0.7.0":
-  version "0.7.4"
-  resolved "https://registry.npmjs.org/@tanstack/store/-/store-0.7.4.tgz"
-  integrity sha512-F1XqZQici1Aq6WigEfcxJSml92nW+85Om8ElBMokPNg5glCYVOmPkZGIQeieYFxcPiKTfwo0MTOQpUyJtwncrg==
+"@tanstack/store@0.7.7", "@tanstack/store@^0.7.0", "@tanstack/store@^0.7.5":
+  version "0.7.7"
+  resolved "https://registry.npmjs.org/@tanstack/store/-/store-0.7.7.tgz"
+  integrity sha512-xa6pTan1bcaqYDS9BDpSiS63qa6EoDkPN9RsRaxHuDdVDNntzq3xNwR5YKTU/V3SkSyC9T4YVOPh2zRQN0nhIQ==
 
 "@tanstack/virtual-file-routes@1.131.2":
   version "1.131.2"
@@ -2835,6 +2852,11 @@ decimal.js@^10.5.0:
   resolved "https://registry.npmjs.org/decimal.js/-/decimal.js-10.6.0.tgz"
   integrity sha512-YpgQiITW3JXGntzdUmyUR1V812Hn8T1YVXhCu+wO3OpS4eU9l4YdD3qjyiKdV6mvV29zapkMeD390UVEf2lkUg==
 
+decode-formdata@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.npmjs.org/decode-formdata/-/decode-formdata-0.9.0.tgz"
+  integrity sha512-q5uwOjR3Um5YD+ZWPOF/1sGHVW9A5rCrRwITQChRXlmPkxDFBqCm4jNTIVdGHNH9OnR+V9MoZVgRhsFb+ARbUw==
+
 decode-named-character-reference@^1.0.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/decode-named-character-reference/-/decode-named-character-reference-1.2.0.tgz"
@@ -2896,6 +2918,11 @@ detect-node-es@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/detect-node-es/-/detect-node-es-1.1.0.tgz"
   integrity sha512-ypdmJU/TbBby2Dxibuv7ZLW3Bs1QEmM7nHjEANfohJLvE0XVujisn1qPJcZxg+qDucsr+bP6fLD1rPS3AhJ7EQ==
+
+devalue@^5.3.2:
+  version "5.3.2"
+  resolved "https://registry.npmjs.org/devalue/-/devalue-5.3.2.tgz"
+  integrity sha512-UDsjUbpQn9kvm68slnrs+mfxwFkIflOhkanmyabZ8zOYk8SMEIbJ3TK+88g70hSIeytu4y18f0z/hYHMTrXIWw==
 
 devlop@^1.0.0, devlop@^1.1.0:
   version "1.1.0"
@@ -6162,6 +6189,11 @@ util-deprecate@~1.0.1:
   resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
+uuid@^13.0.0:
+  version "13.0.0"
+  resolved "https://registry.npmjs.org/uuid/-/uuid-13.0.0.tgz"
+  integrity sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==
+
 vfile-message@^4.0.0:
   version "4.0.3"
   resolved "https://registry.npmjs.org/vfile-message/-/vfile-message-4.0.3.tgz"
@@ -6445,6 +6477,11 @@ zod@^3.24.2:
   version "3.25.76"
   resolved "https://registry.npmjs.org/zod/-/zod-3.25.76.tgz"
   integrity sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==
+
+zod@^4.1.11:
+  version "4.1.11"
+  resolved "https://registry.npmjs.org/zod/-/zod-4.1.11.tgz"
+  integrity sha512-WPsqwxITS2tzx1bzhIKsEs19ABD5vmCVa4xBo2tq/SrV4RNZtfws1EnCWQXM6yh8bD08a1idvkB5MZSBiZsjwg==
 
 zwitch@^2.0.0:
   version "2.0.4"
