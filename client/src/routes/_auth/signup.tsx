@@ -1,37 +1,50 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { useForm } from '@tanstack/react-form'
-import type { SignupFormValues } from '@/lib/validations/auth'
+import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
+import { useState } from 'react'
+import { strapiApi } from '@/data/server-functions'
+import type { FormState } from '@/lib/validations/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import { SignupFormSchema } from '@/lib/validations/auth'
-
-type FormData = SignupFormValues
 
 function SignUp() {
-  const form = useForm({
-    defaultValues: {
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-    } as FormData,
-    validators: {
-      onChange: SignupFormSchema,
-    },
-    onSubmit: async ({ value }) => {
-      try {
-        // TODO: Implement actual registration logic
-        console.log('Sign up:', value)
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-      } catch (error) {
-        console.error('Sign up error:', error)
-      }
-    },
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [formState, setFormState] = useState<FormState>({
+    success: false,
+    message: '',
+    data: {},
+    strapiErrors: null,
+    zodErrors: null,
   })
 
-  const { Field, handleSubmit, state } = form
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    setLoading(true)
+    const formData = new FormData(e.currentTarget)
+
+    try {
+      const result = await strapiApi.auth.registerUserServerFunction({ data: formData })
+      setFormState(result)
+
+      if (result.success) {
+        router.invalidate()
+        router.navigate({ to: '/' })
+      }
+    } catch (error) {
+      console.error('Sign up error:', error)
+      setFormState({
+        success: false,
+        message: 'An unexpected error occurred',
+        data: {},
+        strapiErrors: null,
+        zodErrors: null,
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -41,148 +54,110 @@ function SignUp() {
         </h2>
       </div>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          handleSubmit()
-        }}
-        className="space-y-4"
-      >
-        <Field name="username">
-          {(field) => (
-            <div className="space-y-2">
-              <label
-                htmlFor="username"
-                className="text-sm font-medium text-card-foreground"
-              >
-                Username
-              </label>
-              <Input
-                id="username"
-                type="text"
-                placeholder="username"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                onBlur={field.handleBlur}
-                disabled={state.isSubmitting}
-                className={cn(
-                  field.state.meta.errors.length > 0 && 'border-destructive',
-                )}
-              />
-              {field.state.meta.errors.length > 0 && (
-                <p className="text-xs text-destructive">
-                  {typeof field.state.meta.errors[0] === 'string'
-                    ? field.state.meta.errors[0]
-                    : field.state.meta.errors[0]?.message || 'Validation error'}
-                </p>
-              )}
-            </div>
+      {(formState.message || formState.strapiErrors) && (
+        <div
+          className={cn(
+            'p-3 rounded-md text-sm',
+            formState.success
+              ? 'bg-green-50 text-green-800 border border-green-200'
+              : 'bg-destructive/10 text-destructive border border-destructive/20'
           )}
-        </Field>
-
-        <Field name="email">
-          {(field) => (
-            <div className="space-y-2">
-              <label
-                htmlFor="email"
-                className="text-sm font-medium text-card-foreground"
-              >
-                Email
-              </label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="john.doe@example.com"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                onBlur={field.handleBlur}
-                disabled={state.isSubmitting}
-                className={cn(
-                  field.state.meta.errors.length > 0 && 'border-destructive',
-                )}
-              />
-              {field.state.meta.errors.length > 0 && (
-                <p className="text-xs text-destructive">
-                  {typeof field.state.meta.errors[0] === 'string'
-                    ? field.state.meta.errors[0]
-                    : field.state.meta.errors[0]?.message || 'Validation error'}
-                </p>
-              )}
-            </div>
-          )}
-        </Field>
-
-        <Field name="password">
-          {(field) => (
-            <div className="space-y-2">
-              <label
-                htmlFor="password"
-                className="text-sm font-medium text-card-foreground"
-              >
-                Password
-              </label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Create a password"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                onBlur={field.handleBlur}
-                disabled={state.isSubmitting}
-                className={cn(
-                  field.state.meta.errors.length > 0 && 'border-destructive',
-                )}
-              />
-              {field.state.meta.errors.length > 0 && (
-                <p className="text-xs text-destructive">
-                  {typeof field.state.meta.errors[0] === 'string'
-                    ? field.state.meta.errors[0]
-                    : field.state.meta.errors[0]?.message || 'Validation error'}
-                </p>
-              )}
-            </div>
-          )}
-        </Field>
-
-        <Field name="confirmPassword">
-          {(field) => (
-            <div className="space-y-2">
-              <label
-                htmlFor="confirmPassword"
-                className="text-sm font-medium text-card-foreground"
-              >
-                Confirm Password
-              </label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                placeholder="Confirm your password"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                onBlur={field.handleBlur}
-                disabled={state.isSubmitting}
-                className={cn(
-                  field.state.meta.errors.length > 0 && 'border-destructive',
-                )}
-              />
-              {field.state.meta.errors.length > 0 && (
-                <p className="text-xs text-destructive">
-                  {typeof field.state.meta.errors[0] === 'string'
-                    ? field.state.meta.errors[0]
-                    : field.state.meta.errors[0]?.message || 'Validation error'}
-                </p>
-              )}
-            </div>
-          )}
-        </Field>
-
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={state.isSubmitting || !state.canSubmit}
         >
-          {state.isSubmitting ? 'Creating account...' : 'Create Account'}
+          {formState.strapiErrors?.message || formState.message}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <label
+            htmlFor="username"
+            className="text-sm font-medium text-card-foreground"
+          >
+            Username
+          </label>
+          <Input
+            id="username"
+            name="username"
+            type="text"
+            placeholder="username"
+            defaultValue={formState.data?.username || ''}
+            disabled={loading}
+            className={cn(
+              formState.zodErrors?.username && 'border-destructive'
+            )}
+          />
+          {formState.zodErrors?.username && (
+            <p className="text-xs text-destructive">
+              {formState.zodErrors.username[0]}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <label
+            htmlFor="email"
+            className="text-sm font-medium text-card-foreground"
+          >
+            Email
+          </label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="john.doe@example.com"
+            defaultValue={formState.data?.email || ''}
+            disabled={loading}
+            className={cn(formState.zodErrors?.email && 'border-destructive')}
+          />
+          {formState.zodErrors?.email && (
+            <p className="text-xs text-destructive">
+              {formState.zodErrors.email[0]}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <label
+            htmlFor="password"
+            className="text-sm font-medium text-card-foreground"
+          >
+            Password
+          </label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Create a password"
+            disabled={loading}
+            className={cn(
+              formState.zodErrors?.password && 'border-destructive'
+            )}
+          />
+          {formState.zodErrors?.password && (
+            <p className="text-xs text-destructive">
+              {formState.zodErrors.password[0]}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <label
+            htmlFor="confirmPassword"
+            className="text-sm font-medium text-card-foreground"
+          >
+            Confirm Password
+          </label>
+          <Input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            placeholder="Confirm your password"
+            disabled={loading}
+          />
+        </div>
+
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? 'Creating account...' : 'Create Account'}
         </Button>
       </form>
 

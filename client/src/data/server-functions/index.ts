@@ -1,6 +1,12 @@
 import { getGlobalData } from './global'
 import { getLandingPageData } from './landing-page'
 import { getArticlesData, getArticlesDataBySlug } from './articles'
+import {
+  registerUserServerFunction,
+  loginUserServerFunction,
+  logoutUserServerFunction,
+  getCurrentUserServerFunction
+} from './auth'
 
 export const strapiApi = {
   global: {
@@ -13,4 +19,10 @@ export const strapiApi = {
     getArticlesData,
     getArticlesDataBySlug,
   },
+  auth: {
+    registerUserServerFunction,
+    loginUserServerFunction,
+    logoutUserServerFunction,
+    getCurrentUserServerFunction,
+  }
 }

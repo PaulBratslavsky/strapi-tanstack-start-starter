@@ -73,6 +73,19 @@ export type TMetaData = {
   publishedAt: string
 }
 
+export type TAuthUser = {
+  id: number;
+  documentId: string;
+  username: string;
+  email: string;
+  provider: string;
+  confirmed: boolean;
+  blocked: boolean;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+};
+
 export type TStrapiResponseSingle<T> = {
   data: T
   meta?: {

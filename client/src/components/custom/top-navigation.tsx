@@ -2,6 +2,7 @@ import { Menu } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { ThemeToggle } from './theme-toggle'
 import { StrapiImage } from './strapi-image'
+import { LoggedInUser } from './logged-in-user'
 import type { THeader, TLink } from '../../types'
 
 import { Button } from '@/components/ui/button'
@@ -21,9 +22,14 @@ import {
 
 interface ITopNavigationProps {
   header?: THeader
+  currentUser?: {
+    userId: number
+    email?: string
+    username?: string
+  } | null
 }
 
-export function TopNavigation({ header }: Readonly<ITopNavigationProps>) {
+export function TopNavigation({ header, currentUser }: Readonly<ITopNavigationProps>) {
   if (!header) return null
   const { logo, navItems, cta } = header
   const imageUrl = logo.image.url
@@ -57,20 +63,24 @@ export function TopNavigation({ header }: Readonly<ITopNavigationProps>) {
             </NavigationMenuList>
           </NavigationMenu>
         </div>
-        <div className="flex gap-2">
-          <Button
-            asChild
-            variant={cta.type === 'PRIMARY' ? 'default' : 'outline'}
-            size="default"
-          >
-            <Link
-              to={cta.href}
-              target={cta.isExternal ? '_blank' : undefined}
-              rel={cta.isExternal ? 'noopener noreferrer' : undefined}
+        <div className="flex gap-2 items-center">
+          {currentUser ? (
+            <LoggedInUser userData={{ username: currentUser.username || '', email: currentUser.email || '' }} />
+          ) : (
+            <Button
+              asChild
+              variant={cta.type === 'PRIMARY' ? 'default' : 'outline'}
+              size="default"
             >
-              {cta.label}
-            </Link>
-          </Button>
+              <Link
+                to={cta.href}
+                target={cta.isExternal ? '_blank' : undefined}
+                rel={cta.isExternal ? 'noopener noreferrer' : undefined}
+              >
+                {cta.label}
+              </Link>
+            </Button>
+          )}
           <ThemeToggle />
         </div>
       </nav>
@@ -122,18 +132,22 @@ export function TopNavigation({ header }: Readonly<ITopNavigationProps>) {
                   </div>
 
                   <div className="flex flex-col gap-3">
-                    <Button
-                      asChild
-                      variant={cta.type === 'PRIMARY' ? 'default' : 'outline'}
-                    >
-                      <Link
-                        to={cta.href}
-                        target={cta.isExternal ? '_blank' : undefined}
-                        rel={cta.isExternal ? 'noopener noreferrer' : undefined}
+                    {currentUser ? (
+                      <LoggedInUser userData={{ username: currentUser.username || '', email: currentUser.email || '' }} />
+                    ) : (
+                      <Button
+                        asChild
+                        variant={cta.type === 'PRIMARY' ? 'default' : 'outline'}
                       >
-                        {cta.label}
-                      </Link>
-                    </Button>
+                        <Link
+                          to={cta.href}
+                          target={cta.isExternal ? '_blank' : undefined}
+                          rel={cta.isExternal ? 'noopener noreferrer' : undefined}
+                        >
+                          {cta.label}
+                        </Link>
+                      </Button>
+                    )}
                   </div>
                 </div>
               </SheetContent>

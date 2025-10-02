@@ -19,8 +19,10 @@ export const Route = createRootRouteWithContext<{
 }>()({
   loader: async () => {
     const globalData = await strapiApi.global.getGlobalData()
+    const currentUser = await strapiApi.auth.getCurrentUserServerFunction()
     return {
       header: globalData.data.header,
+      currentUser,
     }
   },
   notFoundComponent: () => {
@@ -55,7 +57,7 @@ export const Route = createRootRouteWithContext<{
 })
 
 function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
-  const { header } = Route.useLoaderData()
+  const { header, currentUser } = Route.useLoaderData()
 
   return (
     <html lang="en">
@@ -64,7 +66,7 @@ function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
       </head>
       <body>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-          <TopNavigation header={header} />
+          <TopNavigation header={header} currentUser={currentUser} />
           <main>{children}</main>
           <TanstackDevtools
             config={{
