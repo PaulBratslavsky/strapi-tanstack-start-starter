@@ -1,5 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { getAuthToken, getCurrentUser, requireAuth } from '@/lib/auth-helpers'
+import { getStrapiURL } from '@/lib/utils'
 
 // Example 1: Using getAuthToken to make authenticated API calls
 export const getUserProfile = createServerFn({
@@ -12,7 +13,10 @@ export const getUserProfile = createServerFn({
   }
 
   // Use the token to make authenticated requests to your API
-  const response = await fetch('http://localhost:1337/api/users/me', {
+  const baseUrl = getStrapiURL()
+  const url = new URL('/api/users/me', baseUrl)
+
+  const response = await fetch(url.href, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -41,13 +45,16 @@ export const getUserDashboard = createServerFn({
 
 // Example 3: Using requireAuth to enforce authentication
 export const deleteUserAccount = createServerFn({
-  method: 'DELETE',
+  method: 'POST',
 }).handler(async () => {
   // This will throw an error if user is not authenticated
   const session = await requireAuth()
 
   // Proceed with deletion using the authenticated user's token
-  const response = await fetch(`http://localhost:1337/api/users/${session.userId}`, {
+  const baseUrl = getStrapiURL()
+  const url = new URL(`/api/users/${session.userId}`, baseUrl)
+
+  const response = await fetch(url.href, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${session.jwt}`,
