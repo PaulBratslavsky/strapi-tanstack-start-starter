@@ -19,6 +19,7 @@ import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthSigninRouteImport } from './routes/_auth/signin'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo.start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo.start.api-request'
+import { Route as ConnectProviderRedirectRouteImport } from './routes/connect/$provider.redirect'
 import { ServerRoute as ApiDemoNamesServerRouteImport } from './routes/api.demo-names'
 
 const rootServerRouteImport = createServerRootRoute()
@@ -62,6 +63,11 @@ const DemoStartApiRequestRoute = DemoStartApiRequestRouteImport.update({
   path: '/demo/start/api-request',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConnectProviderRedirectRoute = ConnectProviderRedirectRouteImport.update({
+  id: '/connect/$provider/redirect',
+  path: '/connect/$provider/redirect',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiDemoNamesServerRoute = ApiDemoNamesServerRouteImport.update({
   id: '/api/demo-names',
   path: '/api/demo-names',
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof AuthSignupRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/articles': typeof ArticlesIndexRoute
+  '/connect/$provider/redirect': typeof ConnectProviderRedirectRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/signup': typeof AuthSignupRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/articles': typeof ArticlesIndexRoute
+  '/connect/$provider/redirect': typeof ConnectProviderRedirectRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/_auth/signup': typeof AuthSignupRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/articles/': typeof ArticlesIndexRoute
+  '/connect/$provider/redirect': typeof ConnectProviderRedirectRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/articles/$slug'
     | '/articles'
+    | '/connect/$provider/redirect'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
   fileRoutesByTo: FileRoutesByTo
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/articles/$slug'
     | '/articles'
+    | '/connect/$provider/redirect'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
   id:
@@ -124,6 +135,7 @@ export interface FileRouteTypes {
     | '/_auth/signup'
     | '/articles/$slug'
     | '/articles/'
+    | '/connect/$provider/redirect'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
   fileRoutesById: FileRoutesById
@@ -133,6 +145,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   ArticlesSlugRoute: typeof ArticlesSlugRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
+  ConnectProviderRedirectRoute: typeof ConnectProviderRedirectRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
   DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
 }
@@ -216,6 +229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoStartApiRequestRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/connect/$provider/redirect': {
+      id: '/connect/$provider/redirect'
+      path: '/connect/$provider/redirect'
+      fullPath: '/connect/$provider/redirect'
+      preLoaderRoute: typeof ConnectProviderRedirectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 declare module '@tanstack/react-start/server' {
@@ -247,6 +267,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   ArticlesSlugRoute: ArticlesSlugRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
+  ConnectProviderRedirectRoute: ConnectProviderRedirectRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
   DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
 }
