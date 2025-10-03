@@ -19,8 +19,8 @@ import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthSigninRouteImport } from './routes/_auth/signin'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo.start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo.start.api-request'
-import { Route as ConnectProviderRedirectRouteImport } from './routes/connect/$provider.redirect'
 import { ServerRoute as ApiDemoNamesServerRouteImport } from './routes/api.demo-names'
+import { ServerRoute as ApiConnectProviderRedirectServerRouteImport } from './routes/api.connect.$provider.redirect'
 
 const rootServerRouteImport = createServerRootRoute()
 
@@ -63,16 +63,17 @@ const DemoStartApiRequestRoute = DemoStartApiRequestRouteImport.update({
   path: '/demo/start/api-request',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ConnectProviderRedirectRoute = ConnectProviderRedirectRouteImport.update({
-  id: '/connect/$provider/redirect',
-  path: '/connect/$provider/redirect',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiDemoNamesServerRoute = ApiDemoNamesServerRouteImport.update({
   id: '/api/demo-names',
   path: '/api/demo-names',
   getParentRoute: () => rootServerRouteImport,
 } as any)
+const ApiConnectProviderRedirectServerRoute =
+  ApiConnectProviderRedirectServerRouteImport.update({
+    id: '/api/connect/$provider/redirect',
+    path: '/api/connect/$provider/redirect',
+    getParentRoute: () => rootServerRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -80,7 +81,6 @@ export interface FileRoutesByFullPath {
   '/signup': typeof AuthSignupRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/articles': typeof ArticlesIndexRoute
-  '/connect/$provider/redirect': typeof ConnectProviderRedirectRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
@@ -90,7 +90,6 @@ export interface FileRoutesByTo {
   '/signup': typeof AuthSignupRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/articles': typeof ArticlesIndexRoute
-  '/connect/$provider/redirect': typeof ConnectProviderRedirectRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
@@ -102,7 +101,6 @@ export interface FileRoutesById {
   '/_auth/signup': typeof AuthSignupRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/articles/': typeof ArticlesIndexRoute
-  '/connect/$provider/redirect': typeof ConnectProviderRedirectRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
@@ -114,7 +112,6 @@ export interface FileRouteTypes {
     | '/signup'
     | '/articles/$slug'
     | '/articles'
-    | '/connect/$provider/redirect'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
   fileRoutesByTo: FileRoutesByTo
@@ -124,7 +121,6 @@ export interface FileRouteTypes {
     | '/signup'
     | '/articles/$slug'
     | '/articles'
-    | '/connect/$provider/redirect'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
   id:
@@ -135,7 +131,6 @@ export interface FileRouteTypes {
     | '/_auth/signup'
     | '/articles/$slug'
     | '/articles/'
-    | '/connect/$provider/redirect'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
   fileRoutesById: FileRoutesById
@@ -145,30 +140,33 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   ArticlesSlugRoute: typeof ArticlesSlugRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
-  ConnectProviderRedirectRoute: typeof ConnectProviderRedirectRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
   DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
 }
 export interface FileServerRoutesByFullPath {
   '/api/demo-names': typeof ApiDemoNamesServerRoute
+  '/api/connect/$provider/redirect': typeof ApiConnectProviderRedirectServerRoute
 }
 export interface FileServerRoutesByTo {
   '/api/demo-names': typeof ApiDemoNamesServerRoute
+  '/api/connect/$provider/redirect': typeof ApiConnectProviderRedirectServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
   '/api/demo-names': typeof ApiDemoNamesServerRoute
+  '/api/connect/$provider/redirect': typeof ApiConnectProviderRedirectServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/demo-names'
+  fullPaths: '/api/demo-names' | '/api/connect/$provider/redirect'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/demo-names'
-  id: '__root__' | '/api/demo-names'
+  to: '/api/demo-names' | '/api/connect/$provider/redirect'
+  id: '__root__' | '/api/demo-names' | '/api/connect/$provider/redirect'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
   ApiDemoNamesServerRoute: typeof ApiDemoNamesServerRoute
+  ApiConnectProviderRedirectServerRoute: typeof ApiConnectProviderRedirectServerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -229,13 +227,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoStartApiRequestRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/connect/$provider/redirect': {
-      id: '/connect/$provider/redirect'
-      path: '/connect/$provider/redirect'
-      fullPath: '/connect/$provider/redirect'
-      preLoaderRoute: typeof ConnectProviderRedirectRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 declare module '@tanstack/react-start/server' {
@@ -245,6 +236,13 @@ declare module '@tanstack/react-start/server' {
       path: '/api/demo-names'
       fullPath: '/api/demo-names'
       preLoaderRoute: typeof ApiDemoNamesServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/connect/$provider/redirect': {
+      id: '/api/connect/$provider/redirect'
+      path: '/api/connect/$provider/redirect'
+      fullPath: '/api/connect/$provider/redirect'
+      preLoaderRoute: typeof ApiConnectProviderRedirectServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
   }
@@ -267,7 +265,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   ArticlesSlugRoute: ArticlesSlugRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
-  ConnectProviderRedirectRoute: ConnectProviderRedirectRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
   DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
 }
@@ -276,6 +273,7 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
   ApiDemoNamesServerRoute: ApiDemoNamesServerRoute,
+  ApiConnectProviderRedirectServerRoute: ApiConnectProviderRedirectServerRoute,
 }
 export const serverRouteTree = rootServerRouteImport
   ._addFileChildren(rootServerRouteChildren)

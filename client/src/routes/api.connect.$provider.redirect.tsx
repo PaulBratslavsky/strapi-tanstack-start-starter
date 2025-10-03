@@ -1,17 +1,12 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createServerFileRoute } from '@tanstack/react-start/server'
 import { getStrapiURL } from '@/lib/utils'
 import { useAppSession } from '@/lib/session'
 
-export const Route = createFileRoute('/connect/$provider/redirect')({
-  validateSearch: (search: Record<string, unknown>) => {
-    return {
-      access_token: (search.access_token as string) || '',
-    }
-  },
-  loaderDeps: ({ search }) => ({ access_token: search.access_token }),
-  loader: async ({ params, deps }) => {
+export const ServerRoute = createServerFileRoute('/api/connect/$provider/redirect').methods({
+  GET: async ({ request, params }) => {
     const { provider } = params
-    const token = deps.access_token
+    const url = new URL(request.url)
+    const token = url.searchParams.get('access_token')
 
     console.log('User attempting to sign in', {
       provider,
@@ -20,7 +15,10 @@ export const Route = createFileRoute('/connect/$provider/redirect')({
 
     if (!token) {
       console.warn('Sign in failed - no access token provided', { provider })
-      throw redirect({ to: '/' })
+      return new Response(null, {
+        status: 302,
+        headers: { Location: '/' },
+      })
     }
 
     const backendUrl = getStrapiURL()
@@ -44,7 +42,10 @@ export const Route = createFileRoute('/connect/$provider/redirect')({
           statusText: res.statusText,
           error: data,
         })
-        throw redirect({ to: '/' })
+        return new Response(null, {
+          status: 302,
+          headers: { Location: '/' },
+        })
       }
 
       if (!data.jwt) {
@@ -52,7 +53,10 @@ export const Route = createFileRoute('/connect/$provider/redirect')({
           provider,
           response: data,
         })
-        throw redirect({ to: '/' })
+        return new Response(null, {
+          status: 302,
+          headers: { Location: '/' },
+        })
       }
 
       // Set HTTP-only cookie session
@@ -70,19 +74,19 @@ export const Route = createFileRoute('/connect/$provider/redirect')({
       })
 
       // Redirect to home or saved redirect URL
-      throw redirect({ to: '/' })
+      return new Response(null, {
+        status: 302,
+        headers: { Location: '/' },
+      })
     } catch (error) {
-      if (error instanceof Error && 'href' in error) {
-        // This is a redirect, let it through
-        throw error
-      }
-
       console.error('Sign in process failed with exception', {
         provider,
         error: error instanceof Error ? error.message : String(error),
       })
-      throw redirect({ to: '/' })
+      return new Response(null, {
+        status: 302,
+        headers: { Location: '/' },
+      })
     }
   },
-  component: () => null,
 })
