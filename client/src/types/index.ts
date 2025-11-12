@@ -127,3 +127,30 @@ export type TStrapiResponse<T = null> = {
     }
   }
 }
+
+export type TComment = {
+  id: number
+  documentId: string
+  content: string
+  articleId: string
+  user?: {
+    id: number
+    documentId: string
+    username: string
+    email: string
+  }
+  createdAt: string
+  updatedAt: string
+}
+
+export type TCommentCreate = {
+  content: string
+  articleId: string
+}
+
+export type TCommentUpdate = {
+  content: string
+}
+
+export type TCommentResponse = TStrapiResponseCollection<TComment>
+export type TCommentSingleResponse = TStrapiResponseSingle<TComment>
