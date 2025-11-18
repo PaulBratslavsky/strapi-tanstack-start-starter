@@ -2,6 +2,8 @@
 
 A full-stack starter project combining [Strapi](https://strapi.io/) headless CMS with [TanStack Start](https://tanstack.com/start) for building modern web applications.
 
+![demo](./demo.gif)
+
 ## 🚀 Project Structure
 
 ```
