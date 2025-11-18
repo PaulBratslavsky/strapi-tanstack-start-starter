@@ -13,6 +13,7 @@ import { TopNavigation } from '../components/custom/top-navigation'
 import { strapiApi } from '../data/server-functions'
 import { NotFound } from '../components/custom/not-found'
 import { ThemeProvider } from '@/components/custom/theme-provider'
+import { ScrollToTop } from '@/components/custom/scroll-to-top'
 
 // Create a client
 const queryClient = new QueryClient({
@@ -73,7 +74,8 @@ function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
         <QueryClientProvider client={queryClient}>
           <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
             <TopNavigation header={header} currentUser={currentUser} />
-            <main className="flex-1 overflow-y-auto">{children}</main>
+            <main id="main-content" className="flex-1 overflow-y-auto">{children}</main>
+            <ScrollToTop />
             <TanstackDevtools
               config={{
                 position: 'bottom-left',
