@@ -58,7 +58,7 @@ function Home() {
           'radial-gradient(50% 50% at 20% 60%, #23272a 0%, #18181b 50%, #000000 100%)',
       }}
     >
-      <div className="w-full max-w-2xl p-8 rounded-xl backdrop-blur-md bg-black/50 shadow-xl border-8 border-black/10">
+      <div className="w-full max-w-2xl p-8 rounded-xl backdrop-blur-md bg-dark/50 shadow-xl border-8 border-black/10">
         <h1 className="text-2xl mb-4">Start Server Functions - Todo Example</h1>
         <ul className="mb-4 space-y-2">
           {todos?.map((t) => (

@@ -1,4 +1,25 @@
+import type { TAuthor, TImage } from "../../types";
 import { Link } from '@tanstack/react-router'
+import { MarkdownContent } from "./markdown-content";
+import { StrapiImage } from "./strapi-image";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
+
+import { getStrapiMedia } from "@/lib/utils";
+
+export interface IArticleDetail {
+  documentId: string;
+  createdAt: string;
+  updatedAt: string;
+  title?: string;
+  description?: string;
+  publishedAt?: string;
+  slug?: string;
+  author?: TAuthor;
+  featuredImage?: TImage;
+  content?: string;
+}
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,45 +27,29 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '../ui/breadcrumb'
-import { MarkdownContent } from './markdown-content'
-import { StrapiImage } from './strapi-image'
-import type { TAuthor, TImage } from '../../types'
-
-export interface IArticleDetail {
-  documentId: string
-  createdAt: string
-  updatedAt: string
-  title?: string
-  description?: string
-  publishedAt?: string
-  slug?: string
-  author?: TAuthor
-  featuredImage?: TImage
-  content?: string
-}
+} from "../ui/breadcrumb";
 
 const styles = {
-  root: 'min-h-screen bg-background',
-  headerWrapper: 'bg-card border-b',
-  headerContainer: 'container mx-auto px-4 py-8',
-  headerInner: 'max-w-4xl mx-auto',
-  breadcrumb: 'mb-8',
-  title: 'text-4xl lg:text-5xl font-bold text-foreground mb-6 leading-tight',
-  description: 'text-xl text-muted-foreground leading-relaxed mb-8',
-  featuredImageWrapper: 'mb-8',
-  featuredImage: 'rounded-lg',
+  root: "min-h-screen",
+  headerWrapper: "bg-card border-b border-border",
+  headerContainer: "container mx-auto px-4 py-8",
+  headerInner: "max-w-4xl mx-auto",
+  breadcrumb: "mb-8",
+  title: "text-4xl lg:text-5xl font-bold text-foreground mb-6 leading-tight",
+  description: "text-xl text-muted-foreground leading-relaxed mb-8",
+  featuredImageWrapper: "mb-8",
+  featuredImage: "rounded-lg",
 
-  bodyContainer: 'container mx-auto px-4 py-4',
-  bodyInner: 'max-w-4xl mx-auto',
-  contentCard: 'bg-card rounded-lg shadow-sm border p-8 lg:p-12',
+  bodyContainer: "container mx-auto px-4 py-4",
+  bodyInner: "max-w-4xl mx-auto",
+  contentCard: "rounded-lg p-8 lg:p-12 bg-card border border-border bg-white dark:bg-background",
 
-  authorWrapper: 'mt-6 flex items-start space-x-6 pt-6 border-t',
-  authorImageWrapper: 'w-16 h-16 flex-shrink-0',
-  authorImage: 'rounded-full',
-  authorName: 'text-xl font-semibold text-foreground mb-2',
-  authorBio: 'text-muted-foreground leading-relaxed',
-}
+  authorWrapper: "mt-6 flex items-start space-x-6 pt-6 border-t border-border",
+  authorImageWrapper: "w-16 h-16 flex-shrink-0",
+  authorImage: "rounded-full",
+  authorName: "text-xl font-semibold text-foreground mb-2",
+  authorBio: "text-muted-foreground leading-relaxed",
+};
 
 const markdownStyles = {
   richText: 'prose prose-lg max-w-none prose-slate dark:prose-invert',
@@ -69,14 +74,9 @@ const markdownStyles = {
   hr: 'border-border my-8',
 }
 
-export function ArticleDetail(props: Readonly<IArticleDetail>) {
-  const {
-    title,
-    description,
-    content,
-    featuredImage,
-    author,
-  } = props
+
+export function ArticleDetail(props: IArticleDetail) {
+  const { title, description, content, featuredImage, author } = props;
 
   return (
     <div className={styles.root}>
@@ -114,7 +114,7 @@ export function ArticleDetail(props: Readonly<IArticleDetail>) {
                 <StrapiImage
                   src={featuredImage.url}
                   alt={
-                    featuredImage.alternativeText || title || 'Article image'
+                    featuredImage.alternativeText || title || "Article image"
                   }
                   aspectRatio="16:9"
                   className={styles.featuredImage}
@@ -127,23 +127,24 @@ export function ArticleDetail(props: Readonly<IArticleDetail>) {
 
       <div className={styles.bodyContainer}>
         <div className={styles.bodyInner}>
-          <div className={styles.contentCard}>
-            <MarkdownContent content={content} styles={markdownStyles} />
+          <Card className={styles.contentCard}>
+            <MarkdownContent content={content} styles={markdownStyles}/>
 
             {author?.fullName && (
               <div className={styles.authorWrapper}>
-                {author.image?.url && (
-                  <div className={styles.authorImageWrapper}>
-                    <StrapiImage
-                      src={author.image.url}
-                      alt={author.image.alternativeText || author.fullName}
-                      aspectRatio="square"
-                      className={styles.authorImage}
-                      width={64}
-                      height={64}
-                    />
-                  </div>
-                )}
+                <Avatar className="w-16 h-16">
+                  <AvatarImage
+                    src={author.image?.url ? getStrapiMedia(author.image.url) : undefined}
+                    alt={author.image?.alternativeText || author.fullName}
+                  />
+                  <AvatarFallback>
+                    {author.fullName
+                      ?.split(" ")
+                      .map((name) => name[0])
+                      .join("")
+                      .slice(0, 2)}
+                  </AvatarFallback>
+                </Avatar>
                 <div>
                   <h3 className={styles.authorName}>About {author.fullName}</h3>
                   {author.bio && (
@@ -152,9 +153,9 @@ export function ArticleDetail(props: Readonly<IArticleDetail>) {
                 </div>
               </div>
             )}
-          </div>
+          </Card>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -9,7 +9,7 @@ export interface ISectionHeading {
 }
 
 const styles = {
-  section: "py-16",
+  section: "py-16 bg-white dark:bg-background",
   container: "container mx-auto px-4 text-center",
   badge: "mb-4 uppercase tracking-wide",
   heading: "text-3xl lg:text-5xl font-bold text-foreground max-w-4xl mx-auto"
@@ -21,7 +21,7 @@ export function SectionHeading(props: Readonly<ISectionHeading>) {
   return (
     <section id={anchorLink} className={styles.section}>
       <div className={styles.container}>
-        <Badge variant="secondary" className={styles.badge}>
+        <Badge variant="default" className={styles.badge}>
           {subHeading}
         </Badge>
         <h2 className={styles.heading}>

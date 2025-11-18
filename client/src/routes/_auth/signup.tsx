@@ -47,9 +47,9 @@ function SignUp() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="text-center">
-        <h2 className="text-2xl font-semibold text-card-foreground">
+        <h2 className="text-2xl font-semibold text-foreground">
           Create Account
         </h2>
       </div>
@@ -57,21 +57,21 @@ function SignUp() {
       {(formState.message || formState.strapiErrors) && (
         <div
           className={cn(
-            'p-3 rounded-md text-sm',
+            'p-3 rounded-md text-sm border-2',
             formState.success
-              ? 'bg-green-50 text-green-800 border border-green-200'
-              : 'bg-destructive/10 text-destructive border border-destructive/20'
+              ? 'bg-chart-2/10 text-foreground border-chart-2'
+              : 'bg-chart-4/10 text-foreground border-chart-4'
           )}
         >
           {formState.strapiErrors?.message || formState.message}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3">
         <div className="space-y-2">
           <label
             htmlFor="username"
-            className="text-sm font-medium text-card-foreground"
+            className="text-sm font-medium text-foreground"
           >
             Username
           </label>
@@ -83,11 +83,11 @@ function SignUp() {
             defaultValue={formState.data?.username || ''}
             disabled={loading}
             className={cn(
-              formState.zodErrors?.username && 'border-destructive'
+              formState.zodErrors?.username && 'border-chart-4 border-2'
             )}
           />
           {formState.zodErrors?.username && (
-            <p className="text-xs text-destructive">
+            <p className="text-xs text-chart-4">
               {formState.zodErrors.username[0]}
             </p>
           )}
@@ -96,7 +96,7 @@ function SignUp() {
         <div className="space-y-2">
           <label
             htmlFor="email"
-            className="text-sm font-medium text-card-foreground"
+            className="text-sm font-medium text-foreground"
           >
             Email
           </label>
@@ -107,10 +107,10 @@ function SignUp() {
             placeholder="john.doe@example.com"
             defaultValue={formState.data?.email || ''}
             disabled={loading}
-            className={cn(formState.zodErrors?.email && 'border-destructive')}
+            className={cn(formState.zodErrors?.email && 'border-chart-4 border-2')}
           />
           {formState.zodErrors?.email && (
-            <p className="text-xs text-destructive">
+            <p className="text-xs text-chart-4">
               {formState.zodErrors.email[0]}
             </p>
           )}
@@ -119,7 +119,7 @@ function SignUp() {
         <div className="space-y-2">
           <label
             htmlFor="password"
-            className="text-sm font-medium text-card-foreground"
+            className="text-sm font-medium text-foreground"
           >
             Password
           </label>
@@ -130,11 +130,11 @@ function SignUp() {
             placeholder="Create a password"
             disabled={loading}
             className={cn(
-              formState.zodErrors?.password && 'border-destructive'
+              formState.zodErrors?.password && 'border-chart-4 border-2'
             )}
           />
           {formState.zodErrors?.password && (
-            <p className="text-xs text-destructive">
+            <p className="text-xs text-chart-4">
               {formState.zodErrors.password[0]}
             </p>
           )}
@@ -143,7 +143,7 @@ function SignUp() {
         <div className="space-y-2">
           <label
             htmlFor="confirmPassword"
-            className="text-sm font-medium text-card-foreground"
+            className="text-sm font-medium text-foreground"
           >
             Confirm Password
           </label>
@@ -162,11 +162,11 @@ function SignUp() {
       </form>
 
       <div className="text-center">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-foreground/70">
           Already have an account?{' '}
           <Link
             to="/signin"
-            className="text-primary hover:text-primary/80 font-medium"
+            className="text-main hover:text-main/80 font-medium"
           >
             Sign in
           </Link>

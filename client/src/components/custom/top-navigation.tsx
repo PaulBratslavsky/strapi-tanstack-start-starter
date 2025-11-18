@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Menu } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { ThemeToggle } from './theme-toggle'
@@ -29,82 +30,95 @@ interface ITopNavigationProps {
   } | null
 }
 
-export function TopNavigation({ header, currentUser }: Readonly<ITopNavigationProps>) {
+export function TopNavigation({
+  header,
+  currentUser,
+}: Readonly<ITopNavigationProps>) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
   if (!header) return null
   const { logo, navItems, cta } = header
   const imageUrl = logo.image.url
   return (
-    <section className="container mx-auto py-4">
+    <section className="bg-white dark:bg-dark p-6 flex justify-center items-center">
       {/* Desktop Menu */}
-      <nav className="hidden justify-between lg:flex">
-        <div className="flex items-center gap-6">
+      <nav className="w-full max-w-7xl bg-background shadow-shadow border-2 border-border rounded-lg px-4 hidden lg:block">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link
             to={logo.href}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 text-foreground hover:text-main transition-colors"
             target={logo.isExternal ? '_blank' : undefined}
             rel={logo.isExternal ? 'noopener noreferrer' : undefined}
           >
             <StrapiImage
               src={imageUrl}
               alt={logo.image.alternativeText || logo.label}
-              aspectRatio="icon"
+              aspectRatio="square"
             />
-
             <span className="text-lg font-semibold tracking-tighter">
               {logo.label}
             </span>
           </Link>
-        </div>
-        <div className="flex items-center justify-center flex-1">
-          <NavigationMenu>
-            <NavigationMenuList className="flex items-center justify-center">
-              {navItems.map((item) => renderNavItem(item))}
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
-        <div className="flex gap-2 items-center">
-          {currentUser ? (
-            <LoggedInUser userData={{ username: currentUser.username || '', email: currentUser.email || '' }} />
-          ) : (
-            <Button
-              asChild
-              variant={cta.type === 'PRIMARY' ? 'default' : 'outline'}
-              size="default"
-            >
-              <Link
-                to={cta.href}
-                target={cta.isExternal ? '_blank' : undefined}
-                rel={cta.isExternal ? 'noopener noreferrer' : undefined}
+
+          {/* Navigation Items */}
+          <div className="flex items-center space-x-8">
+            <NavigationMenu>
+              <NavigationMenuList className="flex items-center space-x-8">
+                {navItems.map((item) => renderNavItem(item))}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
+
+          {/* CTA / User Actions */}
+          <div className="flex gap-2 items-center">
+            {currentUser ? (
+              <LoggedInUser
+                userData={{
+                  username: currentUser.username || '',
+                  email: currentUser.email || '',
+                }}
+              />
+            ) : (
+              <Button
+                asChild
+                variant={cta.type === 'PRIMARY' ? 'default' : 'neutral'}
+                size="default"
               >
-                {cta.label}
-              </Link>
-            </Button>
-          )}
-          <ThemeToggle />
+                <Link
+                  to={cta.href}
+                  target={cta.isExternal ? '_blank' : undefined}
+                  rel={cta.isExternal ? 'noopener noreferrer' : undefined}
+                >
+                  {cta.label}
+                </Link>
+              </Button>
+            )}
+            <ThemeToggle />
+          </div>
         </div>
       </nav>
 
       {/* Mobile Menu */}
-      <div className="block lg:hidden mx-2">
-        <div className="flex items-center justify-between">
+      <nav className="w-full bg-background shadow-shadow border-2 border-border rounded-lg px-4 block lg:hidden">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link
             to={logo.href}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 text-foreground hover:text-main transition-colors"
             target={logo.isExternal ? '_blank' : undefined}
             rel={logo.isExternal ? 'noopener noreferrer' : undefined}
           >
             <StrapiImage
               src={imageUrl}
               alt={logo.image.alternativeText || logo.label}
-              aspectRatio="icon"
+              aspectRatio="square"
             />
           </Link>
           <div className="flex gap-2">
-            <Sheet>
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
+                <Button variant="default" size="icon">
                   <Menu className="size-4" />
                 </Button>
               </SheetTrigger>
@@ -117,32 +131,43 @@ export function TopNavigation({ header, currentUser }: Readonly<ITopNavigationPr
                       className="flex items-center gap-2"
                       target={logo.isExternal ? '_blank' : undefined}
                       rel={logo.isExternal ? 'noopener noreferrer' : undefined}
+                      onClick={() => setMobileMenuOpen(false)}
                     >
                       <StrapiImage
                         src={imageUrl}
                         alt={logo.image.alternativeText || logo.label}
-                        aspectRatio="icon"
+                        aspectRatio="square"
                       />
                     </Link>
                   </SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-6 p-4">
                   <div className="flex w-full flex-col gap-4">
-                    {navItems.map((item) => renderMobileNavItem(item))}
+                    {navItems.map((item) =>
+                      renderMobileNavItem(item, () => setMobileMenuOpen(false))
+                    )}
                   </div>
 
                   <div className="flex flex-col gap-3">
                     {currentUser ? (
-                      <LoggedInUser userData={{ username: currentUser.username || '', email: currentUser.email || '' }} />
+                      <LoggedInUser
+                        userData={{
+                          username: currentUser.username || '',
+                          email: currentUser.email || '',
+                        }}
+                      />
                     ) : (
                       <Button
                         asChild
-                        variant={cta.type === 'PRIMARY' ? 'default' : 'outline'}
+                        variant={cta.type === 'PRIMARY' ? 'default' : 'neutral'}
                       >
                         <Link
                           to={cta.href}
                           target={cta.isExternal ? '_blank' : undefined}
-                          rel={cta.isExternal ? 'noopener noreferrer' : undefined}
+                          rel={
+                            cta.isExternal ? 'noopener noreferrer' : undefined
+                          }
+                          onClick={() => setMobileMenuOpen(false)}
                         >
                           {cta.label}
                         </Link>
@@ -155,7 +180,7 @@ export function TopNavigation({ header, currentUser }: Readonly<ITopNavigationPr
             <ThemeToggle />
           </div>
         </div>
-      </div>
+      </nav>
     </section>
   )
 }
@@ -163,15 +188,15 @@ export function TopNavigation({ header, currentUser }: Readonly<ITopNavigationPr
 const renderNavItem = (item: TLink) => {
   return (
     <NavigationMenuItem key={item.id}>
-      <NavigationMenuLink 
-        asChild 
+      <NavigationMenuLink
+        asChild
         className="bg-transparent hover:bg-transparent focus:bg-transparent data-[active]:bg-transparent data-[state=open]:bg-transparent"
       >
         <Link
           to={item.href}
           target={item.isExternal ? '_blank' : undefined}
           rel={item.isExternal ? 'noopener noreferrer' : undefined}
-          className="relative inline-flex h-10 w-max items-center justify-center px-4 py-2 text-sm font-medium transition-colors hover:text-foreground/80 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+          className="text-foreground hover:text-main transition-colors font-base hover:translate-x-boxShadowX hover:translate-y-boxShadowY"
         >
           {item.label}
         </Link>
@@ -180,16 +205,17 @@ const renderNavItem = (item: TLink) => {
   )
 }
 
-const renderMobileNavItem = (item: TLink) => {
+const renderMobileNavItem = (item: TLink, onNavigate: () => void) => {
   return (
-    <Link
-      key={item.id}
-      to={item.href}
-      target={item.isExternal ? '_blank' : undefined}
-      rel={item.isExternal ? 'noopener noreferrer' : undefined}
-      className="relative inline-flex w-full py-3 text-md font-semibold transition-colors hover:text-foreground/80 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
-    >
-      {item.label}
-    </Link>
+    <Button key={item.id} asChild variant="neutral" className="w-full justify-start">
+      <Link
+        to={item.href}
+        target={item.isExternal ? '_blank' : undefined}
+        rel={item.isExternal ? 'noopener noreferrer' : undefined}
+        onClick={onNavigate}
+      >
+        {item.label}
+      </Link>
+    </Button>
   )
 }

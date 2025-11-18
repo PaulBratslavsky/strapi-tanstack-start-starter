@@ -8,7 +8,6 @@ import { TanstackDevtools } from '@tanstack/react-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import globalCss from '../global.css?url'
-import customCss from '../custom.css?url'
 
 import { TopNavigation } from '../components/custom/top-navigation'
 import { strapiApi } from '../data/server-functions'
@@ -56,10 +55,6 @@ export const Route = createRootRouteWithContext<{
         rel: 'stylesheet',
         href: globalCss,
       },
-      {
-        rel: 'stylesheet',
-        href: customCss,
-      },
     ],
   }),
 
@@ -74,11 +69,11 @@ function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="h-screen flex flex-col overflow-hidden">
         <QueryClientProvider client={queryClient}>
           <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
             <TopNavigation header={header} currentUser={currentUser} />
-            <main>{children}</main>
+            <main className="flex-1 overflow-y-auto">{children}</main>
             <TanstackDevtools
               config={{
                 position: 'bottom-left',

@@ -4,26 +4,26 @@ import { SocialAuthButton } from '@/components/custom/social-auth-button'
 // Auth Layout Component (shared but not affecting URL)
 function AuthLayout() {
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="h-full bg-secondary-background dark:bg-dark flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Auth form container */}
-        <div className="bg-card border border-border rounded-lg shadow-lg p-6 space-y-6">
+        <div className="bg-background border-2 border-border rounded-lg shadow-shadow p-5 space-y-4">
           {/* This is where child routes (signin/signup) will render */}
           <Outlet />
 
           {/* Shared social login section */}
-          <div className="relative">
+          <div className="relative pt-1">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">
+              <span className="bg-background px-2 text-foreground/70">
                 Or continue with
               </span>
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="pt-1">
             {/* Google OAuth - Commented out for now */}
             {/* <SocialAuthButton
               provider="google"
@@ -48,8 +48,8 @@ function AuthLayout() {
         </div>
 
         {/* Shared footer */}
-        <div className="text-center mt-6">
-          <p className="text-sm text-muted-foreground">
+        <div className="text-center mt-3">
+          <p className="text-xs text-foreground/70">
             By continuing, you agree to our Terms of Service and Privacy Policy
           </p>
         </div>

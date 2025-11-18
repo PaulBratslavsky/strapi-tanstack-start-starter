@@ -4,8 +4,8 @@ import type { CurrentUser } from '@/lib/comment-auth'
 
 import { CommentFeedItem } from './comment-feed-item'
 import { CommentForm } from './comment-form'
-// import { CommentPagination } from '@/components/custom/comment-pagination'
-// import { CommentSearch } from '@/components/custom/comment-search'
+import { CommentPagination } from '@/components/custom/comment-section/comment-pagination'
+import { CommentSearch } from '@/components/custom/comment-section/comment-search'
 
 import { strapiApi } from '@/data/server-functions'
 
@@ -87,9 +87,9 @@ export function CommentSection({
   }
 
   const comments = commentsResponse?.data || []
-  // const pagination = commentsResponse?.meta?.pagination
-  // const totalComments = pagination?.total || 0
-  // const totalPages = pagination?.pageCount || 1
+  const pagination = commentsResponse?.meta?.pagination
+  const totalComments = pagination?.total || 0
+  const totalPages = pagination?.pageCount || 1
 
   return (
     <div className={`${className}`}>
@@ -109,7 +109,7 @@ export function CommentSection({
           </div>
 
           {/* Search Bar */}
-          {/* <CommentSearch onSearch={handleSearch} /> */}
+          <CommentSearch onSearch={handleSearch} />
 
           {searchQuery.length > 0 && (
             <p className="text-sm text-muted-foreground">
@@ -153,7 +153,7 @@ export function CommentSection({
         </div>
 
         {/* Pagination */}
-        {/* {totalPages > 1 && (
+        {totalPages > 1 && (
           <div className="px-6 py-4 border-t">
             <CommentPagination
               currentPage={currentPage}
@@ -161,7 +161,7 @@ export function CommentSection({
               onPageChange={setCurrentPage}
             />
           </div>
-        )} */}
+        )}
       </div>
     </div>
   )

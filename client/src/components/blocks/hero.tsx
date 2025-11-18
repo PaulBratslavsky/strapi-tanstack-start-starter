@@ -46,7 +46,7 @@ export function Hero(props: Readonly<IHero>) {
         <div className={styles.grid}>
           <div className={styles.content}>
             {badge && (
-              <Badge variant="outline" className={styles.badge}>
+              <Badge variant="default" className={styles.badge}>
                 {badge}
                 <ArrowUpRight className={styles.icon} />
               </Badge>
@@ -70,7 +70,7 @@ export function Hero(props: Readonly<IHero>) {
               {secondaryLink && (
                 <Button
                   asChild
-                  variant="outline"
+                  variant="neutral"
                   className={styles.secondaryButton}
                   size="lg"
                 >

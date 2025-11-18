@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
+import { Textarea } from "@/components/ui/textarea";
 import { strapiApi } from '@/data/server-functions'
 import { handleAuthError, isAuthenticated, type CurrentUser } from '@/lib/comment-auth'
 import type { TCommentCreate } from '@/types'
@@ -35,6 +36,7 @@ export function CommentForm({
     },
     onSuccess: (result) => {
       // Invalidate and refetch comments
+      console.log(result)
       queryClient.invalidateQueries({ queryKey: ['comments', articleDocumentId] })
       setContent('')
       setError(null)
@@ -79,7 +81,7 @@ export function CommentForm({
           <Button asChild variant="default">
             <Link to="/signin">Sign In</Link>
           </Button>
-          <Button asChild variant="outline">
+          <Button asChild variant="default">
             <Link to="/signup">Sign Up</Link>
           </Button>
         </div>
@@ -94,12 +96,12 @@ export function CommentForm({
   return (
     <form onSubmit={handleSubmit} className={`space-y-4 ${className}`}>
       <div className="space-y-2">
-        <textarea
+        <Textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder={placeholder}
           rows={4}
-          className={`w-full px-3 py-2 border rounded-md resize-none transition-colors
+          className={`w-full px-3 py-2 resize-none transition-colors
             ${isOverLimit 
               ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' 
               : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500/20'

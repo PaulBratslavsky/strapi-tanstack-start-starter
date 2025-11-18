@@ -2,7 +2,8 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 import { strapiApi } from '@/data/server-functions'
 
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 
 import { StrapiImage } from '@/components/custom/strapi-image'
 import { Search } from '@/components/custom/search'
@@ -30,30 +31,36 @@ export const Route = createFileRoute('/articles/')({
 })
 
 const styles = {
-  root: 'min-h-screen bg-background',
+  root: 'min-h-screen bg-secondary mb-16',
   container: 'container mx-auto px-4 py-16',
-  header: 'text-center mb-12',
-  title: 'text-4xl font-bold text-foreground mb-4',
-  subtitle: 'text-xl text-muted-foreground max-w-2xl mx-auto',
   search: 'container mx-auto py-4',
 
+  header: 'text-center mb-12',
+  title: 'text-4xl font-bold text-foreground mb-4',
+  subtitle: 'text-xl text-foreground/70 max-w-2xl mx-auto',
+
   emptyWrap: 'text-center py-12',
-  emptyText: 'text-muted-foreground text-lg',
+  emptyText: 'text-foreground/70 text-lg',
 
   grid: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6',
 
-  card: 'pt-0 pb-8 group hover:shadow-lg transition-shadow overflow-hidden cursor-pointer bg-card border border-border',
+  card: 'pt-0 pb-8 group hover:shadow-shadow transition-all overflow-hidden bg-background border-2 border-border rounded-lg',
   imageWrapper: 'overflow-hidden',
   image: 'group-hover:scale-105 transition-transform duration-300',
 
   cardHeader: 'pb-3',
-  metaRow: 'flex items-center gap-2 text-sm text-muted-foreground mb-2',
+  metaRow: 'flex items-center gap-2 text-sm text-foreground/60 mb-2',
   badge: 'text-xs',
   cardTitle:
-    'text-xl font-semibold group-hover:text-primary transition-colors line-clamp-2 text-card-foreground',
+    'text-xl font-semibold group-hover:text-main transition-colors line-clamp-2 text-foreground',
 
   cardContent: 'pt-0',
-  description: 'text-muted-foreground line-clamp-3 leading-relaxed',
+  description: 'text-foreground/70 line-clamp-3 leading-relaxed',
+
+  cardFooter: 'pt-0',
+  readMoreBtn: 'p-0 h-auto font-medium group/button',
+  readMoreIcon:
+    'w-4 h-4 ml-2 group-hover/button:translate-x-1 transition-transform',
 }
 
 function Articles() {
@@ -83,49 +90,68 @@ function Articles() {
         ) : (
           <div className={styles.grid}>
             {articles.map((article) => (
-              <Link
-                key={article.documentId}
-                to="/articles/$slug"
-                params={{ slug: article.slug || '' }}
-              >
-                <Card className={styles.card}>
-                  {article.featuredImage?.url && (
-                    <div className={styles.imageWrapper}>
-                      <StrapiImage
-                        src={article.featuredImage.url}
-                        alt={
-                          article.featuredImage.alternativeText || article.title
-                        }
-                        aspectRatio="16:9"
-                        className={styles.image}
-                      />
-                    </div>
-                  )}
+              <Card key={article.documentId} className={styles.card}>
+                {article.featuredImage?.url && (
+                  <div className={styles.imageWrapper}>
+                    <StrapiImage
+                      src={article.featuredImage.url}
+                      alt={
+                        article.featuredImage.alternativeText || article.title
+                      }
+                      aspectRatio="16:9"
+                      className={styles.image}
+                    />
+                  </div>
+                )}
 
-                  <CardHeader className={styles.cardHeader}>
-                    <div className={styles.metaRow}>
-                      <time dateTime={article.publishedAt}>
-                        {article.publishedAt
-                          ? new Date(article.publishedAt).toLocaleDateString(
-                              'en-US',
-                              {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                              },
-                            )
-                          : 'No date'}
-                      </time>
-                    </div>
+                <CardHeader className={styles.cardHeader}>
+                  <div className={styles.metaRow}>
+                    <time dateTime={article.publishedAt}>
+                      {article.publishedAt
+                        ? new Date(article.publishedAt).toLocaleDateString(
+                            'en-US',
+                            {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            },
+                          )
+                        : 'No date'}
+                    </time>
+                  </div>
 
-                    <h2 className={styles.cardTitle}>{article.title}</h2>
-                  </CardHeader>
+                  <h2 className={styles.cardTitle}>{article.title}</h2>
+                </CardHeader>
 
-                  <CardContent className={styles.cardContent}>
-                    <p className={styles.description}>{article.description}</p>
-                  </CardContent>
-                </Card>
-              </Link>
+                <CardContent className={styles.cardContent}>
+                  <p className={styles.description}>{article.description}</p>
+                </CardContent>
+
+                <CardFooter className={styles.cardFooter}>
+                  <Button asChild>
+                    <Link
+                      key={article.documentId}
+                      to="/articles/$slug"
+                      params={{ slug: article.slug || '' }}
+                    >
+                      Read more 
+                      <svg
+                        className={styles.readMoreIcon}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
             ))}
           </div>
         )}

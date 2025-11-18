@@ -8,12 +8,12 @@ export interface ICardGrid {
 }
 
 const styles = {
-  section: "py-16 bg-muted/50",
+  section: "py-16 bg-white dark:bg-background",
   container: "container mx-auto px-4",
   cardGrid: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",
-  cardContainer: "hover:shadow-lg transition-shadow",
+  cardContainer: "hover:shadow-lg transition-shadow bg-main text-main-foreground",
   cardTitle: "text-xl",
-  cardText: "text-muted-foreground leading-relaxed",
+  cardText: "text-main-foreground/80 leading-relaxed",
 };
 
 export function CardGrid(props: Readonly<ICardGrid>) {
