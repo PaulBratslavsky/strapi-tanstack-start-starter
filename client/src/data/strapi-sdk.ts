@@ -1,5 +1,6 @@
 import { strapi } from '@strapi/client';
 import { getStrapiURL } from "@/lib/utils";
+import type { TAuthUser } from '@/types';
 
 const BASE_API_URL = getStrapiURL() + "/api";
 const sdk = strapi({ baseURL: BASE_API_URL });
@@ -13,4 +14,20 @@ const getAuthenticatedCollection = (collectionName: string, jwt: string) => {
   return authenticatedSdk.collection(collectionName)
 }
 
-export { sdk, getAuthenticatedCollection };
+// Helper to get current authenticated user from Strapi using SDK
+const getUserMe = async (jwt: string): Promise<TAuthUser> => {
+  const authenticatedSdk = strapi({
+    baseURL: BASE_API_URL,
+    auth: jwt,
+  })
+
+  const response = await authenticatedSdk.fetch('/users/me')
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch user: ${response.statusText}`)
+  }
+
+  return response.json() as Promise<TAuthUser>
+}
+
+export { sdk, getAuthenticatedCollection, getUserMe };

@@ -8,7 +8,7 @@ import type {
   TCommentUpdate,
 } from '@/types'
 
-import { useAppSession } from '@/lib/session'
+import { useAppSession, getAuth } from '@/lib/session'
 import { getAuthenticatedCollection, sdk } from '@/data/strapi-sdk'
 
 // Get comments for a specific article using Strapi SDK custom route (public access)
@@ -167,16 +167,20 @@ export const createComment = createServerFn({
     async ({
       data: commentData,
     }): Promise<TCommentSingleResponse | { error: string }> => {
-      const session = await useAppSession()
+      // Validate JWT with Strapi - this checks against Strapi's /users/me endpoint
+      const user = await getAuth()
 
-      if (!session.data.jwt || !session.data.userId) {
+      if (!user) {
         return { error: 'Authentication required' }
       }
+
+      // Get JWT from session (already validated above)
+      const session = await useAppSession()
 
       try {
         const response = await createCommentInternal(
           commentData,
-          session.data.jwt,
+          session.data.jwt!,
         )
         return response
       } catch (error) {
@@ -198,17 +202,21 @@ export const updateComment = createServerFn({
   )
   .handler(
     async ({ data }): Promise<TCommentSingleResponse | { error: string }> => {
-      const session = await useAppSession()
+      // Validate JWT with Strapi - this checks against Strapi's /users/me endpoint
+      const user = await getAuth()
 
-      if (!session.data.jwt || !session.data.userId) {
+      if (!user) {
         return { error: 'Authentication required' }
       }
+
+      // Get JWT from session (already validated above)
+      const session = await useAppSession()
 
       try {
         const response = await updateCommentInternal(
           data.commentDocumentId,
           data.commentData,
-          session.data.jwt,
+          session.data.jwt!,
         )
         return response
       } catch (error) {
@@ -227,16 +235,20 @@ export const deleteComment = createServerFn({
     async ({
       data: commentDocumentId,
     }): Promise<TCommentSingleResponse | { error: string }> => {
-      const session = await useAppSession()
+      // Validate JWT with Strapi - this checks against Strapi's /users/me endpoint
+      const user = await getAuth()
 
-      if (!session.data.jwt || !session.data.userId) {
+      if (!user) {
         return { error: 'Authentication required' }
       }
+
+      // Get JWT from session (already validated above)
+      const session = await useAppSession()
 
       try {
         const response = await deleteCommentInternal(
           commentDocumentId,
-          session.data.jwt,
+          session.data.jwt!,
         )
         return response
       } catch (error) {
