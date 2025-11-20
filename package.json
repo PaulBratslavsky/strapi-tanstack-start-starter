@@ -1,6 +1,8 @@
 {
   "name": "strapi-tanstack-start-starter",
   "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
   "description": "Strapi TanStack Start starter project.",
   "type": "module",
   "scripts": {

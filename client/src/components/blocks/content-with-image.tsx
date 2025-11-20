@@ -1,9 +1,10 @@
 import { Link } from '@tanstack/react-router'
-import { StrapiImage } from '../custom/strapi-image'
-import { Button } from '../ui/button'
-import { MarkdownContent } from '../custom/markdown-content'
-import { cn } from '../../lib/utils'
-import type { TImage, TLink } from '../../types'
+import type { TImage, TLink } from '@/types'
+import { Button } from '@/components/ui/button'
+import { MarkdownContent } from '@/components/custom/markdown-content'
+import { cn } from '@/lib/utils'
+import { StrapiImage } from '@/components/custom/strapi-image'
+import { Card } from '@/components/ui/card'
 
 export interface IContentWithImage {
   __component: 'blocks.content-with-image'
@@ -16,8 +17,8 @@ export interface IContentWithImage {
 }
 
 const styles = {
-  section: 'py-16',
-  container: 'container mx-auto px-4',
+  section: 'py-10',
+  container: 'container mx-auto p-16 bg-white dark:bg-background',
   wrapper: 'grid grid-cols-1 items-center gap-12 lg:grid-cols-2',
   reversed: 'lg:[&>*:first-child]:order-2',
   heading: 'mb-6 text-3xl font-bold text-foreground lg:text-4xl',
@@ -51,7 +52,7 @@ const markdownStyles = {
 export function ContentWithImage(props: Readonly<IContentWithImage>) {
   const { reversed, heading, content, link, image } = props
   const isExternal = Boolean(link?.isExternal)
-  const buttonVariant = link?.type === 'PRIMARY' ? 'default' : 'outline'
+  const buttonVariant = link?.type === 'PRIMARY' ? 'default' : 'neutral'
   const alt = image.alternativeText || heading || 'Content image'
 
   return (
@@ -59,7 +60,7 @@ export function ContentWithImage(props: Readonly<IContentWithImage>) {
       aria-labelledby="content-with-image-title"
       className={styles.section}
     >
-      <div className={styles.container}>
+      <Card className={styles.container}>
         <div className={cn(styles.wrapper, reversed && styles.reversed)}>
           <div>
             <h2 className={styles.heading}>{heading}</h2>
@@ -81,7 +82,7 @@ export function ContentWithImage(props: Readonly<IContentWithImage>) {
 
           <StrapiImage src={image.url} alt={alt} className={styles.image} />
         </div>
-      </div>
+      </Card>
     </section>
   )
 }

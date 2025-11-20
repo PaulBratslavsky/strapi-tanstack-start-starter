@@ -4,7 +4,7 @@ import {
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanstackDevtools } from '@tanstack/react-devtools'
+import { TanStackDevtools } from '@tanstack/react-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import globalCss from '../global.css?url'
@@ -76,7 +76,7 @@ function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
             <TopNavigation header={header} currentUser={currentUser} />
             <main id="main-content" className="flex-1 overflow-y-auto">{children}</main>
             <ScrollToTop />
-            <TanstackDevtools
+            <TanStackDevtools
               config={{
                 position: 'bottom-left',
               }}

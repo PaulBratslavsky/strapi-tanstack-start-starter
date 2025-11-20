@@ -37,7 +37,7 @@ const getArticles = async (queryString?: string, page?: number) =>
 export const getArticlesData = createServerFn({
   method: 'GET',
 })
-  .validator((input?: { query?: string; page?: number }) => input)
+  .inputValidator((input?: { query?: string; page?: number }) => input)
   .handler(async ({ data }): Promise<TStrapiResponseCollection<IArticleDetail>> => {
     const response = await getArticles(data?.query, data?.page)
     console.log(response)
@@ -47,7 +47,7 @@ export const getArticlesData = createServerFn({
 export const getArticlesDataBySlug = createServerFn({
   method: 'GET',
 })
-  .validator((slug: string) => slug)
+  .inputValidator((slug: string) => slug)
   .handler(
     async ({
       data: slug,

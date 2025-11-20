@@ -140,7 +140,7 @@ const deleteCommentInternal = async (
 export const getCommentsForArticle = createServerFn({
   method: 'GET',
 })
-  .validator(
+  .inputValidator(
     (data: {
       articleDocumentId: string
       page?: number
@@ -162,7 +162,7 @@ export const getCommentsForArticle = createServerFn({
 export const createComment = createServerFn({
   method: 'POST',
 })
-  .validator((data: TCommentCreate) => data)
+  .inputValidator((data: TCommentCreate) => data)
   .handler(
     async ({
       data: commentData,
@@ -193,7 +193,7 @@ export const createComment = createServerFn({
 export const updateComment = createServerFn({
   method: 'POST',
 })
-  .validator(
+  .inputValidator(
     (data: { commentDocumentId: string; commentData: TCommentUpdate }) => data,
   )
   .handler(
@@ -222,7 +222,7 @@ export const updateComment = createServerFn({
 export const deleteComment = createServerFn({
   method: 'POST',
 })
-  .validator((commentDocumentId: string) => commentDocumentId)
+  .inputValidator((commentDocumentId: string) => commentDocumentId)
   .handler(
     async ({
       data: commentDocumentId,
