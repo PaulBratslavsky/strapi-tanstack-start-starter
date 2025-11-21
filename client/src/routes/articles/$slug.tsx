@@ -7,11 +7,12 @@ import { NotFound } from '@/components/custom/not-found'
 export const Route = createFileRoute('/articles/$slug')({
   component: ArticleDetailRoute,
   loader: async ({ params }) => {
+    // Validate user with Strapi (uses 2-minute cache)
     const [articleResponse, currentUser] = await Promise.all([
       strapiApi.articles.getArticlesDataBySlug({
         data: params.slug,
       }),
-      strapiApi.auth.getCurrentUserServerFunction(),
+      strapiApi.auth.getAuthServerFunction(),
     ])
 
     if (!articleResponse.data.length) throw notFound()

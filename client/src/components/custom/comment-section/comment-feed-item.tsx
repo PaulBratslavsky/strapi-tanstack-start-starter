@@ -20,7 +20,7 @@ export function CommentFeedItem({
   const [editContent, setEditContent] = useState(comment.content)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const isOwner = currentUser?.userId === comment.user?.id
+  const isOwner = currentUser?.id === comment.user?.id
 
   const handleUpdate = async () => {
     if (!editContent.trim() || isSubmitting) return
@@ -112,7 +112,7 @@ export function CommentFeedItem({
                 </Button>
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant="neutral"
                   onClick={() => {
                     setIsEditing(false)
                     setEditContent(comment.content)

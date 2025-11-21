@@ -23,7 +23,7 @@ export function useAppSession() {
 
 // Cache for validated user data to avoid hitting Strapi on every request
 const authCache = new Map<string, { user: TAuthUser; timestamp: number }>()
-const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
+const CACHE_TTL = 2 * 60 * 1000 // 2 minutes - balanced performance and security
 
 /**
  * Get authenticated user by validating the session JWT with Strapi

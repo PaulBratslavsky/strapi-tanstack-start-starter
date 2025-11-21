@@ -4,7 +4,7 @@ import { Link } from '@tanstack/react-router'
 import { ThemeToggle } from './theme-toggle'
 import { StrapiImage } from './strapi-image'
 import { LoggedInUser } from './logged-in-user'
-import type { THeader, TLink } from '../../types'
+import type { TAuthUser, THeader, TLink } from '../../types'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -23,11 +23,7 @@ import {
 
 interface ITopNavigationProps {
   header?: THeader
-  currentUser?: {
-    userId: number
-    email?: string
-    username?: string
-  } | null
+  currentUser?: TAuthUser | null
 }
 
 export function TopNavigation({

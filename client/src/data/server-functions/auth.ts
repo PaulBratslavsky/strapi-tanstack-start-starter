@@ -186,34 +186,11 @@ export const getCurrentUserServerFunction = createServerFn({
 /**
  * Validate the current session JWT with Strapi's /users/me endpoint
  * Returns the authenticated user or null if invalid
+ * Uses 2-minute cache for performance
  */
-export const validateAuthServerFunction = createServerFn({
+export const getAuthServerFunction = createServerFn({
   method: 'GET',
 }).handler(async () => {
-  const session = await useAppSession()
-  const jwt = session.data.jwt
-
-  if (!jwt) {
-    return null
-  }
-
-  try {
-    const { getUserMe } = await import('@/data/strapi-sdk')
-    const user = await getUserMe(jwt)
-
-    // Update session with latest user data
-    await session.update({
-      ...session.data,
-      userId: user.id,
-      email: user.email,
-      username: user.username,
-    })
-
-    return user
-  } catch (error) {
-    console.error('Failed to validate auth:', error)
-    // Invalid token: clear session
-    await session.clear()
-    return null
-  }
+  const { getAuth } = await import('@/lib/session')
+  return getAuth()
 })

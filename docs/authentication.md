@@ -46,7 +46,7 @@ The authentication system uses a **hybrid approach** combining:
        │──────────────────────▶│                        │
        │                       │  6. Validate JWT      │
        │                       │───────────────────────▶│
-       │                       │     (cached 5 min)     │
+       │                       │     (cached 2 min)     │
        │                       │                        │
 ```
 
@@ -237,7 +237,7 @@ export async function getAuth(): Promise<TAuthUser | null> {
   // No JWT = not logged in
   if (!jwt) return null
 
-  // Check 5-minute cache first
+  // Check 2-minute cache first
   const cached = authCache.get(jwt)
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
     return cached.user
@@ -310,7 +310,7 @@ Without caching, every protected operation would hit Strapi's `/users/me` endpoi
 ```typescript
 // In-memory cache (lives in Node.js process)
 const authCache = new Map<string, { user: TAuthUser; timestamp: number }>()
-const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
+const CACHE_TTL = 2 * 60 * 1000 // 2 minutes
 ```
 
 ### Cache Flow
@@ -323,11 +323,11 @@ Request 1 (t=0s):
   └─ Return user
 
 Request 2 (t=30s):
-  ├─ Cache HIT (within 5 min)
+  ├─ Cache HIT (within 2 min)
   ├─ Skip Strapi validation
   └─ Return cached user (FAST!)
 
-Request 3 (t=6m):
+Request 3 (t=3m):
   ├─ Cache EXPIRED
   ├─ Validate with Strapi (/users/me)
   ├─ Update cache
@@ -663,7 +663,7 @@ console.log('User:', user)
 **Cause**: Cache TTL hasn't expired
 
 **Solution**:
-- Cache expires after 5 minutes
+- Cache expires after 2 minutes
 - User will be automatically logged out on next auth check
 - To force immediate logout, reduce `CACHE_TTL` in `session.ts`
 
@@ -674,7 +674,7 @@ console.log('User:', user)
 **Solution**:
 ```typescript
 // Verify cache is enabled
-console.log('Cache TTL:', CACHE_TTL) // Should be 300000 (5 min)
+console.log('Cache TTL:', CACHE_TTL) // Should be 120000 (2 min)
 console.log('Cache size:', authCache.size)
 ```
 
@@ -686,7 +686,7 @@ The authentication system provides:
 
 ✅ **Secure session management** with HTTP-only cookies
 ✅ **JWT validation** against Strapi on every auth check
-✅ **5-minute caching** to balance security and performance
+✅ **2-minute caching** to balance security and performance
 ✅ **Automatic session cleanup** for invalid tokens
 ✅ **Protection against** XSS, CSRF, session hijacking, and token theft
 ✅ **Strapi SDK integration** for consistent API calls

@@ -29,7 +29,10 @@ export const Route = createRootRouteWithContext<{
 }>()({
   loader: async () => {
     const globalData = await strapiApi.global.getGlobalData()
-    const currentUser = await strapiApi.auth.getCurrentUserServerFunction()
+
+    // Validate user with Strapi (uses 2-minute cache)
+    const currentUser = await strapiApi.auth.getAuthServerFunction()
+
     return {
       header: globalData.data.header,
       currentUser,

@@ -1,6 +1,7 @@
 import { getArticlesData, getArticlesDataBySlug } from './articles'
 import {
   getCurrentUserServerFunction,
+  getAuthServerFunction,
   loginUserServerFunction,
   logoutUserServerFunction,
   registerUserServerFunction,
@@ -30,6 +31,7 @@ export const strapiApi = {
     loginUserServerFunction,
     logoutUserServerFunction,
     getCurrentUserServerFunction,
+    getAuthServerFunction,
   },
   comments: {
     getCommentsForArticle,

@@ -7,11 +7,9 @@
  * - update/delete: global::is-owner (verifies ownership)
  */
 
-export interface CurrentUser {
-  userId: number
-  email?: string
-  username?: string
-}
+import type { TAuthUser } from '@/types'
+
+export type CurrentUser = TAuthUser
 
 /**
  * Check if current user owns a comment (for UI purposes - showing edit/delete buttons)
@@ -26,7 +24,7 @@ export function isCommentOwner(commentUserId?: string, currentUserId?: number): 
  * Check if user is authenticated
  */
 export function isAuthenticated(currentUser?: CurrentUser | null): boolean {
-  return !!currentUser?.userId
+  return !!currentUser?.id
 }
 
 /**
