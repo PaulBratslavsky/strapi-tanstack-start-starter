@@ -1,5 +1,4 @@
-import { ClientOnly } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react';
 
 interface SyntaxHighlighterProps {
   language: string;
@@ -8,56 +7,65 @@ interface SyntaxHighlighterProps {
   className?: string;
 }
 
-// Fallback component for SSR
+// Fallback component for SSR and loading
 function SyntaxHighlighterFallback({ code, className }: SyntaxHighlighterProps) {
   return (
-    <pre className={className}>
-      <code>{code}</code>
+    <pre className={`${className} p-4 bg-muted rounded border border-border overflow-auto`}>
+      <code className="text-sm">{code}</code>
     </pre>
   );
 }
 
-// Client-side component that dynamically imports react-syntax-highlighter
-function ClientSyntaxHighlighter({ language, code, isDark, className }: SyntaxHighlighterProps) {
-  const [Component, setComponent] = useState<any>(null);
-  const [styles, setStyles] = useState<any>(null);
+// Lazy load syntax highlighter to avoid SSR issues
+const LazySyntaxHighlighter = lazy(() =>
+  import('react-syntax-highlighter').then((mod) => ({
+    default: ({ language, code, isDark, className }: SyntaxHighlighterProps) => {
+      const [styles, setStyles] = useState<any>(null);
+
+      useEffect(() => {
+        import('react-syntax-highlighter/dist/esm/styles/prism').then((styleModule) => {
+          setStyles(styleModule);
+        });
+      }, []);
+
+      if (!styles) {
+        return <SyntaxHighlighterFallback code={code} language={language} isDark={isDark} className={className} />;
+      }
+
+      return (
+        <mod.Prism
+          language={language}
+          style={isDark ? styles.vscDarkPlus : styles.vs}
+          customStyle={{
+            borderRadius: '0.5rem',
+            padding: '1rem',
+            marginBottom: '1.5rem',
+          }}
+          showLineNumbers
+          wrapLines
+        >
+          {code}
+        </mod.Prism>
+      );
+    },
+  }))
+);
+
+export function SyntaxHighlighter(props: SyntaxHighlighterProps) {
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    // Dynamic imports only run on client
-    Promise.all([
-      import('react-syntax-highlighter'),
-      import('react-syntax-highlighter/dist/esm/styles/prism')
-    ]).then(([mod, styleModule]) => {
-      setComponent(() => mod.Prism);
-      setStyles(styleModule);
-    });
+    setIsClient(true);
   }, []);
 
-  if (!Component || !styles) {
-    return <SyntaxHighlighterFallback code={code} language={language} isDark={isDark} className={className} />;
+  // Only render the syntax highlighter on the client to avoid SSR issues
+  if (!isClient) {
+    return <SyntaxHighlighterFallback {...props} />;
   }
 
   return (
-    <Component
-      language={language}
-      style={isDark ? styles.vscDarkPlus : styles.vs}
-      customStyle={{
-        borderRadius: '0.5rem',
-        padding: '1rem',
-        marginBottom: '1.5rem',
-      }}
-      showLineNumbers
-      wrapLines
-    >
-      {code}
-    </Component>
-  );
-}
-
-export function SyntaxHighlighter(props: SyntaxHighlighterProps) {
-  return (
-    <ClientOnly fallback={<SyntaxHighlighterFallback {...props} />}>
-      <ClientSyntaxHighlighter {...props} />
-    </ClientOnly>
+    <Suspense fallback={<SyntaxHighlighterFallback {...props} />}>
+      <LazySyntaxHighlighter {...props} />
+    </Suspense>
   );
 }
