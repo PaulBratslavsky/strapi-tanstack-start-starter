@@ -1,5 +1,6 @@
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { MermaidDiagram } from "./mermaid-diagram";
 
 interface MarkdownStyles {
   richText: string;
@@ -43,13 +44,31 @@ export function MarkdownContent({ content, styles }: Readonly<MarkdownContentPro
           ol: ({ ...props }) => <ol className={styles.ol} {...props} />,
           li: ({ ...props }) => <li className={styles.li} {...props} />,
           blockquote: ({ ...props }) => <blockquote className={styles.blockquote} {...props} />,
-          code: ({ className, ...props }) => (
-            className ? (
-              <code className={styles.codeBlock} {...props} />
+          code: ({ className, children, ...props }) => {
+            // Check if this is a mermaid diagram
+            const match = /language-(\w+)/.exec(className || '');
+            const language = match ? match[1] : '';
+
+            if (language === 'mermaid') {
+              return (
+                <MermaidDiagram
+                  chart={String(children).replace(/\n$/, '')}
+                  className="my-4"
+                />
+              );
+            }
+
+            // Regular code block or inline code
+            return className ? (
+              <code className={styles.codeBlock} {...props}>
+                {children}
+              </code>
             ) : (
-              <code className={styles.codeInline} {...props} />
-            )
-          ),
+              <code className={styles.codeInline} {...props}>
+                {children}
+              </code>
+            );
+          },
           pre: ({ ...props }) => <pre className={styles.pre} {...props} />,
           table: ({ ...props }) => <table className={styles.table} {...props} />,
           th: ({ ...props }) => <th className={styles.th} {...props} />,
