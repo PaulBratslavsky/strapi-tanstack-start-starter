@@ -68,8 +68,6 @@ export const Route = createRootRouteWithContext<{
 function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
   // shellComponent renders before loader completes during SSR, so data may be undefined
   const loaderData = Route.useLoaderData()
-  const header = loaderData?.header
-  const currentUser = loaderData?.currentUser
 
   return (
     <html lang="en">
@@ -79,7 +77,7 @@ function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
       <body className="h-screen flex flex-col overflow-hidden">
         <QueryClientProvider client={queryClient}>
           <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            <TopNavigation header={header} currentUser={currentUser} />
+            <TopNavigation header={loaderData.header} currentUser={loaderData.currentUser} />
             <main id="main-content" className="flex-1 overflow-y-auto">{children}</main>
             <ScrollToTop />
             <TanStackDevtools

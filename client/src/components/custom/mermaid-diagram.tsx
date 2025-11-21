@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 
 interface MermaidDiagramProps {
   chart: string;
@@ -26,6 +26,17 @@ function MermaidDiagramFallback({ chart, className }: MermaidDiagramProps) {
 }
 
 export function MermaidDiagram({ chart, className = '' }: MermaidDiagramProps) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Only render the mermaid diagram on the client to avoid hydration mismatch
+  if (!isClient) {
+    return <MermaidDiagramFallback chart={chart} className={className} />;
+  }
+
   return (
     <Suspense fallback={<MermaidDiagramFallback chart={chart} className={className} />}>
       <LazyMermaid chart={chart} className={className} />
