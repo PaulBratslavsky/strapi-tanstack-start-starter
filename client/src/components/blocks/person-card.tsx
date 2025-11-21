@@ -13,7 +13,7 @@ export interface IPersonCard {
 }
 
 const styles = {
-  section: 'py-16 bg-muted/50',
+  section: 'py-16 bg-white dark:bg-dark',
   container: 'container mx-auto px-4',
   wrapper: 'max-w-4xl mx-auto text-center',
   card: 'p-8',
