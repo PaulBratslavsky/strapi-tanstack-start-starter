@@ -55,6 +55,8 @@ export function TopNavigation({
               src={imageUrl}
               alt={logo.image.alternativeText || logo.label}
               aspectRatio="square"
+              height={40}
+              width={40}
             />
             <span className="text-lg font-semibold tracking-tighter">
               {logo.label}
@@ -113,6 +115,8 @@ export function TopNavigation({
               src={imageUrl}
               alt={logo.image.alternativeText || logo.label}
               aspectRatio="square"
+              height={40}
+              width={40}
             />
           </Link>
           <div className="flex gap-2">
