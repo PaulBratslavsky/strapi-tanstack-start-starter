@@ -1,9 +1,9 @@
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { MermaidDiagram } from "./mermaid-diagram";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus, vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { vs, vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useEffect, useState } from 'react';
+import { MermaidDiagram } from "./mermaid-diagram";
 
 interface MarkdownStyles {
   richText: string;

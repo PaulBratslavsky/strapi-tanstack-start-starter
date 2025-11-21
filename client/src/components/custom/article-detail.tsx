@@ -1,11 +1,20 @@
-import type { TAuthor, TImage } from "../../types";
 import { Link } from '@tanstack/react-router'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "../ui/breadcrumb";
 import { MarkdownContent } from "./markdown-content";
 import { StrapiImage } from "./strapi-image";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import type { TAuthor, TImage } from "../../types";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 
 import { getStrapiMedia } from "@/lib/utils";
+
 
 export interface IArticleDetail {
   documentId: string;
@@ -19,15 +28,6 @@ export interface IArticleDetail {
   featuredImage?: TImage;
   content?: string;
 }
-
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "../ui/breadcrumb";
 
 const styles = {
   root: "min-h-screen",
@@ -139,7 +139,7 @@ export function ArticleDetail(props: IArticleDetail) {
                   />
                   <AvatarFallback>
                     {author.fullName
-                      ?.split(" ")
+                      .split(" ")
                       .map((name) => name[0])
                       .join("")
                       .slice(0, 2)}

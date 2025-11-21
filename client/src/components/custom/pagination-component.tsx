@@ -31,7 +31,7 @@ export function PaginationComponent({ pageCount, className }: Readonly<IPaginati
 
   // Generate page numbers to display
   const getPageNumbers = () => {
-    const pages: (number | "ellipsis")[] = [];
+    const pages: Array<number | "ellipsis"> = [];
     const showEllipsis = pageCount > 7;
 
     if (!showEllipsis) {

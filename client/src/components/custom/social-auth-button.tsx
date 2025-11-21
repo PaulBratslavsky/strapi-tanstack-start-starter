@@ -6,14 +6,14 @@ interface SocialAuthButtonProps {
   provider: 'google' | 'github' | 'facebook' | 'twitter'
   label?: string
   icon?: React.ReactNode
-  variant?: 'default' | 'outline' | 'secondary' | 'ghost' | 'link' | 'destructive'
+  variant?: 'default' | 'reverse' | 'neutral' | 'noShadow'
 }
 
 export function SocialAuthButton({
   provider,
   label,
   icon,
-  variant = 'outline',
+  variant = 'default',
 }: Readonly<SocialAuthButtonProps>) {
   const [isLoading, setIsLoading] = useState(false)
   const backendUrl = getStrapiURL()

@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router'
 import { LogoutButton } from './logout-button'
 
 interface ILoggedInUserProps {
@@ -13,9 +12,9 @@ export function LoggedInUser({
 }) {
   return (
     <div className="flex gap-2 items-center">
-      <Link to="/dashboard/account" className="font-semibold hover:text-primary">
+      <span className="font-semibold text-foreground">
         {userData.username}
-      </Link>
+      </span>
       <LogoutButton />
     </div>
   )

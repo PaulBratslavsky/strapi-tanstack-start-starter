@@ -1,7 +1,7 @@
-import { strapiApi } from '@/data/server-functions'
 import { LogOut } from 'lucide-react'
 import { useRouter } from '@tanstack/react-router'
 import { useState } from 'react'
+import { strapiApi } from '@/data/server-functions'
 
 export function LogoutButton() {
   const router = useRouter()
