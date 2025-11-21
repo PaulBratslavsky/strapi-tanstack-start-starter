@@ -17,6 +17,7 @@ export function MermaidDiagram({ chart, className = '' }: MermaidDiagramProps) {
       theme: 'default',
       securityLevel: 'loose',
       fontFamily: 'inherit',
+      logLevel: 'error',
     });
 
     const renderDiagram = async () => {
@@ -25,6 +26,9 @@ export function MermaidDiagram({ chart, className = '' }: MermaidDiagramProps) {
       try {
         // Clear previous content
         containerRef.current.innerHTML = '';
+
+        // Log the chart for debugging
+        console.log('Rendering mermaid chart:', chart);
 
         // Render the mermaid diagram
         const { svg } = await mermaid.render(idRef.current, chart);
@@ -35,9 +39,15 @@ export function MermaidDiagram({ chart, className = '' }: MermaidDiagramProps) {
         }
       } catch (error) {
         console.error('Mermaid rendering error:', error);
+        console.error('Chart content:', chart);
         if (containerRef.current) {
-          containerRef.current.innerHTML = `<div class="text-destructive text-sm p-4 border border-destructive rounded">
-            <strong>Mermaid Diagram Error:</strong> ${error instanceof Error ? error.message : 'Failed to render diagram'}
+          containerRef.current.innerHTML = `<div class="text-destructive text-sm p-4 border border-destructive rounded bg-destructive/10">
+            <strong>Mermaid Diagram Error:</strong><br/>
+            ${error instanceof Error ? error.message : 'Failed to render diagram'}<br/>
+            <details class="mt-2">
+              <summary class="cursor-pointer">Show diagram code</summary>
+              <pre class="mt-2 text-xs overflow-auto">${chart}</pre>
+            </details>
           </div>`;
         }
       }
