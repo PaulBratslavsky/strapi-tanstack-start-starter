@@ -16,6 +16,9 @@ const config = defineConfig({
     netlify(),
     viteReact(),
   ],
+  ssr: {
+    noExternal: ['@lightenna/react-mermaid-diagram'],
+  },
 })
 
 export default config

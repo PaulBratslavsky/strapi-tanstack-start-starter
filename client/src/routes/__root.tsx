@@ -66,7 +66,10 @@ export const Route = createRootRouteWithContext<{
 })
 
 function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
-  const { header, currentUser } = Route.useLoaderData()
+  // shellComponent renders before loader completes during SSR, so data may be undefined
+  const loaderData = Route.useLoaderData()
+  const header = loaderData?.header
+  const currentUser = loaderData?.currentUser
 
   return (
     <html lang="en">

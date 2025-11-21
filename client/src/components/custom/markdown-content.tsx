@@ -1,8 +1,7 @@
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vs, vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { useEffect, useState } from 'react';
+import { SyntaxHighlighter } from "./syntax-highlighter";
 import { MermaidDiagram } from "./mermaid-diagram";
 
 interface MarkdownStyles {
@@ -89,17 +88,10 @@ export function MarkdownContent({ content, styles }: Readonly<MarkdownContentPro
               return (
                 <SyntaxHighlighter
                   language={language}
-                  style={isDark ? vscDarkPlus : vs}
-                  customStyle={{
-                    borderRadius: '0.5rem',
-                    padding: '1rem',
-                    marginBottom: '1.5rem',
-                  }}
-                  showLineNumbers
-                  wrapLines
-                >
-                  {String(children).replace(/\n$/, '')}
-                </SyntaxHighlighter>
+                  code={String(children).replace(/\n$/, '')}
+                  isDark={isDark}
+                  className="my-4"
+                />
               );
             }
 
