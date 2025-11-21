@@ -17,7 +17,7 @@ const config = defineConfig({
     viteReact(),
   ],
   ssr: {
-    external: ['react-syntax-highlighter', '@lightenna/react-mermaid-diagram'],
+    noExternal: true,
   },
 })
 
