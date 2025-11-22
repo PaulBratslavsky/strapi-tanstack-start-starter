@@ -17,6 +17,7 @@
     "repo:upstream": "git fetch upstream && git merge upstream/main"
   },
   "dependencies": {
+    "@netlify/vite-plugin-tanstack-start": "^1.2.1",
     "@types/node": "^22.5.2",
     "concurrently": "^8.2.2",
     "typescript": "^5.0.0",
