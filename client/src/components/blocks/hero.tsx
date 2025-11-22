@@ -16,20 +16,20 @@ export interface IHero {
 }
 
 const styles = {
-  section: 'py-32',
+  section: 'py-24',
   container: 'container mx-auto',
-  grid: 'grid items-center gap-8 lg:grid-cols-2',
+  grid: 'grid items-center gap-8 lg:grid-cols-[1fr_auto] lg:gap-12',
   content: 'flex flex-col items-center text-center lg:items-start lg:text-left',
   badge: 'mb-6',
   heading: 'my-6 text-pretty text-4xl font-bold lg:text-6xl',
-  text: 'text-muted-foreground mb-8 max-w-xl lg:text-xl',
+  text: 'text-muted-foreground mb-8 max-w-xl text-lg lg:text-2xl',
   buttonContainer:
     'flex w-full flex-col justify-center gap-2 sm:flex-row lg:justify-start',
   primaryButton: 'w-full sm:w-auto',
   secondaryButton: 'w-full sm:w-auto',
   icon: 'ml-2 size-4',
-  imageContainer: 'flex items-center justify-center md:justify-end',
-  image: 'max-h-96 max-w-96 rounded-md object-cover',
+  imageContainer: 'flex items-center justify-center',
+  image: 'max-h-132 max-w-132 rounded-2xl object-cover',
 }
 
 export function Hero(props: Readonly<IHero>) {

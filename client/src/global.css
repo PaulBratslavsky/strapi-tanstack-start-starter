@@ -63,15 +63,19 @@
   --shadow-shadow: var(--shadow);
   --font-weight-base: 500;
   --font-weight-heading: 700;
+  --font-family-base: ui-sans-serif, system-ui, sans-serif;
+  --font-family-heading: "Roboto", ui-sans-serif, system-ui, sans-serif;
 }
   
 @layer base {
   body {
-    @apply text-foreground font-base bg-background dark:bg-dark;
+    @apply text-foreground bg-background dark:bg-dark text-lg lg:text-xl;
+    font-family: var(--font-family-base);
   }
 
-  h1, h2, h3, h4, h5, h6{
-    @apply font-heading;
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-heading);
   }
 
   #main-content {

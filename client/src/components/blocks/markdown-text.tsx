@@ -9,26 +9,26 @@ export interface IMarkdownText {
 const markdownStyles = {
   richText:
     "rich-text py-6 prose prose-lg max-w-none text-foreground",
-  h1: "text-3xl font-bold mb-4 text-foreground",
-  h2: "text-2xl font-bold mb-3 text-foreground",
-  h3: "text-xl font-semibold mb-2 text-foreground",
-  p: "mb-4 leading-relaxed text-foreground",
-  a: "text-primary hover:opacity-80 underline",
-  ul: "list-disc pl-6 mb-4 space-y-2",
-  ol: "list-decimal pl-6 mb-4 space-y-2",
+  h1: "text-4xl lg:text-5xl font-bold mb-6 text-foreground font-heading",
+  h2: "text-3xl lg:text-4xl font-bold mb-5 text-foreground font-heading",
+  h3: "text-2xl lg:text-3xl font-bold mb-4 text-foreground font-heading",
+  p: "mb-6 leading-relaxed text-foreground text-lg lg:text-xl",
+  a: "text-main hover:text-main/80 underline font-semibold transition-colors",
+  ul: "list-disc pl-8 mb-6 space-y-3 text-lg lg:text-xl",
+  ol: "list-decimal pl-8 mb-6 space-y-3 text-lg lg:text-xl",
   li: "leading-relaxed",
   blockquote:
-    "border-l-4 border-primary pl-4 italic text-muted-foreground mb-4",
+    "border-l-4 border-main pl-6 italic text-muted-foreground mb-6 text-lg lg:text-xl py-2",
   codeBlock:
-    "block bg-muted p-4 rounded-lg text-sm overflow-x-auto text-foreground",
-  codeInline: "bg-muted px-2 py-1 rounded text-sm text-foreground",
-  pre: "bg-muted p-4 rounded-lg overflow-x-auto mb-4",
+    "block bg-secondary-background border-2 border-border p-4 rounded-base text-base overflow-x-auto text-foreground font-mono",
+  codeInline: "bg-secondary-background border border-border px-2 py-1 rounded-base text-base text-foreground font-mono",
+  pre: "bg-secondary-background border-2 border-border p-4 rounded-base overflow-x-auto mb-6",
   table:
-    "w-full border-collapse border border-border mb-4",
-  th: "border border-border p-2 bg-muted font-semibold text-left text-foreground",
-  td: "border border-border p-2 text-foreground",
-  img: "max-w-full h-auto rounded-lg mb-4",
-  hr: "border-border my-8",
+    "w-full border-collapse border-2 border-border mb-6 text-lg",
+  th: "border-2 border-border p-3 bg-secondary-background font-bold text-left text-foreground",
+  td: "border border-border p-3 text-foreground",
+  img: "max-w-full h-auto rounded-base border-2 border-border shadow-shadow mb-6",
+  hr: "border-2 border-border my-12",
 };
 
 export function MarkdownText(props: Readonly<IMarkdownText>) {

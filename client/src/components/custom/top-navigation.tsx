@@ -33,6 +33,30 @@ interface ITopNavigationProps {
   currentUser?: NavigationUser | null
 }
 
+const styles = {
+  section: 'bg-white dark:bg-dark p-6 flex justify-center items-center',
+  desktopNav: 'container mx-auto w-full bg-background shadow-shadow border-2 border-border rounded-lg px-6 hidden lg:block',
+  desktopNavInner: 'flex items-center justify-between h-20',
+  logoLink: 'flex items-center gap-3 text-foreground hover:text-main transition-colors',
+  logoText: 'text-2xl font-bold tracking-tight font-heading',
+  navItemsContainer: 'flex items-center space-x-8',
+  navList: 'flex items-center space-x-8',
+  ctaContainer: 'flex gap-2 items-center',
+  mobileNav: 'w-full bg-background shadow-shadow border-2 border-border rounded-lg px-4 block lg:hidden',
+  mobileNavInner: 'flex items-center justify-between h-16',
+  mobileActionsContainer: 'flex gap-2',
+  mobileMenuButton: 'size-4',
+  sheetContent: 'overflow-y-auto',
+  sheetHeaderLink: 'flex items-center gap-2',
+  sheetDescription: 'sr-only',
+  mobileNavItems: 'flex flex-col gap-6 p-4',
+  mobileNavList: 'flex w-full flex-col gap-4',
+  mobileCtaContainer: 'flex flex-col gap-3',
+  navMenuLink: 'bg-transparent hover:bg-transparent focus:bg-transparent data-[active]:bg-transparent data-[state=open]:bg-transparent',
+  navItemLink: 'text-xl font-bold text-foreground hover:text-main transition-colors hover:translate-x-boxShadowX hover:translate-y-boxShadowY',
+  mobileNavButton: 'w-full justify-start',
+}
+
 export function TopNavigation({
   header,
   currentUser,
@@ -44,14 +68,14 @@ export function TopNavigation({
   const imageUrl = logo.image?.url
 
   return (
-    <section className="bg-white dark:bg-dark p-6 flex justify-center items-center">
+    <section className={styles.section}>
       {/* Desktop Menu */}
-      <nav className="w-full max-w-7xl bg-background shadow-shadow border-2 border-border rounded-lg px-4 hidden lg:block">
-        <div className="flex items-center justify-between h-16">
+      <nav className={styles.desktopNav}>
+        <div className={styles.desktopNavInner}>
           {/* Logo */}
           <Link
             to={logo.href}
-            className="flex items-center gap-2 text-foreground hover:text-main transition-colors"
+            className={styles.logoLink}
             target={logo.isExternal ? '_blank' : undefined}
             rel={logo.isExternal ? 'noopener noreferrer' : undefined}
           >
@@ -60,26 +84,26 @@ export function TopNavigation({
                 src={imageUrl}
                 alt={logo.image?.alternativeText || logo.label}
                 aspectRatio="square"
-                height={24}
-                width={24}
+                height={32}
+                width={32}
               />
             )}
-            <span className="text-lg font-semibold tracking-tighter">
+            <span className={styles.logoText}>
               {logo.label}
             </span>
           </Link>
 
           {/* Navigation Items */}
-          <div className="flex items-center space-x-8">
+          <div className={styles.navItemsContainer}>
             <NavigationMenu>
-              <NavigationMenuList className="flex items-center space-x-8">
+              <NavigationMenuList className={styles.navList}>
                 {navItems.map((item) => renderNavItem(item))}
               </NavigationMenuList>
             </NavigationMenu>
           </div>
 
           {/* CTA / User Actions */}
-          <div className="flex gap-2 items-center">
+          <div className={styles.ctaContainer}>
             {currentUser ? (
               <LoggedInUser
                 userData={{
@@ -108,12 +132,12 @@ export function TopNavigation({
       </nav>
 
       {/* Mobile Menu */}
-      <nav className="w-full bg-background shadow-shadow border-2 border-border rounded-lg px-4 block lg:hidden">
-        <div className="flex items-center justify-between h-16">
+      <nav className={styles.mobileNav}>
+        <div className={styles.mobileNavInner}>
           {/* Logo */}
           <Link
             to={logo.href}
-            className="flex items-center gap-2 text-foreground hover:text-main transition-colors"
+            className={styles.logoLink}
             target={logo.isExternal ? '_blank' : undefined}
             rel={logo.isExternal ? 'noopener noreferrer' : undefined}
           >
@@ -127,20 +151,20 @@ export function TopNavigation({
               />
             )}
           </Link>
-          <div className="flex gap-2">
+          <div className={styles.mobileActionsContainer}>
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="default" size="icon">
-                  <Menu className="size-4" />
+                  <Menu className={styles.mobileMenuButton} />
                 </Button>
               </SheetTrigger>
 
-              <SheetContent className="overflow-y-auto">
+              <SheetContent className={styles.sheetContent}>
                 <SheetHeader>
                   <SheetTitle>
                     <Link
                       to={logo.href}
-                      className="flex items-center gap-2"
+                      className={styles.sheetHeaderLink}
                       target={logo.isExternal ? '_blank' : undefined}
                       rel={logo.isExternal ? 'noopener noreferrer' : undefined}
                       onClick={() => setMobileMenuOpen(false)}
@@ -154,18 +178,18 @@ export function TopNavigation({
                       )}
                     </Link>
                   </SheetTitle>
-                  <SheetDescription className="sr-only">
+                  <SheetDescription className={styles.sheetDescription}>
                     Mobile navigation menu
                   </SheetDescription>
                 </SheetHeader>
-                <div className="flex flex-col gap-6 p-4">
-                  <div className="flex w-full flex-col gap-4">
+                <div className={styles.mobileNavItems}>
+                  <div className={styles.mobileNavList}>
                     {navItems.map((item) =>
                       renderMobileNavItem(item, () => setMobileMenuOpen(false)),
                     )}
                   </div>
 
-                  <div className="flex flex-col gap-3">
+                  <div className={styles.mobileCtaContainer}>
                     {currentUser ? (
                       <LoggedInUser
                         userData={{
@@ -207,13 +231,13 @@ const renderNavItem = (item: TLink) => {
     <NavigationMenuItem key={item.id}>
       <NavigationMenuLink
         asChild
-        className="bg-transparent hover:bg-transparent focus:bg-transparent data-[active]:bg-transparent data-[state=open]:bg-transparent"
+        className={styles.navMenuLink}
       >
         <Link
           to={item.href}
           target={item.isExternal ? '_blank' : undefined}
           rel={item.isExternal ? 'noopener noreferrer' : undefined}
-          className="text-foreground hover:text-main transition-colors font-base hover:translate-x-boxShadowX hover:translate-y-boxShadowY"
+          className={styles.navItemLink}
         >
           {item.label}
         </Link>
@@ -228,7 +252,7 @@ const renderMobileNavItem = (item: TLink, onNavigate: () => void) => {
       key={item.id}
       asChild
       variant="neutral"
-      className="w-full justify-start"
+      className={styles.mobileNavButton}
     >
       <Link
         to={item.href}
