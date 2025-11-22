@@ -1,7 +1,7 @@
 import { getArticlesData, getArticlesDataBySlug } from './articles'
 import {
-  getCurrentUserServerFunction,
   getAuthServerFunction,
+  getCurrentUserServerFunction,
   loginUserServerFunction,
   logoutUserServerFunction,
   registerUserServerFunction,
