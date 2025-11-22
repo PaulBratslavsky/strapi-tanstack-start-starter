@@ -38,8 +38,6 @@ const CACHE_TTL = 2 * 60 * 1000 // 2 minutes - balanced performance and security
  * @returns Authenticated user or null if not logged in
  */
 export async function getAuth(): Promise<TAuthUser | null> {
-  'use server'
-
   const session = await useAppSession()
   const jwt = session.data.jwt
 
@@ -90,8 +88,6 @@ export async function getAuth(): Promise<TAuthUser | null> {
  * Clear authentication session and cache
  */
 export async function clearAuth(): Promise<void> {
-  'use server'
-
   const session = await useAppSession()
   const jwt = session.data.jwt
 
