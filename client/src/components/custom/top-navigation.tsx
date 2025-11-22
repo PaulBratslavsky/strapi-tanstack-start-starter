@@ -40,8 +40,9 @@ export function TopNavigation({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   if (!header) return null
-  const { logo, navItems, cta } = header
-  const imageUrl = logo.image.url
+  const { logo, navItems = [], cta } = header
+  const imageUrl = logo.image?.url
+
   return (
     <section className="bg-white dark:bg-dark p-6 flex justify-center items-center">
       {/* Desktop Menu */}
@@ -54,13 +55,15 @@ export function TopNavigation({
             target={logo.isExternal ? '_blank' : undefined}
             rel={logo.isExternal ? 'noopener noreferrer' : undefined}
           >
-            <StrapiImage
-              src={imageUrl}
-              alt={logo.image.alternativeText || logo.label}
-              aspectRatio="square"
-              height={40}
-              width={40}
-            />
+            {imageUrl && (
+              <StrapiImage
+                src={imageUrl}
+                alt={logo.image?.alternativeText || logo.label}
+                aspectRatio="square"
+                height={24}
+                width={24}
+              />
+            )}
             <span className="text-lg font-semibold tracking-tighter">
               {logo.label}
             </span>
@@ -84,7 +87,7 @@ export function TopNavigation({
                   email: currentUser.email || '',
                 }}
               />
-            ) : (
+            ) : cta ? (
               <Button
                 asChild
                 variant={cta.type === 'PRIMARY' ? 'default' : 'neutral'}
@@ -98,7 +101,7 @@ export function TopNavigation({
                   {cta.label}
                 </Link>
               </Button>
-            )}
+            ) : null}
             <ThemeToggle />
           </div>
         </div>
@@ -114,13 +117,15 @@ export function TopNavigation({
             target={logo.isExternal ? '_blank' : undefined}
             rel={logo.isExternal ? 'noopener noreferrer' : undefined}
           >
-            <StrapiImage
-              src={imageUrl}
-              alt={logo.image.alternativeText || logo.label}
-              aspectRatio="square"
-              height={40}
-              width={40}
-            />
+            {imageUrl && (
+              <StrapiImage
+                src={imageUrl}
+                alt={logo.image?.alternativeText || logo.label}
+                aspectRatio="square"
+                height={40}
+                width={40}
+              />
+            )}
           </Link>
           <div className="flex gap-2">
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -140,11 +145,13 @@ export function TopNavigation({
                       rel={logo.isExternal ? 'noopener noreferrer' : undefined}
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      <StrapiImage
-                        src={imageUrl}
-                        alt={logo.image.alternativeText || logo.label}
-                        aspectRatio="square"
-                      />
+                      {imageUrl && (
+                        <StrapiImage
+                          src={imageUrl}
+                          alt={logo.image?.alternativeText || logo.label}
+                          aspectRatio="square"
+                        />
+                      )}
                     </Link>
                   </SheetTitle>
                   <SheetDescription className="sr-only">
@@ -154,7 +161,7 @@ export function TopNavigation({
                 <div className="flex flex-col gap-6 p-4">
                   <div className="flex w-full flex-col gap-4">
                     {navItems.map((item) =>
-                      renderMobileNavItem(item, () => setMobileMenuOpen(false))
+                      renderMobileNavItem(item, () => setMobileMenuOpen(false)),
                     )}
                   </div>
 
@@ -166,7 +173,7 @@ export function TopNavigation({
                           email: currentUser.email || '',
                         }}
                       />
-                    ) : (
+                    ) : cta ? (
                       <Button
                         asChild
                         variant={cta.type === 'PRIMARY' ? 'default' : 'neutral'}
@@ -182,7 +189,7 @@ export function TopNavigation({
                           {cta.label}
                         </Link>
                       </Button>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </SheetContent>
@@ -217,7 +224,12 @@ const renderNavItem = (item: TLink) => {
 
 const renderMobileNavItem = (item: TLink, onNavigate: () => void) => {
   return (
-    <Button key={item.id} asChild variant="neutral" className="w-full justify-start">
+    <Button
+      key={item.id}
+      asChild
+      variant="neutral"
+      className="w-full justify-start"
+    >
       <Link
         to={item.href}
         target={item.isExternal ? '_blank' : undefined}

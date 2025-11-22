@@ -33,14 +33,14 @@ export type TLogo = {
   label: string
   href: string
   isExternal: boolean
-  image: TImage
+  image?: TImage 
 }
 
 export type THeader = {
   id: number
   logo: TLogo
-  navItems: Array<TLink>
-  cta: TLink
+  navItems?: Array<TLink>
+  cta?: TLink
 }
 
 export type TGlobal = {
