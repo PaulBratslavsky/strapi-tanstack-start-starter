@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import type { CurrentUser } from '@/lib/comment-auth'
 
 import { CommentFeedItem } from './comment-feed-item'
 import { CommentForm } from './comment-form'
+import type { CurrentUser } from '@/lib/comment-auth'
 import { CommentPagination } from '@/components/custom/comment-section/comment-pagination'
 import { CommentSearch } from '@/components/custom/comment-section/comment-search'
 
@@ -13,6 +13,31 @@ interface CommentSectionProps {
   readonly articleDocumentId: string
   readonly currentUser?: CurrentUser | null
   readonly className?: string
+}
+
+const styles = {
+  container: 'container mx-auto px-4 py-8',
+  maxWidth: 'max-w-4xl mx-auto',
+  loadingRoot: 'animate-pulse',
+  loadingContent: 'space-y-4',
+  loadingHeader: 'h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4',
+  loadingItems: 'space-y-3',
+  loadingItem: 'h-20 bg-gray-200 dark:bg-gray-700 rounded',
+  errorRoot: 'text-center py-8',
+  errorMessage: 'text-red-600 dark:text-red-400 mb-4',
+  errorDetails: 'text-sm text-gray-500 dark:text-gray-400',
+  retryButton: 'px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors',
+  card: 'bg-card rounded-lg shadow-sm border',
+  header: 'px-6 py-4 border-b space-y-4',
+  headerTop: 'flex items-center justify-between',
+  heading: 'text-lg font-semibold text-foreground',
+  loadingIndicator: 'flex items-center gap-2 text-sm text-muted-foreground',
+  spinner: 'w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin',
+  searchResults: 'text-sm text-muted-foreground',
+  commentFormContainer: 'px-6 py-4 border-b bg-muted/30',
+  commentsFeed: 'divide-y',
+  emptyState: 'px-6 py-12 text-center text-muted-foreground',
+  paginationContainer: 'px-6 py-4 border-t',
 }
 
 export function CommentSection({
@@ -52,13 +77,17 @@ export function CommentSection({
 
   if (isLoading) {
     return (
-      <div className={`animate-pulse ${className}`}>
-        <div className="space-y-4">
-          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
-          <div className="space-y-3">
-            <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
-            <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
-            <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+      <div className={styles.container}>
+        <div className={styles.maxWidth}>
+          <div className={`${styles.loadingRoot} ${className}`}>
+            <div className={styles.loadingContent}>
+              <div className={styles.loadingHeader}></div>
+              <div className={styles.loadingItems}>
+                <div className={styles.loadingItem}></div>
+                <div className={styles.loadingItem}></div>
+                <div className={styles.loadingItem}></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -67,21 +96,25 @@ export function CommentSection({
 
   if (error) {
     return (
-      <div className={`text-center py-8 ${className}`}>
-        <div className="text-red-600 dark:text-red-400 mb-4">
-          <p>Failed to load comments</p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            {error instanceof Error
-              ? error.message
-              : 'An unexpected error occurred'}
-          </p>
+      <div className={styles.container}>
+        <div className={styles.maxWidth}>
+          <div className={`${styles.errorRoot} ${className}`}>
+            <div className={styles.errorMessage}>
+              <p>Failed to load comments</p>
+              <p className={styles.errorDetails}>
+                {error instanceof Error
+                  ? error.message
+                  : 'An unexpected error occurred'}
+              </p>
+            </div>
+            <button
+              onClick={() => refetch()}
+              className={styles.retryButton}
+            >
+              Try Again
+            </button>
+          </div>
         </div>
-        <button
-          onClick={() => refetch()}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-        >
-          Try Again
-        </button>
       </div>
     )
   }
@@ -92,76 +125,80 @@ export function CommentSection({
   const totalPages = pagination?.pageCount || 1
 
   return (
-    <div className={`${className}`}>
-      <div className="bg-card rounded-lg shadow-sm border">
-        {/* Header with Search */}
-        <div className="px-6 py-4 border-b space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-foreground">
-              {/* Comments ({totalComments}) */}
-            </h3>
-            {isFetching && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                <span>Loading...</span>
+    <div className={styles.container}>
+      <div className={styles.maxWidth}>
+        <div className={`${className}`}>
+          <div className={styles.card}>
+            {/* Header with Search */}
+            <div className={styles.header}>
+              <div className={styles.headerTop}>
+                <h3 className={styles.heading}>
+                  Comments ({totalComments})
+                </h3>
+                {isFetching && (
+                  <div className={styles.loadingIndicator}>
+                    <div className={styles.spinner} />
+                    <span>Loading...</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Search Bar */}
+              <CommentSearch onSearch={handleSearch} />
+
+              {searchQuery.length > 0 && (
+                <p className={styles.searchResults}>
+                  Showing results for "{searchQuery}"
+                </p>
+              )}
+            </div>
+
+            {/* Comment Input at Top */}
+            <div className={styles.commentFormContainer}>
+              <CommentForm
+                articleDocumentId={articleDocumentId}
+                currentUser={currentUser}
+                onSuccess={() => {
+                  refetch()
+                  setCurrentPage(1)
+                }}
+              />
+            </div>
+
+            {/* Comments Feed */}
+            <div className={styles.commentsFeed}>
+              {comments.length === 0 ? (
+                <div className={styles.emptyState}>
+                  {searchQuery ? (
+                    <p>No comments found matching "{searchQuery}"</p>
+                  ) : (
+                    <p>No comments yet. Be the first to comment!</p>
+                  )}
+                </div>
+              ) : (
+                comments.map((comment) => (
+                  <CommentFeedItem
+                    key={comment.documentId}
+                    comment={comment}
+                    currentUser={currentUser}
+                    onUpdate={() => refetch()}
+                  />
+                ))
+              )}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className={styles.paginationContainer}>
+                <CommentPagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
               </div>
             )}
           </div>
-
-          {/* Search Bar */}
-          <CommentSearch onSearch={handleSearch} />
-
-          {searchQuery.length > 0 && (
-            <p className="text-sm text-muted-foreground">
-              Showing results for "{searchQuery}"
-            </p>
-          )}
         </div>
-
-        {/* Comment Input at Top */}
-        <div className="px-6 py-4 border-b bg-muted/30">
-          <CommentForm
-            articleDocumentId={articleDocumentId}
-            currentUser={currentUser}
-            onSuccess={() => {
-              refetch()
-              setCurrentPage(1)
-            }}
-          />
-        </div>
-
-        {/* Comments Feed */}
-        <div className="divide-y">
-          {comments.length === 0 ? (
-            <div className="px-6 py-12 text-center text-muted-foreground">
-              {searchQuery ? (
-                <p>No comments found matching "{searchQuery}"</p>
-              ) : (
-                <p>No comments yet. Be the first to comment!</p>
-              )}
-            </div>
-          ) : (
-            comments.map((comment) => (
-              <CommentFeedItem
-                key={comment.documentId}
-                comment={comment}
-                currentUser={currentUser}
-                onUpdate={() => refetch()}
-              />
-            ))
-          )}
-        </div>
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="px-6 py-4 border-t">
-            <CommentPagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-          </div>
-        )}
       </div>
     </div>
   )

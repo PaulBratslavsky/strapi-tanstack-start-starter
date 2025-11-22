@@ -20,7 +20,6 @@ const styles = {
   content: 'p-6',
   title: 'text-xl font-semibold mb-3 text-foreground',
   description: 'text-foreground/70 mb-4 line-clamp-3',
-  link: 'text-main hover:text-main/80 font-medium',
 }
 
 export function FeaturedArticles(props: Readonly<IFeaturedArticles>) {
@@ -41,7 +40,6 @@ export function FeaturedArticles(props: Readonly<IFeaturedArticles>) {
                     <Link
                       to="/articles/$slug"
                       params={{ slug: article.slug }}
-                      className={styles.link}
                     >
                       Read more →
                     </Link>

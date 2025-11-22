@@ -37,7 +37,7 @@ const styles = {
   section: 'bg-white dark:bg-dark p-6 flex justify-center items-center',
   desktopNav: 'container mx-auto w-full bg-background shadow-shadow border-2 border-border rounded-lg px-6 hidden lg:block',
   desktopNavInner: 'flex items-center justify-between h-20',
-  logoLink: 'flex items-center gap-3 text-foreground hover:text-main transition-colors',
+  logoLink: 'flex items-center gap-3 text-foreground hover:text-main transition-all duration-300 ease-in-out',
   logoText: 'text-2xl font-bold tracking-tight font-heading',
   navItemsContainer: 'flex items-center space-x-8',
   navList: 'flex items-center space-x-8',
@@ -53,7 +53,7 @@ const styles = {
   mobileNavList: 'flex w-full flex-col gap-4',
   mobileCtaContainer: 'flex flex-col gap-3',
   navMenuLink: 'bg-transparent hover:bg-transparent focus:bg-transparent data-[active]:bg-transparent data-[state=open]:bg-transparent',
-  navItemLink: 'text-xl font-bold text-foreground hover:text-main transition-colors hover:translate-x-boxShadowX hover:translate-y-boxShadowY',
+  navItemLink: 'text-xl font-bold text-foreground hover:text-main transition-all duration-300 ease-in-out hover:translate-x-boxShadowX hover:translate-y-boxShadowY',
   mobileNavButton: 'w-full justify-start',
 }
 

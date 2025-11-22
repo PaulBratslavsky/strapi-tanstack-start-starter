@@ -1,5 +1,5 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
-import { ArticleDetail } from '@/components/custom/article-detail'
+import { Article } from '@/components/custom/article'
 import { CommentSection } from '@/components/custom/comment-section'
 import { strapiApi } from '@/data/server-functions'
 import { NotFound } from '@/components/custom/not-found'
@@ -30,15 +30,11 @@ function ArticleDetailRoute() {
   const { article, currentUser } = Route.useLoaderData()
   return (
     <>
-      <ArticleDetail {...article} />
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <CommentSection
-            articleDocumentId={article.documentId}
-            currentUser={currentUser}
-          />
-        </div>
-      </div>
+      <Article {...article} />
+      <CommentSection
+        articleDocumentId={article.documentId}
+        currentUser={currentUser}
+      />
     </>
   )
 }

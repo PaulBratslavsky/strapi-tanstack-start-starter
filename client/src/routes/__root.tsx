@@ -117,17 +117,19 @@ function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
             <TopNavigation header={header} currentUser={currentUser} />
             <main id="main-content" className="flex-1 overflow-y-auto">{children}</main>
             <ScrollToTop />
-            <TanStackDevtools
-              config={{
-                position: 'bottom-left',
-              }}
-              plugins={[
-                {
-                  name: 'Tanstack Router',
-                  render: <TanStackRouterDevtoolsPanel />,
-                },
-              ]}
-            />
+            {import.meta.env.DEV && (
+              <TanStackDevtools
+                config={{
+                  position: 'bottom-left',
+                }}
+                plugins={[
+                  {
+                    name: 'Tanstack Router',
+                    render: <TanStackRouterDevtoolsPanel />,
+                  },
+                ]}
+              />
+            )}
             <Scripts />
           </ThemeProvider>
         </QueryClientProvider>

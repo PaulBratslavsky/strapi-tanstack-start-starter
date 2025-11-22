@@ -27,7 +27,7 @@ export function LogoutButton() {
       disabled={isLoading}
       className="disabled:opacity-50"
     >
-      <LogOut className="w-6 h-6 hover:text-primary" />
+      <LogOut className="w-6 h-6 text-foreground hover:text-main transition-colors duration-300 ease-in-out" />
     </button>
   )
 }

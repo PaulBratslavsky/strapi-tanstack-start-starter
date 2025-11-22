@@ -32,17 +32,15 @@ export interface IArticleDetail {
 const styles = {
   root: "min-h-screen",
   headerWrapper: "bg-card border-b-2 border-border",
-  headerContainer: "container mx-auto px-4 py-8",
-  headerInner: "max-w-4xl mx-auto",
+  headerContainer: "container mx-auto px-6 py-8",
   breadcrumb: "mb-8",
   title: "text-4xl lg:text-6xl font-bold text-foreground mb-6 leading-tight font-heading",
   description: "text-xl lg:text-2xl text-muted-foreground leading-relaxed mb-8",
   featuredImageWrapper: "mb-8",
-  featuredImage: "rounded-base border-2 border-border shadow-shadow",
+  featuredImage: "rounded-2xl",
 
-  bodyContainer: "container mx-auto px-4 py-4",
-  bodyInner: "max-w-4xl mx-auto",
-  contentCard: "rounded-base p-8 lg:p-12 bg-card border-2 border-border bg-white dark:bg-background shadow-shadow",
+  bodyContainer: "my-16",
+  contentCard: "max-w-4xl mx-auto rounded-base p-8 lg:p-12 bg-white dark:bg-background shadow-shadow",
 
   authorWrapper: "mt-8 flex items-start space-x-6 pt-8 border-t-2 border-border",
   authorImageWrapper: "w-16 h-16 flex-shrink-0",
@@ -82,9 +80,8 @@ export function ArticleDetail(props: IArticleDetail) {
     <div className={styles.root}>
       <div className={styles.headerWrapper}>
         <div className={styles.headerContainer}>
-          <div className={styles.headerInner}>
-            {/* Breadcrumb */}
-            <Breadcrumb className={styles.breadcrumb}>
+          {/* Breadcrumb */}
+          <Breadcrumb className={styles.breadcrumb}>
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
@@ -121,13 +118,11 @@ export function ArticleDetail(props: IArticleDetail) {
                 />
               </div>
             )}
-          </div>
         </div>
       </div>
 
       <div className={styles.bodyContainer}>
-        <div className={styles.bodyInner}>
-          <Card className={styles.contentCard}>
+        <Card className={styles.contentCard}>
             <MarkdownContent content={content} styles={markdownStyles}/>
 
             {author?.fullName && (
@@ -153,8 +148,7 @@ export function ArticleDetail(props: IArticleDetail) {
                 </div>
               </div>
             )}
-          </Card>
-        </div>
+        </Card>
       </div>
     </div>
   );
