@@ -13,9 +13,7 @@ export function getStrapiURL() {
 
 export function getStrapiMedia(url: string): string {
   if (!url) return '';
-  if (url.startsWith("data:") || url.startsWith("http") || url.startsWith("//")) {
-    return url;
-  }
+  if (url.startsWith("data:") || url.startsWith("http") || url.startsWith("//")) return url;
   const BASE_URL = import.meta.env.VITE_STRAPI_BASE_URL ?? "http://localhost:1337";
   return `${BASE_URL}${url}`;
 }

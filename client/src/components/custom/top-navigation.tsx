@@ -4,7 +4,7 @@ import { Link } from '@tanstack/react-router'
 import { ThemeToggle } from './theme-toggle'
 import { StrapiImage } from './strapi-image'
 import { LoggedInUser } from './logged-in-user'
-import type { TAuthUser, THeader, TLink } from '../../types'
+import type { THeader, TLink } from '../../types'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -22,9 +22,15 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 
+// Simplified user type - only what we need for navigation
+interface NavigationUser {
+  username: string
+  email: string
+}
+
 interface ITopNavigationProps {
   header?: THeader
-  currentUser?: TAuthUser | null
+  currentUser?: NavigationUser | null
 }
 
 export function TopNavigation({

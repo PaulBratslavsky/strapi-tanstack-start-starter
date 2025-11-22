@@ -12,8 +12,21 @@ import globalCss from '../global.css?url'
 import { TopNavigation } from '../components/custom/top-navigation'
 import { strapiApi } from '../data/server-functions'
 import { NotFound } from '../components/custom/not-found'
+import type { THeader } from '@/types'
 import { ThemeProvider } from '@/components/custom/theme-provider'
 import { ScrollToTop } from '@/components/custom/scroll-to-top'
+
+// Session user data returned from auth server function
+interface SessionUser {
+  userId: number
+  email: string
+  username: string
+}
+
+interface RootLoaderData {
+  header: THeader
+  currentUser: SessionUser | null
+}
 
 // Create a client
 const queryClient = new QueryClient({
@@ -67,7 +80,18 @@ export const Route = createRootRouteWithContext<{
 
 function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
   // shellComponent renders before loader completes during SSR, so data may be undefined
-  const loaderData = Route.useLoaderData()
+  // We need to handle the case where loaderData is not yet available
+  let loaderData: RootLoaderData | undefined
+  try {
+    loaderData = Route.useLoaderData()
+  } catch {
+    // During initial SSR, loader data might not be available yet
+    loaderData = undefined
+  }
+
+  // Provide safe defaults during SSR when loader hasn't completed yet
+  const header = loaderData?.header
+  const currentUser = loaderData?.currentUser
 
   return (
     <html lang="en">
@@ -77,7 +101,7 @@ function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
       <body className="h-screen flex flex-col overflow-hidden">
         <QueryClientProvider client={queryClient}>
           <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            <TopNavigation header={loaderData.header} currentUser={loaderData.currentUser} />
+            <TopNavigation header={header} currentUser={currentUser} />
             <main id="main-content" className="flex-1 overflow-y-auto">{children}</main>
             <ScrollToTop />
             <TanStackDevtools
