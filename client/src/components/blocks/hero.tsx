@@ -28,7 +28,8 @@ const styles = {
   primaryButton: 'w-full sm:w-auto',
   secondaryButton: 'w-full sm:w-auto',
   icon: 'ml-2 size-4',
-  image: 'max-h-96 w-full rounded-md object-cover',
+  imageContainer: 'flex items-center justify-center md:justify-end',
+  image: 'max-h-96 max-w-96 rounded-md object-cover',
 }
 
 export function Hero(props: Readonly<IHero>) {
@@ -90,11 +91,14 @@ export function Hero(props: Readonly<IHero>) {
               )}
             </div>
           </div>
-          <StrapiImage
-            src={image.url}
-            alt={image.alternativeText || heading}
-            className={styles.image}
-          />
+          <div className={styles.imageContainer}>
+            <StrapiImage
+              src={image.url}
+              alt={image.alternativeText || heading}
+              className={styles.image}
+              aspectRatio='square'
+            />
+          </div>
         </div>
       </div>
     </section>

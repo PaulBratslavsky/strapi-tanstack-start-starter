@@ -5,18 +5,17 @@ import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 import netlify from '@netlify/vite-plugin-tanstack-start'
 
-const config = defineConfig({
+const config = defineConfig(({ mode }) => ({
   plugins: [
     // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),
     tailwindcss(),
-    viteReact(),
     tanstackStart(),
-    netlify(),
+    viteReact(),
+    ...(mode === 'production' ? [netlify()] : []),
   ],
- 
-})
+}))
 
 export default config
