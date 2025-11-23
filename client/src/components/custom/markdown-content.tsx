@@ -60,9 +60,18 @@ export function MarkdownContent({ content, styles }: Readonly<MarkdownContentPro
       <Markdown
         remarkPlugins={[remarkGfm]}
         components={{
-          h1: ({ ...props }) => <h1 className={styles.h1} {...props} />,
-          h2: ({ ...props }) => <h2 className={styles.h2} {...props} />,
-          h3: ({ ...props }) => <h3 className={styles.h3} {...props} />,
+          h1: ({ children, ...props }) => {
+            const id = String(children).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            return <h1 id={id} className={styles.h1} {...props}>{children}</h1>;
+          },
+          h2: ({ children, ...props }) => {
+            const id = String(children).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            return <h2 id={id} className={styles.h2} {...props}>{children}</h2>;
+          },
+          h3: ({ children, ...props }) => {
+            const id = String(children).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            return <h3 id={id} className={styles.h3} {...props}>{children}</h3>;
+          },
           p: ({ ...props }) => <p className={styles.p} {...props} />,
           a: ({ href, children, ...props }) => {
             // Check if this is a YouTube link with "youtube" text
@@ -83,6 +92,30 @@ export function MarkdownContent({ content, styles }: Readonly<MarkdownContentPro
                     controls
                   />
                 </div>
+              );
+            }
+
+            // Handle hash links (table of contents)
+            const isHashLink = href?.startsWith('#');
+            if (isHashLink && href) {
+              return (
+                <a
+                  href={href}
+                  className={styles.a}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const id = href.substring(1);
+                    const element = document.getElementById(id);
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      // Update URL hash without triggering navigation
+                      window.history.pushState(null, '', href);
+                    }
+                  }}
+                  {...props}
+                >
+                  {children}
+                </a>
               );
             }
 
