@@ -16,6 +16,9 @@ const config = defineConfig(({ mode }) => ({
     viteReact(),
     ...(mode === 'production' ? [netlify()] : []),
   ],
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(mode === 'production' ? 'production' : 'development'),
+  },
 }))
 
 export default config

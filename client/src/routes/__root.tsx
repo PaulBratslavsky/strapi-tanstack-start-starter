@@ -117,7 +117,7 @@ function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
             <TopNavigation header={header} currentUser={currentUser} />
             <main id="main-content" className="flex-1 overflow-y-auto">{children}</main>
             <ScrollToTop />
-            {!import.meta.env.PROD && (
+            {process.env.NODE_ENV !== 'production' && (
               <TanStackDevtools
                 config={{
                   position: 'bottom-left',
