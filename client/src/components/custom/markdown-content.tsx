@@ -1,6 +1,7 @@
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useEffect, useState } from 'react';
+import ReactPlayer from 'react-player';
 import { SyntaxHighlighter } from "./syntax-highlighter";
 import { MermaidDiagram } from "./mermaid-diagram";
 
@@ -63,7 +64,30 @@ export function MarkdownContent({ content, styles }: Readonly<MarkdownContentPro
           h2: ({ ...props }) => <h2 className={styles.h2} {...props} />,
           h3: ({ ...props }) => <h3 className={styles.h3} {...props} />,
           p: ({ ...props }) => <p className={styles.p} {...props} />,
-          a: ({ ...props }) => <a className={styles.a} {...props} />,
+          a: ({ href, children, ...props }) => {
+            // Check if this is a YouTube link with "youtube" text
+            const isYouTubeLink = href && (
+              href.includes('youtube.com') ||
+              href.includes('youtu.be')
+            );
+            const hasYouTubeText = children &&
+              String(children).toLowerCase().includes('youtube');
+
+            if (isYouTubeLink && hasYouTubeText) {
+              return (
+                <div key={href} className="my-6 aspect-video max-w-full">
+                  <ReactPlayer
+                    src={href}
+                    width="100%"
+                    height="100%"
+                    controls
+                  />
+                </div>
+              );
+            }
+
+            return <a href={href} className={styles.a} {...props}>{children}</a>;
+          },
           ul: ({ ...props }) => <ul className={styles.ul} {...props} />,
           ol: ({ ...props }) => <ol className={styles.ol} {...props} />,
           li: ({ ...props }) => <li className={styles.li} {...props} />,

@@ -1,20 +1,10 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
+import mermaid from 'mermaid';
 
 interface MermaidDiagramProps {
   chart: string;
   className?: string;
 }
-
-// Lazy load the mermaid component - only loads on client
-const LazyMermaid = lazy(() =>
-  import('@lightenna/react-mermaid-diagram').then((mod) => ({
-    default: ({ chart, className }: MermaidDiagramProps) => (
-      <mod.MermaidDiagram className={className} theme="default">
-        {chart}
-      </mod.MermaidDiagram>
-    ),
-  }))
-);
 
 // Fallback component shown during SSR and loading
 function MermaidDiagramFallback({ chart, className }: MermaidDiagramProps) {
@@ -25,10 +15,65 @@ function MermaidDiagramFallback({ chart, className }: MermaidDiagramProps) {
   );
 }
 
+// Client-side mermaid renderer
+function MermaidDiagramClient({ chart, className = '' }: MermaidDiagramProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [svg, setSvg] = useState<string>('');
+  const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    // Initialize mermaid with configuration
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      securityLevel: 'loose',
+      suppressErrorRendering: true,
+    });
+
+    // Generate unique ID for this diagram
+    const id = `mermaid-${Math.random().toString(36).substring(2, 11)}`;
+
+    // Render the diagram
+    const renderDiagram = async () => {
+      try {
+        const { svg } = await mermaid.render(id, chart);
+        setSvg(svg);
+        setError('');
+      } catch (err) {
+        // Silently handle errors - suppressErrorRendering prevents UI display
+        setError(err instanceof Error ? err.message : 'Failed to render diagram');
+      }
+    };
+
+    renderDiagram();
+  }, [chart]);
+
+  if (error) {
+    return <MermaidDiagramFallback chart={chart} className={className} />;
+  }
+
+  if (!svg) {
+    return <MermaidDiagramFallback chart={chart} className={className} />;
+  }
+
+  return (
+    <div
+      ref={containerRef}
+      className={`my-4 flex justify-center ${className}`}
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
+  );
+}
+
+// Lazy load the client component - only loads on client
+const LazyMermaidClient = lazy(() =>
+  Promise.resolve({ default: MermaidDiagramClient })
+);
+
 export function MermaidDiagram({ chart, className = '' }: MermaidDiagramProps) {
   return (
     <Suspense fallback={<MermaidDiagramFallback chart={chart} className={className} />}>
-      <LazyMermaid chart={chart} className={className} />
+      <LazyMermaidClient chart={chart} className={className} />
     </Suspense>
   );
 }
