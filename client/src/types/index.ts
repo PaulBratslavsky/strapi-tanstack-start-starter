@@ -64,6 +64,17 @@ export type TLandingPage = {
   blocks: Array<Block>;
 }
 
+export type TPage = {
+  id: number;
+  documentId: string;
+  title: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  blocks: Array<Block>;
+}
+
 export type TMetaData = {
   documentId: string
   title: string

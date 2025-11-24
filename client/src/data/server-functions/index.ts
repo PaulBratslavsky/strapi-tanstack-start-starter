@@ -13,6 +13,7 @@ import {
   updateComment,
 } from './comments'
 import { getGlobalData } from './global'
+import { getPageData } from './page'
 import { getLandingPageData } from './landing-page'
 
 export const strapiApi = {
@@ -21,6 +22,9 @@ export const strapiApi = {
   },
   landingPage: {
     getLandingPageData,
+  },
+  page: {
+    getPageData,
   },
   articles: {
     getArticlesData,
