@@ -21,6 +21,12 @@ export const Route = createFileRoute('/articles/$slug')({
       currentUser,
     }
   },
+  head: ({ loaderData }) => ({
+    meta: [
+      { title: loaderData?.article.title },
+      { name: 'description', content: loaderData?.article?.description },
+    ],
+  }),
   notFoundComponent: () => {
     return <NotFound title="Article Not Found" message="Article not found" />
   },

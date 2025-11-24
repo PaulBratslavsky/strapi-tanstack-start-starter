@@ -27,6 +27,12 @@ export const Route = createFileRoute('/articles/')({
     })
     return { articlesData }
   },
+  head: () => ({
+    meta: [
+      { title: 'Blog' },
+      { name: 'description', content: 'Discover insights, tutorials, and stories from our team' },
+    ],
+  }),
   component: Articles,
 })
 

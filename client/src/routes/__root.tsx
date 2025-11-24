@@ -26,6 +26,8 @@ interface SessionUser {
 interface RootLoaderData {
   header: THeader
   currentUser: SessionUser | null
+  title: string
+  description: string
 }
 
 // Create a client
@@ -49,12 +51,14 @@ export const Route = createRootRouteWithContext<{
     return {
       header: globalData.data.header,
       currentUser,
+      title: globalData.data.title,
+      description: globalData.data.description,
     }
   },
   notFoundComponent: () => {
     return <NotFound title="Page Not Found" message="Global not found." />
   },
-  head: () => ({
+  head: ({ loaderData }) => ({
     meta: [
       {
         charSet: 'utf-8',
@@ -64,7 +68,11 @@ export const Route = createRootRouteWithContext<{
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: loaderData?.title ?? 'TanStack Start Starter',
+      },
+      {
+        name: 'description',
+        content: loaderData?.description ?? '',
       },
     ],
     links: [
