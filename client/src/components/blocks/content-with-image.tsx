@@ -17,9 +17,9 @@ export interface IContentWithImage {
 }
 
 const styles = {
-  section: 'py-10',
-  container: 'container mx-auto p-16 bg-white dark:bg-background',
-  wrapper: 'grid grid-cols-1 items-center gap-12 lg:grid-cols-2',
+  section: 'block-section-sm',
+  container: 'block-container block-card-padding block-bg-secondary',
+  wrapper: 'grid grid-cols-1 items-center block-gap-lg lg:grid-cols-2',
   reversed: 'lg:[&>*:first-child]:order-2',
   heading: 'mb-6 text-4xl font-bold text-foreground lg:text-5xl font-heading',
   content: 'prose prose-lg mb-8 text-muted-foreground',

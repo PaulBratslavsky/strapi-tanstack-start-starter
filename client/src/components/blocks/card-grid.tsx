@@ -8,9 +8,9 @@ export interface ICardGrid {
 }
 
 const styles = {
-  section: "py-16 bg-white dark:bg-background",
-  container: "container mx-auto px-4",
-  cardGrid: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",
+  section: "block-section block-bg-primary",
+  container: "block-container",
+  cardGrid: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 block-gap-sm",
   cardContainer: "hover:shadow-lg transition-shadow bg-main text-main-foreground",
   cardTitle: "text-xl",
   cardText: "text-main-foreground/80 leading-relaxed",

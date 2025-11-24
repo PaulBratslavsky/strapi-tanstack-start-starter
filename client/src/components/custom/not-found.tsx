@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, useRouter } from '@tanstack/react-router';
 import { ArrowLeft, Home, SearchX } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -25,7 +25,8 @@ export function NotFound({
   title = 'Page Not Found',
   message = "The page you're looking for doesn't exist or has been moved.",
 }: Readonly<INotFoundProps>) {
-  const handleBack = () => window.history.back()
+  const router = useRouter()
+  const handleBack = () => router.history.back()
 
   return (
     <div className={styles.root}>

@@ -65,7 +65,6 @@ export function TopNavigation({
 
   if (!header) return null
   const { logo, navItems = [], cta } = header
-  const imageUrl = logo.image?.url
 
   return (
     <section className={styles.section}>
@@ -79,10 +78,10 @@ export function TopNavigation({
             target={logo.isExternal ? '_blank' : undefined}
             rel={logo.isExternal ? 'noopener noreferrer' : undefined}
           >
-            {imageUrl && (
+            {logo.image && (
               <StrapiImage
-                src={imageUrl}
-                alt={logo.image?.alternativeText || logo.label}
+                src={logo.image.url}
+                alt={logo.image.alternativeText || logo.label}
                 aspectRatio="square"
                 height={32}
                 width={32}
@@ -141,10 +140,10 @@ export function TopNavigation({
             target={logo.isExternal ? '_blank' : undefined}
             rel={logo.isExternal ? 'noopener noreferrer' : undefined}
           >
-            {imageUrl && (
+            {logo.image && (
               <StrapiImage
-                src={imageUrl}
-                alt={logo.image?.alternativeText || logo.label}
+                src={logo.image.url}
+                alt={logo.image.alternativeText || logo.label}
                 aspectRatio="square"
                 height={40}
                 width={40}
@@ -169,10 +168,10 @@ export function TopNavigation({
                       rel={logo.isExternal ? 'noopener noreferrer' : undefined}
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      {imageUrl && (
+                      {logo.image && (
                         <StrapiImage
-                          src={imageUrl}
-                          alt={logo.image?.alternativeText || logo.label}
+                          src={logo.image.url}
+                          alt={logo.image.alternativeText || logo.label}
                           aspectRatio="square"
                         />
                       )}

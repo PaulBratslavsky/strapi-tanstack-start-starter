@@ -23,10 +23,11 @@ export function PaginationComponent({ pageCount, className }: Readonly<IPaginati
   const currentPage = Number((search as any)?.page) || 1;
 
   const handlePageChange = (page: number) => {
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set("page", page.toString());
-    window.history.replaceState(null, "", currentUrl.toString());
-    router.invalidate();
+    router.navigate({
+      to: '.',
+      search: (prev) => ({ ...prev, page }),
+      replace: true,
+    });
   };
 
   // Generate page numbers to display
@@ -34,13 +35,7 @@ export function PaginationComponent({ pageCount, className }: Readonly<IPaginati
     const pages: Array<number | "ellipsis"> = [];
     const showEllipsis = pageCount > 7;
 
-    if (!showEllipsis) {
-      // Show all pages if 7 or fewer
-      for (let i = 1; i <= pageCount; i++) {
-        pages.push(i);
-      }
-    } else {
-      // Always show first page
+    if (showEllipsis) {
       pages.push(1);
 
       if (currentPage > 3) {
@@ -62,6 +57,11 @@ export function PaginationComponent({ pageCount, className }: Readonly<IPaginati
       // Always show last page
       if (pageCount > 1) {
         pages.push(pageCount);
+      }
+    } else {
+      // Show all pages if 7 or fewer
+      for (let i = 1; i <= pageCount; i++) {
+        pages.push(i);
       }
     }
 

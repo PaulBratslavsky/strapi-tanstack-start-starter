@@ -2,7 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 import { strapiApi } from '@/data/server-functions'
 
-import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
 import { StrapiImage } from '@/components/custom/strapi-image'
@@ -11,7 +11,7 @@ import { PaginationComponent } from '@/components/custom/pagination-component'
 
 const articlesSearchSchema = z.object({
   query: z.string().optional(),
-  page: z.number().catch(1),
+  page: z.number().default(1),
 })
 
 export const Route = createFileRoute('/articles/')({
@@ -44,7 +44,7 @@ const styles = {
 
   grid: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6',
 
-  card: 'pt-0 pb-8 group hover:shadow-shadow transition-all overflow-hidden bg-background border-2 border-border rounded-lg',
+  card: 'pt-0 pb-8 group hover:shadow-shadow transition-all overflow-hidden block-bg-secondary border-2 border-border rounded-lg',
   imageWrapper: 'overflow-hidden',
   image: 'group-hover:scale-105 transition-transform duration-300',
 

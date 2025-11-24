@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
+import type { TCommentCreate } from '@/types'
+import type {CurrentUser} from '@/lib/comment-auth';
 import { Button } from '@/components/ui/button'
 import { Textarea } from "@/components/ui/textarea";
 import { strapiApi } from '@/data/server-functions'
-import { handleAuthError, isAuthenticated, type CurrentUser } from '@/lib/comment-auth'
-import type { TCommentCreate } from '@/types'
+import {  handleAuthError, isAuthenticated } from '@/lib/comment-auth'
 
 interface CommentFormProps {
   readonly articleDocumentId: string

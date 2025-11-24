@@ -13,15 +13,15 @@ export interface IPersonCard {
 }
 
 const styles = {
-  section: 'py-16 bg-white dark:bg-dark',
-  container: 'container mx-auto px-4',
+  section: 'block-section block-bg-card',
+  container: 'block-container',
   wrapper: 'max-w-4xl mx-auto text-center',
-  card: 'p-8',
+  card: 'block-card-padding',
   cardContent: 'pt-6',
   avatar: 'w-24 h-24 mx-auto mb-6',
   quote: 'text-xl text-muted-foreground mb-6 italic leading-relaxed',
   name: 'text-lg font-semibold text-foreground',
-  job: 'text-primary font-medium',
+  job: 'text-main font-medium',
 }
 
 export function PersonCard(props: Readonly<IPersonCard>) {

@@ -16,8 +16,8 @@ export interface IFaqs {
 }
 
 const styles = {
-  section: "py-16 bg-white dark:bg-dark",
-  container: "container mx-auto px-4 max-w-3xl",
+  section: "block-section block-bg-card",
+  container: "block-container max-w-3xl",
   accordion: "w-full",
 };
 

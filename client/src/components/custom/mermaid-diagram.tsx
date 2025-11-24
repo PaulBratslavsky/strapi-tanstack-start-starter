@@ -2,8 +2,8 @@ import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import mermaid from 'mermaid';
 
 interface MermaidDiagramProps {
-  chart: string;
-  className?: string;
+  readonly chart: string;
+  readonly className?: string;
 }
 
 // Fallback component shown during SSR and loading
@@ -36,8 +36,8 @@ function MermaidDiagramClient({ chart, className = '' }: MermaidDiagramProps) {
     // Render the diagram
     const renderDiagram = async () => {
       try {
-        const { svg } = await mermaid.render(id, chart);
-        setSvg(svg);
+        const { svg: renderedSvg } = await mermaid.render(id, chart);
+        setSvg(renderedSvg);
         setError('');
       } catch (err) {
         // Silently handle errors - suppressErrorRendering prevents UI display

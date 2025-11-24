@@ -9,8 +9,8 @@ export interface ISectionHeading {
 }
 
 const styles = {
-  section: "py-16 bg-white dark:bg-background",
-  container: "container mx-auto px-4 text-center",
+  section: "block-section block-bg-primary",
+  container: "block-container text-center",
   badge: "mb-4 uppercase tracking-wide",
   heading: "text-3xl lg:text-5xl font-bold text-foreground max-w-4xl mx-auto"
 }

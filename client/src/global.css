@@ -19,6 +19,29 @@
   --chart-4: #FF4D50;
   --chart-5: #7A83FF;
   --chart-active-dot: #000;
+
+  /* Block-specific variables */
+  --block-section-py: 4rem;
+  --block-section-py-sm: 2.5rem;
+  --block-section-py-lg: 6rem;
+  --block-container-px: 1rem;
+  --block-card-p: 2rem;
+  --block-card-p-sm: 1.5rem;
+  --block-gap: 2rem;
+  --block-gap-sm: 1.5rem;
+  --block-gap-lg: 3rem;
+
+  /* Block background colors */
+  --block-bg-primary: var(--background);
+  --block-bg-secondary: oklch(100% 0 0);
+  --block-bg-card: oklch(100% 0 0);
+
+  /* Block text and accent colors */
+  --block-text-primary: var(--foreground);
+  --block-text-muted: var(--foreground);
+  --block-accent: var(--main);
+  --block-card-bg: var(--main);
+  --block-card-text: var(--main-foreground);
 }
 
 .dark {
@@ -37,6 +60,18 @@
   --chart-4: #FF6669;
   --chart-5: #7A83FF;
   --chart-active-dot: #fff;
+
+  /* Block background colors for dark mode */
+  --block-bg-primary: var(--background);
+  --block-bg-secondary: var(--secondary-background);
+  --block-bg-card: var(--dark);
+
+  /* Block text and accent colors for dark mode */
+  --block-text-primary: var(--foreground);
+  --block-text-muted: var(--foreground);
+  --block-accent: var(--main);
+  --block-card-bg: var(--main);
+  --block-card-text: var(--main-foreground);
 }
 
 @theme inline {
@@ -65,6 +100,27 @@
   --font-weight-heading: 700;
   --font-family-base: ui-sans-serif, system-ui, sans-serif;
   --font-family-heading: "Roboto", ui-sans-serif, system-ui, sans-serif;
+
+  /* Block spacing variables */
+  --spacing-block-section-py: var(--block-section-py);
+  --spacing-block-section-py-sm: var(--block-section-py-sm);
+  --spacing-block-section-py-lg: var(--block-section-py-lg);
+  --spacing-block-container-px: var(--block-container-px);
+  --spacing-block-card-p: var(--block-card-p);
+  --spacing-block-card-p-sm: var(--block-card-p-sm);
+  --spacing-block-gap: var(--block-gap);
+  --spacing-block-gap-sm: var(--block-gap-sm);
+  --spacing-block-gap-lg: var(--block-gap-lg);
+
+  /* Block color variables */
+  --color-block-bg-primary: var(--block-bg-primary);
+  --color-block-bg-secondary: var(--block-bg-secondary);
+  --color-block-bg-card: var(--block-bg-card);
+  --color-block-text-primary: var(--block-text-primary);
+  --color-block-text-muted: var(--block-text-muted);
+  --color-block-accent: var(--block-accent);
+  --color-block-card-bg: var(--block-card-bg);
+  --color-block-card-text: var(--block-card-text);
 }
   
 @layer base {
@@ -80,5 +136,79 @@
 
   #main-content {
     scroll-behavior: smooth;
+  }
+
+  /* Block utility classes for consistent styling */
+  .block-section {
+    padding-top: var(--block-section-py);
+    padding-bottom: var(--block-section-py);
+  }
+
+  .block-section-sm {
+    padding-top: var(--block-section-py-sm);
+    padding-bottom: var(--block-section-py-sm);
+  }
+
+  .block-section-lg {
+    padding-top: var(--block-section-py-lg);
+    padding-bottom: var(--block-section-py-lg);
+  }
+
+  .block-container {
+    @apply container mx-auto;
+    padding-left: var(--block-container-px);
+    padding-right: var(--block-container-px);
+  }
+
+  .block-card-padding {
+    padding: var(--block-card-p);
+  }
+
+  .block-card-padding-sm {
+    padding: var(--block-card-p-sm);
+  }
+
+  .block-gap {
+    gap: var(--block-gap);
+  }
+
+  .block-gap-sm {
+    gap: var(--block-gap-sm);
+  }
+
+  .block-gap-lg {
+    gap: var(--block-gap-lg);
+  }
+
+  /* Block background variants */
+  .block-bg-primary {
+    background-color: var(--block-bg-primary) !important;
+  }
+
+  .block-bg-secondary {
+    background-color: var(--block-bg-secondary) !important;
+  }
+
+  .block-bg-card {
+    background-color: var(--block-bg-card) !important;
+  }
+
+  /* Block text color variants */
+  .block-text-primary {
+    color: var(--block-text-primary);
+  }
+
+  .block-text-muted {
+    color: var(--block-text-muted);
+  }
+
+  /* Block card styling */
+  .block-card {
+    background-color: var(--block-card-bg);
+    color: var(--block-card-text);
+  }
+
+  .block-accent {
+    color: var(--block-accent);
   }
 }

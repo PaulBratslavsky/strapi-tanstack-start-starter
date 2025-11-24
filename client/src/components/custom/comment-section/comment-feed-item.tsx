@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { TComment } from '@/types'
-import { type CurrentUser } from '@/lib/comment-auth'
+import { formatDistanceToNow } from 'date-fns'
+import type { TComment } from '@/types'
+import type {CurrentUser} from '@/lib/comment-auth';
 import { strapiApi } from '@/data/server-functions'
 import { Button } from '@/components/ui/button'
-import { formatDistanceToNow } from 'date-fns'
 
 interface CommentFeedItemProps {
   readonly comment: TComment

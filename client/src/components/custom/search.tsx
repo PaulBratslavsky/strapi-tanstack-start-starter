@@ -14,17 +14,15 @@ export function Search({ className }: ISearchProps) {
   const handleSearch = useDebouncedCallback((term: string) => {
     console.log(`Searching... ${term}`);
 
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set("page", "1");
-
-    if (term) {
-      currentUrl.searchParams.set("query", term);
-    } else {
-      currentUrl.searchParams.delete("query");
-    }
-
-    window.history.replaceState(null, "", currentUrl.toString());
-    router.invalidate();
+    router.navigate({
+      to: '.',
+      search: (prev) => ({
+        ...prev,
+        page: 1,
+        query: term || undefined,
+      }),
+      replace: true,
+    });
   }, 300);
 
   return (

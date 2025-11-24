@@ -16,9 +16,9 @@ export interface IHero {
 }
 
 const styles = {
-  section: 'py-24',
-  container: 'container mx-auto',
-  grid: 'grid items-center gap-8 lg:grid-cols-[1fr_auto] lg:gap-12',
+  section: 'block-section-lg',
+  container: 'block-container',
+  grid: 'grid items-center block-gap lg:grid-cols-[1fr_auto] block-gap-lg',
   content: 'flex flex-col items-center text-center lg:items-start lg:text-left',
   badge: 'mb-6',
   heading: 'my-6 text-pretty text-4xl font-bold lg:text-6xl',

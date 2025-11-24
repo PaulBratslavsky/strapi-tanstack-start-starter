@@ -33,8 +33,8 @@ const markdownStyles = {
 
 export function MarkdownText(props: Readonly<IMarkdownText>) {
   return (
-    <section className="py-16">
-      <div className="container mx-auto px-4">
+    <section className="block-section">
+      <div className="block-container">
         <div className="max-w-4xl mx-auto">
           <MarkdownContent content={props.content} styles={markdownStyles} />
         </div>

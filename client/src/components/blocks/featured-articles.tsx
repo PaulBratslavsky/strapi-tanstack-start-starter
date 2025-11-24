@@ -11,13 +11,13 @@ export interface IFeaturedArticles {
 }
 
 const styles = {
-  section: 'py-16 bg-secondary-background dark:bg-dark',
-  container: 'container mx-auto px-4',
+  section: 'block-section block-bg-secondary',
+  container: 'block-container',
   heading: 'text-3xl text-foreground font-bold text-center mb-12',
-  grid: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8',
+  grid: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 block-gap',
   card: 'bg-background border-2 border-border rounded-lg overflow-hidden hover:shadow-shadow transition-all shadow-shadow',
   image: 'w-full h-48 object-cover',
-  content: 'p-6',
+  content: 'block-card-padding-sm',
   title: 'text-xl font-semibold mb-3 text-foreground',
   description: 'text-foreground/70 mb-4 line-clamp-3',
 }
