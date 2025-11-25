@@ -27,6 +27,11 @@ export interface IArticleDetail {
   author?: TAuthor;
   featuredImage?: TImage;
   content?: string;
+  contentTags?: Array<{
+    id: number;
+    documentId: string;
+    title: string;
+  }>;
 }
 
 const styles = {

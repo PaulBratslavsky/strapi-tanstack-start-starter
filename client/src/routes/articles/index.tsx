@@ -9,6 +9,7 @@ import { StrapiImage } from '@/components/custom/strapi-image'
 import { Search } from '@/components/custom/search'
 import { PaginationComponent } from '@/components/custom/pagination-component'
 import { Tags } from '@/components/custom/tags'
+import { Badge } from '@/components/ui/badge'
 
 const articlesSearchSchema = z.object({
   query: z.string().optional(),
@@ -129,6 +130,16 @@ function Articles() {
                   </div>
 
                   <h2 className={styles.cardTitle}>{article.title}</h2>
+
+                  {article.contentTags && article.contentTags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {article.contentTags.map((tag) => (
+                        <Badge key={tag.documentId} variant="neutral" className="text-xs">
+                          {tag.title}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </CardHeader>
 
                 <CardContent className={styles.cardContent}>
