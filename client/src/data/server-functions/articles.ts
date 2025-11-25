@@ -7,23 +7,46 @@ const PAGE_SIZE = 3;
 
 const articles = sdk.collection('articles')
 
-const getArticles = async (queryString?: string, page?: number) =>
-  articles.find({
+const getArticles = async (queryString?: string, page?: number, tag?: string) => {
+  const filterConditions: Record<string, unknown>[] = []
+
+  if (queryString) {
+    filterConditions.push({
+      $or: [
+        { title: { $containsi: queryString } },
+        { content: { $containsi: queryString } },
+      ],
+    })
+  }
+
+  if (tag) {
+    filterConditions.push({
+      contentTags: {
+        title: { $containsi: tag },
+      },
+    })
+  }
+
+  const filters = filterConditions.length === 0
+    ? undefined
+    : filterConditions.length === 1
+      ? filterConditions[0]
+      : { $and: filterConditions }
+
+  return articles.find({
     sort: ['createdAt:desc'],
     pagination: {
       page: page || 1,
-      pageSize: PAGE_SIZE
-      ,
+      pageSize: PAGE_SIZE,
     },
-    ...(queryString && {
-      filters: {
-        $or: [
-          { title: { $containsi: queryString } },
-          { content: { $containsi: queryString } },
-        ],
+    populate: {
+      contentTags: {
+        fields: ['title'],
       },
-    }),
+    },
+    filters,
   }) as Promise<TStrapiResponseCollection<IArticleDetail>>
+}
 
   const getArticlesBySlug = async (slug: string) =>
   articles.find({
@@ -37,10 +60,9 @@ const getArticles = async (queryString?: string, page?: number) =>
 export const getArticlesData = createServerFn({
   method: 'GET',
 })
-  .inputValidator((input?: { query?: string; page?: number }) => input)
+  .inputValidator((input?: { query?: string; page?: number; tag?: string }) => input)
   .handler(async ({ data }): Promise<TStrapiResponseCollection<IArticleDetail>> => {
-    const response = await getArticles(data?.query, data?.page)
-    console.log(response)
+    const response = await getArticles(data?.query, data?.page, data?.tag)
     return response
   })
 

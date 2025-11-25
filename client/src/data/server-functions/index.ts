@@ -14,6 +14,7 @@ import {
 } from './comments'
 import { getGlobalData } from './global'
 import { getPageData } from './page'
+import { getTagsData } from './tags'
 import { getLandingPageData } from './landing-page'
 
 export const strapiApi = {
@@ -29,6 +30,9 @@ export const strapiApi = {
   articles: {
     getArticlesData,
     getArticlesDataBySlug,
+  },
+  tags: {
+    getTagsData,
   },
   auth: {
     registerUserServerFunction,

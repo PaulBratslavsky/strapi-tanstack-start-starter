@@ -28,6 +28,16 @@ export type TAuthor = {
   image?: TImage
 }
 
+export type TTag = {
+  id: number;
+  documentId: string;
+  title: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
 export type TLogo = {
   id: number
   label: string

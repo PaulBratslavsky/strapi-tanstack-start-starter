@@ -8,21 +8,24 @@ import { Button } from '@/components/ui/button'
 import { StrapiImage } from '@/components/custom/strapi-image'
 import { Search } from '@/components/custom/search'
 import { PaginationComponent } from '@/components/custom/pagination-component'
+import { Tags } from '@/components/custom/tags'
 
 const articlesSearchSchema = z.object({
   query: z.string().optional(),
   page: z.number().default(1),
+  tag: z.string().optional(),
 })
 
 export const Route = createFileRoute('/articles/')({
   validateSearch: articlesSearchSchema,
   loaderDeps: ({ search }) => ({ search }),
   loader: async ({ deps }) => {
-    const { query, page } = deps.search
+    const { query, page, tag } = deps.search
     const articlesData = await strapiApi.articles.getArticlesData({
       data: {
         query,
         page,
+        tag,
       },
     })
     return { articlesData }
@@ -74,8 +77,6 @@ function Articles() {
   const articles = articlesData.data
   const totalPages = articlesData.meta?.pagination?.pageCount || 1
 
-  console.dir(totalPages)
-
   return (
     <div className={styles.root}>
       <div className={styles.container}>
@@ -84,6 +85,7 @@ function Articles() {
           <p className={styles.subtitle}>
             Discover insights, tutorials, and stories from our team
           </p>
+          <Tags className="justify-center mt-4" />
           <div className={styles.search}>
             <Search />
           </div>
@@ -115,13 +117,13 @@ function Articles() {
                     <time dateTime={article.publishedAt}>
                       {article.publishedAt
                         ? new Date(article.publishedAt).toLocaleDateString(
-                            'en-US',
-                            {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                            },
-                          )
+                          'en-US',
+                          {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          },
+                        )
                         : 'No date'}
                     </time>
                   </div>
@@ -140,7 +142,7 @@ function Articles() {
                       to="/articles/$slug"
                       params={{ slug: article.slug || '' }}
                     >
-                      Read more 
+                      Read more
                       <svg
                         className={styles.readMoreIcon}
                         fill="none"
