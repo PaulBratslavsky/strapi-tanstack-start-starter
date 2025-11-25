@@ -1,6 +1,8 @@
 import { ArticleDetail } from './article-detail';
 import { ArticleContent } from './article-content';
+import { ArticleBlocks } from './article-blocks';
 import type { TAuthor, TImage } from '../../../types';
+import type { Block } from '@/components/blocks/block-renderer';
 
 export interface IArticle {
   documentId: string;
@@ -13,10 +15,11 @@ export interface IArticle {
   author?: TAuthor;
   featuredImage?: TImage;
   content?: string;
+  blocks?: Array<Block>;
 }
 
 export function Article(props: IArticle) {
-  const { title, description, featuredImage, content, author } = props;
+  const { title, description, featuredImage, content, author, blocks } = props;
 
   return (
     <>
@@ -29,6 +32,9 @@ export function Article(props: IArticle) {
         content={content}
         author={author}
       />
+      <ArticleBlocks blocks={blocks} />
     </>
   );
 }
+
+export { ArticleBlocks };
