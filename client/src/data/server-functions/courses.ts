@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start'
-import type { TStrapiResponseCollection, TCourse } from '@/types'
+import type { TCourse, TLesson, TStrapiResponseCollection } from '@/types'
 import { sdk } from '@/data/strapi-sdk'
 
 const PAGE_SIZE = 3
@@ -86,5 +86,30 @@ export const getCoursesDataBySlug = createServerFn({
   .inputValidator((slug: string) => slug)
   .handler(async ({ data: slug }): Promise<TStrapiResponseCollection<TCourse>> => {
     const response = await getCoursesBySlug(slug)
+    return response
+  })
+
+const lessons = sdk.collection('strapi-plugin-lms/lessons')
+
+const getLessonBySlug = async (slug: string) =>
+  lessons.find({
+    filters: {
+      slug: {
+        $eq: slug,
+      },
+    },
+    populate: {
+      course: {
+        fields: ['title', 'slug'],
+      },
+    },
+  }) as Promise<TStrapiResponseCollection<TLesson>>
+
+export const getLessonDataBySlug = createServerFn({
+  method: 'GET',
+})
+  .inputValidator((slug: string) => slug)
+  .handler(async ({ data: slug }): Promise<TStrapiResponseCollection<TLesson>> => {
+    const response = await getLessonBySlug(slug)
     return response
   })
