@@ -675,12 +675,38 @@
     "@formatjs/intl-localematcher" "0.5.4"
     tslib "^2.4.0"
 
+"@formatjs/ecma402-abstract@2.3.6":
+  version "2.3.6"
+  resolved "https://registry.yarnpkg.com/@formatjs/ecma402-abstract/-/ecma402-abstract-2.3.6.tgz#d6ca9d3579054fe1e1a0a0b5e872e0d64922e4e1"
+  integrity sha512-HJnTFeRM2kVFVr5gr5kH1XP6K0JcJtE7Lzvtr3FS/so5f1kpsqqqxy5JF+FRaO6H2qmcMfAUIox7AJteieRtVw==
+  dependencies:
+    "@formatjs/fast-memoize" "2.2.7"
+    "@formatjs/intl-localematcher" "0.6.2"
+    decimal.js "^10.4.3"
+    tslib "^2.8.0"
+
 "@formatjs/fast-memoize@2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@formatjs/fast-memoize/-/fast-memoize-2.2.0.tgz#33bd616d2e486c3e8ef4e68c99648c196887802b"
   integrity sha512-hnk/nY8FyrL5YxwP9e4r9dqeM6cAbo8PeU9UjyXojZMNvVad2Z06FAVHyR3Ecw6fza+0GH7vdJgiKIVXTMbSBA==
   dependencies:
     tslib "^2.4.0"
+
+"@formatjs/fast-memoize@2.2.7":
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/@formatjs/fast-memoize/-/fast-memoize-2.2.7.tgz#707f9ddaeb522a32f6715bb7950b0831f4cc7b15"
+  integrity sha512-Yabmi9nSvyOMrlSeGGWDiH7rf3a7sIwplbvo/dlz9WCIjzIQAfy1RMf4S0X3yG724n5Ghu2GmEl5NJIV6O9sZQ==
+  dependencies:
+    tslib "^2.8.0"
+
+"@formatjs/icu-messageformat-parser@2.11.4":
+  version "2.11.4"
+  resolved "https://registry.yarnpkg.com/@formatjs/icu-messageformat-parser/-/icu-messageformat-parser-2.11.4.tgz#63bd2cd82d08ae2bef55adeeb86486df68826f32"
+  integrity sha512-7kR78cRrPNB4fjGFZg3Rmj5aah8rQj9KPzuLsmcSn4ipLXQvC04keycTI1F7kJYDwIXtT2+7IDEto842CfZBtw==
+  dependencies:
+    "@formatjs/ecma402-abstract" "2.3.6"
+    "@formatjs/icu-skeleton-parser" "1.8.16"
+    tslib "^2.8.0"
 
 "@formatjs/icu-messageformat-parser@2.7.6":
   version "2.7.6"
@@ -698,6 +724,14 @@
   dependencies:
     "@formatjs/ecma402-abstract" "1.18.2"
     tslib "^2.4.0"
+
+"@formatjs/icu-skeleton-parser@1.8.16":
+  version "1.8.16"
+  resolved "https://registry.yarnpkg.com/@formatjs/icu-skeleton-parser/-/icu-skeleton-parser-1.8.16.tgz#13f81f6845c7cf6599623006aacaf7d6b4ad2970"
+  integrity sha512-H13E9Xl+PxBd8D5/6TVUluSpxGNvFSlN/b3coUp0e0JpuWXXnQDiavIpY3NnvSp4xhEMoXyyBvVfdFX8jglOHQ==
+  dependencies:
+    "@formatjs/ecma402-abstract" "2.3.6"
+    tslib "^2.8.0"
 
 "@formatjs/intl-displaynames@6.6.6":
   version "6.6.6"
@@ -724,6 +758,13 @@
   dependencies:
     tslib "^2.4.0"
 
+"@formatjs/intl-localematcher@0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-localematcher/-/intl-localematcher-0.6.2.tgz#e9ebe0b4082d7d48e5b2d753579fb7ece4eaefea"
+  integrity sha512-XOMO2Hupl0wdd172Y06h6kLpBz6Dv+J4okPLl4LPtzbr8f66WbIoy4ev98EBuZ6ZK4h5ydTN6XneT4QVpD7cdA==
+  dependencies:
+    tslib "^2.8.0"
+
 "@formatjs/intl@2.10.0":
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/@formatjs/intl/-/intl-2.10.0.tgz#d7bb557e172ceb0bb0be9298b61e9de957119985"
@@ -736,6 +777,17 @@
     "@formatjs/intl-listformat" "7.5.5"
     intl-messageformat "10.5.11"
     tslib "^2.4.0"
+
+"@formatjs/intl@3.1.8":
+  version "3.1.8"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl/-/intl-3.1.8.tgz#17f4a5721f32cd077ab04949be558f9f767c39f5"
+  integrity sha512-LWXgwI5zTMatvR8w8kCNh/priDTOF/ZssokMBHJ7ZWXFoYLVOYo0EJERD9Eajv+xsfQO1QkuAt77KWQ1OI4mOQ==
+  dependencies:
+    "@formatjs/ecma402-abstract" "2.3.6"
+    "@formatjs/fast-memoize" "2.2.7"
+    "@formatjs/icu-messageformat-parser" "2.11.4"
+    intl-messageformat "10.7.18"
+    tslib "^2.8.0"
 
 "@hapi/bourne@^3.0.0":
   version "3.0.0"
@@ -2152,6 +2204,37 @@
     lodash "4.17.21"
     react-remove-scroll "2.5.10"
 
+"@strapi/design-system@^2.0.0-rc.30":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@strapi/design-system/-/design-system-2.0.1.tgz#0b66cf32a34bc9440a51d2fbbf2188bc357d8454"
+  integrity sha512-Yuk64klpzwg8bqQS/n+IblMNzhlwOu+7w8CBIkghJjNZ9OiOQcFGi153xRncfubFQhxCOPwZuhMhYs/CZwV1NQ==
+  dependencies:
+    "@codemirror/lang-json" "6.0.1"
+    "@floating-ui/react-dom" "2.1.0"
+    "@internationalized/date" "3.5.4"
+    "@internationalized/number" "3.5.3"
+    "@radix-ui/react-accordion" "1.1.2"
+    "@radix-ui/react-alert-dialog" "1.0.5"
+    "@radix-ui/react-avatar" "1.0.4"
+    "@radix-ui/react-checkbox" "1.0.4"
+    "@radix-ui/react-dialog" "1.0.5"
+    "@radix-ui/react-dismissable-layer" "1.0.5"
+    "@radix-ui/react-dropdown-menu" "2.0.6"
+    "@radix-ui/react-focus-guards" "1.0.1"
+    "@radix-ui/react-focus-scope" "1.0.4"
+    "@radix-ui/react-popover" "1.0.7"
+    "@radix-ui/react-progress" "1.0.3"
+    "@radix-ui/react-radio-group" "1.1.3"
+    "@radix-ui/react-scroll-area" "1.0.5"
+    "@radix-ui/react-switch" "1.0.3"
+    "@radix-ui/react-tabs" "1.0.4"
+    "@radix-ui/react-tooltip" "1.0.7"
+    "@radix-ui/react-use-callback-ref" "1.0.1"
+    "@strapi/ui-primitives" "2.0.1"
+    "@uiw/react-codemirror" "4.22.2"
+    lodash "4.17.21"
+    react-remove-scroll "2.5.10"
+
 "@strapi/email@5.27.0":
   version "5.27.0"
   resolved "https://registry.yarnpkg.com/@strapi/email/-/email-5.27.0.tgz#7993f8d7cc06ff55b655a04225c8572fa4dd531f"
@@ -2203,6 +2286,11 @@
   version "2.0.0-rc.30"
   resolved "https://registry.yarnpkg.com/@strapi/icons/-/icons-2.0.0-rc.30.tgz#0162156f2cb963930e1c70055210e8545f91d5f9"
   integrity sha512-XOqbr573AP8eOwyMPTn7tDtFV1HFlqDlwr8qNgPzo29V2+449NE8Bk0aG8PZ+kGmbnxzyQC8OQDtWlvRBEL5uA==
+
+"@strapi/icons@^2.0.0-rc.30":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@strapi/icons/-/icons-2.0.1.tgz#73af76cd21e0a0d8f784420d354eddaf2a768a59"
+  integrity sha512-lB97LoIbl8vP5vFT6bnqz0ZzZ4TTHciv2nznVln5sX6cOeh6tVdmLQF9J139QN9l2Umbnp3digeZGnXqS8tgNQ==
 
 "@strapi/logger@5.27.0":
   version "5.27.0"
@@ -2430,6 +2518,33 @@
     aria-hidden "1.2.4"
     react-remove-scroll "2.5.10"
 
+"@strapi/ui-primitives@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@strapi/ui-primitives/-/ui-primitives-2.0.1.tgz#48304158d7b6d6751453100025dff080f1cee382"
+  integrity sha512-WfdTaDOJ7hFGp7+fcaTdqBF+evOGiqND3I/ajZHzjGDBiasQlCVsbJwZ6VztxRKhgC+XaiOB1m2CxIzn6ilm6w==
+  dependencies:
+    "@radix-ui/number" "1.0.1"
+    "@radix-ui/primitive" "1.0.1"
+    "@radix-ui/react-collection" "1.0.3"
+    "@radix-ui/react-compose-refs" "1.0.1"
+    "@radix-ui/react-context" "1.0.1"
+    "@radix-ui/react-direction" "1.0.1"
+    "@radix-ui/react-dismissable-layer" "1.0.5"
+    "@radix-ui/react-focus-guards" "1.0.1"
+    "@radix-ui/react-focus-scope" "1.0.4"
+    "@radix-ui/react-id" "1.0.1"
+    "@radix-ui/react-popper" "1.1.3"
+    "@radix-ui/react-portal" "1.0.4"
+    "@radix-ui/react-primitive" "1.0.3"
+    "@radix-ui/react-slot" "1.0.2"
+    "@radix-ui/react-use-controllable-state" "1.0.1"
+    "@radix-ui/react-use-layout-effect" "1.0.1"
+    "@radix-ui/react-use-previous" "1.0.1"
+    "@radix-ui/react-visually-hidden" "1.0.3"
+    "@tanstack/react-virtual" "^3.10.8"
+    aria-hidden "1.2.4"
+    react-remove-scroll "2.5.10"
+
 "@strapi/upload@5.27.0":
   version "5.27.0"
   resolved "https://registry.yarnpkg.com/@strapi/upload/-/upload-5.27.0.tgz#0858db28cf529a9b5ffb40e4d963fd3cd8b4aee0"
@@ -2572,6 +2687,18 @@
   integrity sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==
   dependencies:
     defer-to-connect "^2.0.0"
+
+"@tanstack/react-virtual@^3.10.8":
+  version "3.13.12"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-virtual/-/react-virtual-3.13.12.tgz#d372dc2783739cc04ec1a728ca8203937687a819"
+  integrity sha512-Gd13QdxPSukP8ZrkbgS2RwoZseTTbQPLnQEn7HY/rqtM+8Zt95f7xKC7N0EsKs7aoz0WzZ+fditZux+F8EzYxA==
+  dependencies:
+    "@tanstack/virtual-core" "3.13.12"
+
+"@tanstack/virtual-core@3.13.12":
+  version "3.13.12"
+  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.13.12.tgz#1dff176df9cc8f93c78c5e46bcea11079b397578"
+  integrity sha512-1YBOJfRHV4sXUmWsFSf5rQor4Ss82G8dQWLRbnk3GA4jeP8hQt1hxXh0tmflpC0dz3VgEv/1+qwPyLeWkQuPFA==
 
 "@testing-library/dom@10.1.0":
   version "10.1.0"
@@ -2978,6 +3105,13 @@
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
+
+"@types/react@16 || 17 || 18 || 19":
+  version "19.2.7"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-19.2.7.tgz#84e62c0f23e8e4e5ac2cadcea1ffeacccae7f62f"
+  integrity sha512-MWtvHrGZLFttgeEj28VXHxpmwYbor/ATPYbBfSFZEIRK0ecCFLl2Qo55z52Hss+UV9CRN7trSeq1zbgx7YDWWg==
+  dependencies:
+    csstype "^3.2.2"
 
 "@types/responselike@^1.0.0":
   version "1.0.3"
@@ -4341,6 +4475,11 @@ csstype@3.1.3, csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.3.tgz#d80ff294d114fb0e6ac500fbf85b60137d7eff81"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
 
+csstype@^3.2.2:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.2.3.tgz#ec48c0f3e993e50648c86da559e2610995cf989a"
+  integrity sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==
+
 custom-media-element@~1.3.1:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/custom-media-element/-/custom-media-element-1.3.3.tgz#1f9ab10265f84a96437281bc3607490eb9bfef12"
@@ -4388,6 +4527,11 @@ debug@^4, debug@^4.0.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.2, debug@^4.3.3, 
   integrity sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==
   dependencies:
     ms "^2.1.3"
+
+decimal.js@^10.4.3:
+  version "10.6.0"
+  resolved "https://registry.yarnpkg.com/decimal.js/-/decimal.js-10.6.0.tgz#e649a43e3ab953a72192ff5983865e509f37ed9a"
+  integrity sha512-YpgQiITW3JXGntzdUmyUR1V812Hn8T1YVXhCu+wO3OpS4eU9l4YdD3qjyiKdV6mvV29zapkMeD390UVEf2lkUg==
 
 decode-named-character-reference@^1.0.0:
   version "1.2.0"
@@ -6013,6 +6157,16 @@ intl-messageformat@10.5.11:
     "@formatjs/fast-memoize" "2.2.0"
     "@formatjs/icu-messageformat-parser" "2.7.6"
     tslib "^2.4.0"
+
+intl-messageformat@10.7.18:
+  version "10.7.18"
+  resolved "https://registry.yarnpkg.com/intl-messageformat/-/intl-messageformat-10.7.18.tgz#51a6f387afbca9b0f881b2ec081566db8c540b0d"
+  integrity sha512-m3Ofv/X/tV8Y3tHXLohcuVuhWKo7BBq62cqY15etqmLxg2DZ34AGGgQDeR+SCta2+zICb1NX83af0GJmbQ1++g==
+  dependencies:
+    "@formatjs/ecma402-abstract" "2.3.6"
+    "@formatjs/fast-memoize" "2.2.7"
+    "@formatjs/icu-messageformat-parser" "2.11.4"
+    tslib "^2.8.0"
 
 invariant@^2.2.4:
   version "2.2.4"
@@ -8474,6 +8628,20 @@ react-intl@6.6.2:
     intl-messageformat "10.5.11"
     tslib "^2.4.0"
 
+react-intl@^7.1.14:
+  version "7.1.14"
+  resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-7.1.14.tgz#5500f76b0bb35694a7bec418b1adf1533dad6752"
+  integrity sha512-VE/0Wi/lHJlBC7APQpCzLUdIt3GB5B0GZrRW8Q+ACbkHI4j+Wwgg9J1TniN6zmLHmPH5gxXcMy+fkSPfw5p1WQ==
+  dependencies:
+    "@formatjs/ecma402-abstract" "2.3.6"
+    "@formatjs/icu-messageformat-parser" "2.11.4"
+    "@formatjs/intl" "3.1.8"
+    "@types/hoist-non-react-statics" "^3.3.1"
+    "@types/react" "16 || 17 || 18 || 19"
+    hoist-non-react-statics "^3.3.2"
+    intl-messageformat "10.7.18"
+    tslib "^2.8.0"
+
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -9418,6 +9586,15 @@ stdin-discarder@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/stdin-discarder/-/stdin-discarder-0.2.2.tgz#390037f44c4ae1a1ae535c5fe38dc3aba8d997be"
   integrity sha512-UhDfHmA92YAlNnCfhmq0VeNL5bDbiZGg7sZ2IvPsXubGkiNa9EC+tUTsjBRsYUAz87btI6/1wf4XoVvQ3uRnmQ==
+
+strapi-plugin-lms@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/strapi-plugin-lms/-/strapi-plugin-lms-0.0.2.tgz#785d2ff5f20f948c6a5fafa734c54621b13e40a1"
+  integrity sha512-Vf894HZ9kZ4zs+XtjNLgZck84gWcgewjFvCE/BRS7xIzlJfGVjLV3fGChUjPvrkDTz66bJX/AxVzhzoIvKOLSQ==
+  dependencies:
+    "@strapi/design-system" "^2.0.0-rc.30"
+    "@strapi/icons" "^2.0.0-rc.30"
+    react-intl "^7.1.14"
 
 stream-chain@2.2.5, stream-chain@^2.2.5:
   version "2.2.5"

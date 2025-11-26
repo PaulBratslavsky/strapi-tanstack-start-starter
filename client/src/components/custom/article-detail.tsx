@@ -1,14 +1,6 @@
-import { Link } from '@tanstack/react-router'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "../ui/breadcrumb";
 import { MarkdownContent } from "./markdown-content";
 import { StrapiImage } from "./strapi-image";
+import { PageBreadcrumb } from "./page-breadcrumb";
 import type { TAuthor, TImage } from "../../types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
@@ -85,28 +77,13 @@ export function ArticleDetail(props: IArticleDetail) {
     <div className={styles.root}>
       <div className={styles.headerWrapper}>
         <div className={styles.headerContainer}>
-          {/* Breadcrumb */}
-          <Breadcrumb className={styles.breadcrumb}>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link to="/">Home</Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link to="/articles" search={{ page: 1 }}>
-                      Articles
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{title}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+          <PageBreadcrumb
+            className={styles.breadcrumb}
+            segments={[
+              { label: 'Articles', href: '/articles', search: { page: 1 } },
+              { label: title || '' },
+            ]}
+          />
 
             <h1 className={styles.title}>{title}</h1>
             <p className={styles.description}>{description}</p>

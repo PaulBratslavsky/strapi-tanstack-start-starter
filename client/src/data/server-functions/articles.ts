@@ -8,7 +8,7 @@ const PAGE_SIZE = 3;
 const articles = sdk.collection('articles')
 
 const getArticles = async (queryString?: string, page?: number, tag?: string) => {
-  const filterConditions: Record<string, unknown>[] = []
+  const filterConditions: Array<Record<string, unknown>> = []
 
   if (queryString) {
     filterConditions.push({

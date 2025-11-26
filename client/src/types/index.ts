@@ -175,3 +175,39 @@ export type TCommentUpdate = {
 
 export type TCommentResponse = TStrapiResponseCollection<TComment>
 export type TCommentSingleResponse = TStrapiResponseSingle<TComment>
+
+export type TLesson = {
+  id: number
+  documentId: string
+  title: string
+  description: string | null
+  slug: string
+  videoId: string | null
+  videoUrl: string | null
+  videoTimecode: number | null
+  content: string | null
+  resources: string | null
+  createdAt: string
+  updatedAt: string
+  publishedAt: string
+}
+
+export type TCourse = {
+  id: number
+  documentId: string
+  title: string
+  description: string | null
+  slug: string
+  isPremium: boolean
+  image: TImage | null
+  lessons: TLesson[]
+  content: string | null
+  createdAt: string
+  updatedAt: string
+  publishedAt: string
+}
+
+export type TCourseResponse = TStrapiResponseCollection<TCourse>
+export type TCourseSingleResponse = TStrapiResponseSingle<TCourse>
+export type TLessonResponse = TStrapiResponseCollection<TLesson>
+export type TLessonSingleResponse = TStrapiResponseSingle<TLesson>

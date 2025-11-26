@@ -16,6 +16,7 @@ import { getGlobalData } from './global'
 import { getPageData } from './page'
 import { getTagsData } from './tags'
 import { getLandingPageData } from './landing-page'
+import { getCoursesData, getCoursesDataBySlug } from './courses'
 
 export const strapiApi = {
   global: {
@@ -30,6 +31,10 @@ export const strapiApi = {
   articles: {
     getArticlesData,
     getArticlesDataBySlug,
+  },
+  courses: {
+    getCoursesData,
+    getCoursesDataBySlug,
   },
   tags: {
     getTagsData,
