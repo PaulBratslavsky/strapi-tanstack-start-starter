@@ -84,6 +84,18 @@ const config = defineConfig(async ({ mode }) => {
           enabled: mode === 'production',
           crawlLinks: true,
           autoStaticPathsDiscovery: true,
+          // Exclude routes that return 404 or are not meant to be prerendered
+          filter: ({ path }) => {
+            const excludedPaths = [
+              '/not-found',
+              '/signin',
+              '/signup',
+              '/api/',
+            ]
+            return !excludedPaths.some((excluded) => path.startsWith(excluded))
+          },
+          // Don't fail build on errors, just log them
+          failOnError: false,
         },
         pages,
       }),
