@@ -8,7 +8,7 @@ import type {
   TCommentUpdate,
 } from '@/types'
 
-import { useAppSession, getAuth } from '@/lib/session'
+import { getAuth, useAppSession } from '@/lib/session'
 import { getAuthenticatedCollection, sdk } from '@/data/strapi-sdk'
 
 // Get comments for a specific article using Strapi SDK custom route (public access)

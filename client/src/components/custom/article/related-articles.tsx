@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { getStrapiMedia } from '@/lib/utils'
 import type { TRelatedArticle } from '@/types'
+import { getStrapiMedia } from '@/lib/utils'
 import { Text } from '@/components/retroui/Text'
 
 interface RelatedArticlesProps {

@@ -18,7 +18,7 @@ export const Route = createFileRoute('/courses/$slug')({
   head: ({ loaderData }) => ({
     meta: [
       { title: loaderData?.course.title },
-      { name: 'description', content: loaderData?.course?.description ?? undefined },
+      { name: 'description', content: loaderData?.course.description ?? undefined },
     ],
   }),
   notFoundComponent: () => {

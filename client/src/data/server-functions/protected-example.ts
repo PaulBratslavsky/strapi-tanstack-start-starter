@@ -54,7 +54,7 @@ export const deleteUserAccount = createServerFn({
   const baseUrl = getStrapiURL()
   const url = new URL(`/api/users/${session.userId}`, baseUrl)
 
-  const response = await fetch(url.href, {
+  await fetch(url.href, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${session.jwt}`,

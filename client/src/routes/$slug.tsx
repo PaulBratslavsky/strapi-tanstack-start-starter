@@ -8,7 +8,7 @@ export const Route = createFileRoute('/$slug')({
     const pageData = await strapiApi.page.getPageData({ data: params.slug })
     const page = pageData.data
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+     
     if (!page) {
       throw notFound()
     }

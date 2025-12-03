@@ -15,7 +15,7 @@ type BreadcrumbSegment = {
 }
 
 interface PageBreadcrumbProps {
-  segments: BreadcrumbSegment[]
+  segments: Array<BreadcrumbSegment>
   className?: string
 }
 

@@ -41,7 +41,7 @@ function formatDuration(seconds: number): string {
 export function CourseDetail(props: TCourse) {
   const { title, description, isPremium, lessons } = props
   const [selectedLessonSlug, setSelectedLessonSlug] = useState<string | null>(
-    lessons?.[0]?.slug || null
+    lessons[0]?.slug ?? null
   )
 
   const {
@@ -56,8 +56,8 @@ export function CourseDetail(props: TCourse) {
     enabled: !!selectedLessonSlug,
   })
 
-  const currentLesson = lessonResponse?.data?.[0]
-  const selectedIndex = lessons?.findIndex((l) => l.slug === selectedLessonSlug) ?? 0
+  const currentLesson = lessonResponse?.data[0]
+  const selectedIndex = lessons.findIndex((l) => l.slug === selectedLessonSlug)
 
   const handleLessonSelect = (lesson: TLesson) => {
     setSelectedLessonSlug(lesson.slug)
@@ -169,12 +169,12 @@ export function CourseDetail(props: TCourse) {
               <div className="bg-[#E7F193] border-4 border-black p-4 mb-4">
                 <Text as="h4">Course Lessons</Text>
                 <Text className="text-sm text-muted-foreground">
-                  {lessons?.length || 0} lessons
+                  {lessons.length} lessons
                 </Text>
               </div>
 
               <div className="space-y-3">
-                {lessons?.map((lesson, index) => {
+                {lessons.map((lesson, index) => {
                   const isActive = lesson.slug === selectedLessonSlug
                   return (
                     <div

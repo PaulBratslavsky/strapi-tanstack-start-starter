@@ -38,18 +38,18 @@ export function CommentForm({
       }
       return result
     },
-    onSuccess: (result) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments', articleDocumentId] })
       setContent('')
       setError(null)
       onSuccess?.()
     },
-    onError: (error) => {
-      setError(handleAuthError(error))
+    onError: (err) => {
+      setError(handleAuthError(err))
     }
   })
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!content.trim()) {

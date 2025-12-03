@@ -200,7 +200,7 @@ export type TCourse = {
   slug: string
   isPremium: boolean
   image: TImage | null
-  lessons: TLesson[]
+  lessons: Array<TLesson>
   content: string | null
   createdAt: string
   updatedAt: string
