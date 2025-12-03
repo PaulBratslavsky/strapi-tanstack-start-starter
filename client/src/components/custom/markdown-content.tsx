@@ -125,7 +125,10 @@ export function MarkdownContent({ content, styles }: Readonly<MarkdownContentPro
           ol: ({ ...props }) => <ol className={styles.ol} {...props} />,
           li: ({ ...props }) => <li className={styles.li} {...props} />,
           blockquote: ({ ...props }) => <blockquote className={styles.blockquote} {...props} />,
-          code: ({ className, children, ...props }) => {
+          code: ({ className, children, node, ...props }) => {
+            // Check if this is a code block (inside pre tag) by checking parent or if it has newlines
+            const isCodeBlock = node?.position && String(children).includes('\n');
+
             // Check if this is a code block (has language class)
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
@@ -152,6 +155,17 @@ export function MarkdownContent({ content, styles }: Readonly<MarkdownContentPro
               );
             }
 
+            // Handle code blocks without language (ASCII art, plain text)
+            if (isCodeBlock) {
+              return (
+                <pre className={styles.pre}>
+                  <code className="whitespace-pre font-mono text-sm" {...props}>
+                    {children}
+                  </code>
+                </pre>
+              );
+            }
+
             // Handle inline code
             return (
               <code className={styles.codeInline} {...props}>
@@ -160,7 +174,7 @@ export function MarkdownContent({ content, styles }: Readonly<MarkdownContentPro
             );
           },
           pre: ({ children }) => {
-            // Pre is handled by SyntaxHighlighter, just return children
+            // Pre wrapper - children already handled by code component
             return <>{children}</>;
           },
           table: ({ ...props }) => (
