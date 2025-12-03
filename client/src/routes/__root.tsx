@@ -15,6 +15,7 @@ import type { THeader } from '@/types'
 import { TopNavigation } from '@/components/custom/top-navigation'
 import { ThemeProvider } from '@/components/custom/theme-provider'
 import { ScrollToTop } from '@/components/custom/scroll-to-top'
+import { BuiltWithBanner } from '@/components/custom/built-with-banner'
 
 // Session user data returned from auth server function
 interface SessionUser {
@@ -127,6 +128,7 @@ function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
               {children}
             </main>
             <ScrollToTop />
+            <BuiltWithBanner />
             {process.env.NODE_ENV !== 'production' && (
               <TanStackDevtools
                 config={{
