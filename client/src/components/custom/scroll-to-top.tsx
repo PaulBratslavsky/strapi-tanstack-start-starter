@@ -1,13 +1,5 @@
 import { useEffect, useState } from 'react'
 import { ArrowUp } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-
-const styles = {
-  button:
-    'fixed bottom-8 right-8 z-50 size-12 rounded-full shadow-shadow border-2 border-border transition-all duration-300 ease-in-out',
-  visible: 'opacity-100 translate-y-0',
-  hidden: 'opacity-0 translate-y-16 pointer-events-none',
-}
 
 export function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false)
@@ -42,14 +34,23 @@ export function ScrollToTop() {
   }
 
   return (
-    <Button
+    <button
       onClick={scrollToTop}
-      size="icon"
-      variant="default"
-      className={`${styles.button} ${isVisible ? styles.visible : styles.hidden}`}
+      className={`
+        fixed bottom-8 right-8 z-50
+        w-12 h-12 rounded-full
+        bg-white border-4 border-black
+        shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+        flex items-center justify-center
+        transition-all duration-300 ease-in-out
+        hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
+        hover:translate-x-[2px] hover:translate-y-[2px]
+        active:shadow-none active:translate-x-[4px] active:translate-y-[4px]
+        ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16 pointer-events-none'}
+      `}
       aria-label="Scroll to top"
     >
-      <ArrowUp className="size-5" />
-    </Button>
+      <ArrowUp className="w-5 h-5 text-black" />
+    </button>
   )
 }
