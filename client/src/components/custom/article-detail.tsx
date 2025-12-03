@@ -1,5 +1,5 @@
 import { Calendar } from "lucide-react";
-import { MarkdownContent } from "./markdown-content";
+import { MarkdownContentLazy } from "./markdown-content-lazy";
 import { StrapiImage } from "./strapi-image";
 import { PageBreadcrumb } from "./page-breadcrumb";
 import type { TAuthor, TImage } from "../../types";
@@ -157,7 +157,7 @@ export function ArticleDetail(props: IArticleDetail) {
         )}
 
         <div className="bg-white border-2 border-black p-8 lg:p-12 shadow">
-          <MarkdownContent content={content} styles={markdownStyles} />
+          <MarkdownContentLazy content={content} styles={markdownStyles} />
 
           {author?.fullName && (
             <div className="mt-8 flex items-start space-x-6 pt-8 border-t-2 border-black">

@@ -1,4 +1,4 @@
-import { MarkdownContent } from "@/components/custom/markdown-content";
+import { MarkdownContentLazy } from "@/components/custom/markdown-content-lazy";
 
 export interface IMarkdownText {
   __component: "blocks.markdown";
@@ -31,7 +31,7 @@ export function MarkdownText(props: Readonly<IMarkdownText>) {
   return (
     <section className="py-12">
       <div className="container max-w-4xl mx-auto px-4">
-        <MarkdownContent content={props.content} styles={markdownStyles} />
+        <MarkdownContentLazy content={props.content} styles={markdownStyles} />
       </div>
     </section>
   );

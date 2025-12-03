@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import ReactPlayer from 'react-player'
 import { ChevronDown } from 'lucide-react'
-import { MarkdownContent } from './markdown-content'
+import { MarkdownContentLazy } from './markdown-content-lazy'
 import { PageBreadcrumb } from './page-breadcrumb'
 import type { TCourse, TLesson } from '@/types'
 import { strapiApi } from '@/data/server-functions'
@@ -139,7 +139,7 @@ export function CourseDetail(props: TCourse) {
               ) : currentLesson?.content ? (
                 <>
                   <Text as="h4" className="mb-4">Lesson Content</Text>
-                  <MarkdownContent
+                  <MarkdownContentLazy
                     content={currentLesson.content}
                     styles={markdownStyles}
                   />
@@ -148,7 +148,7 @@ export function CourseDetail(props: TCourse) {
                       <Text as="h4" className="mt-8 pt-8 border-t-2 border-dashed border-black mb-4">
                         Resources
                       </Text>
-                      <MarkdownContent
+                      <MarkdownContentLazy
                         content={currentLesson.resources}
                         styles={markdownStyles}
                       />
