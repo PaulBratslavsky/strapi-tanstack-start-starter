@@ -1,6 +1,6 @@
 import { useDebouncedCallback } from 'use-debounce'
 import { Search } from 'lucide-react'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/retroui/Input'
 import { cn } from '@/lib/utils'
 
 interface CommentSearchProps {
@@ -20,14 +20,14 @@ export function CommentSearch({
 
   return (
     <div className={cn('relative', className)}>
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
       <Input
         type="text"
         placeholder={placeholder}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           handleSearch(e.target.value)
         }
-        className="pl-10"
+        className="pl-10 border-2 border-black"
       />
     </div>
   )

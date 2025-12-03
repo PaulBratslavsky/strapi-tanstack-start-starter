@@ -3,76 +3,31 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import ReactPlayer from 'react-player'
+import { ChevronDown } from 'lucide-react'
 import { MarkdownContent } from './markdown-content'
 import { PageBreadcrumb } from './page-breadcrumb'
 import type { TCourse, TLesson } from '@/types'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { strapiApi } from '@/data/server-functions'
-import { cn } from '@/lib/utils'
-
-const styles = {
-  root: 'min-h-screen',
-  headerWrapper: 'bg-card border-b-2 border-border',
-  headerContainer: 'container mx-auto px-6 py-8',
-  breadcrumb: 'mb-8',
-  titleWrapper: 'flex items-center gap-4 mb-6',
-  title: 'text-4xl lg:text-5xl font-bold text-foreground leading-tight font-heading',
-  premiumBadge: 'text-sm',
-  description: 'text-lg text-muted-foreground leading-relaxed',
-
-  mainContainer: 'container mx-auto px-6 py-8',
-  contentGrid: 'grid grid-cols-1 lg:grid-cols-3 gap-8',
-
-  videoSection: 'lg:col-span-2',
-  videoWrapper: 'aspect-video bg-black rounded-lg overflow-hidden mb-6',
-  videoPlaceholder: 'w-full h-full flex items-center justify-center text-white/60',
-
-  lessonInfo: 'mb-6',
-  lessonTitle: 'text-2xl font-bold text-foreground mb-2 font-heading',
-  lessonDescription: 'text-muted-foreground',
-
-  contentCard: 'rounded-lg p-6 lg:p-8 bg-card border-2 border-border',
-  contentTitle: 'text-xl font-bold text-foreground mb-4 font-heading',
-  resourcesTitle: 'text-xl font-bold text-foreground mb-4 mt-8 pt-8 border-t-2 border-border font-heading',
-
-  sidebar: 'lg:col-span-1',
-  lessonsCard: 'rounded-lg bg-card border-2 border-border sticky top-4',
-  lessonsHeader: 'p-4 border-b-2 border-border',
-  lessonsTitle: 'text-lg font-bold text-foreground font-heading',
-  lessonsCount: 'text-sm text-muted-foreground',
-  lessonsList: 'max-h-[60vh] overflow-y-auto',
-  lessonItem: 'flex items-center gap-3 p-4 cursor-pointer hover:bg-muted/50 transition-colors border-b border-border last:border-b-0',
-  lessonItemActive: 'bg-main/10 hover:bg-main/15',
-  lessonNumber: 'flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm flex-shrink-0',
-  lessonNumberDefault: 'bg-muted text-muted-foreground',
-  lessonNumberActive: 'bg-main text-main-foreground',
-  lessonContent: 'flex-1 min-w-0',
-  lessonItemTitle: 'font-medium text-foreground truncate',
-  lessonItemDescription: 'text-sm text-muted-foreground truncate',
-  lessonDuration: 'text-xs text-muted-foreground flex-shrink-0',
-
-  loadingState: 'flex items-center justify-center py-12',
-  spinner: 'w-6 h-6 border-2 border-main border-t-transparent rounded-full animate-spin',
-}
+import { Text } from '@/components/retroui/Text'
+import { Badge } from '@/components/retroui/Badge'
 
 const markdownStyles = {
   richText: 'prose prose-lg max-w-none prose-slate dark:prose-invert',
-  h1: 'text-3xl font-bold mb-4 text-foreground font-heading',
-  h2: 'text-2xl font-bold mb-3 text-foreground font-heading',
-  h3: 'text-xl font-bold mb-3 text-foreground font-heading',
-  p: 'mb-4 leading-relaxed text-foreground',
+  h1: 'text-3xl font-bold mb-4 font-heading',
+  h2: 'text-2xl font-bold mb-3 font-heading',
+  h3: 'text-xl font-bold mb-3 font-heading',
+  p: 'mb-4 leading-relaxed',
   a: 'text-main hover:text-main/80 underline underline-offset-4 font-semibold transition-colors',
   ul: 'list-disc pl-6 mb-4 space-y-2',
   ol: 'list-decimal pl-6 mb-4 space-y-2',
-  li: 'leading-relaxed text-foreground',
+  li: 'leading-relaxed',
   blockquote: 'border-l-4 border-main pl-4 italic text-muted-foreground mb-4 py-2',
   codeBlock: 'block bg-muted p-4 rounded-lg text-sm overflow-x-auto mb-4 font-mono',
-  codeInline: 'bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-foreground',
+  codeInline: 'bg-muted px-1.5 py-0.5 rounded text-sm font-mono',
   pre: 'bg-muted p-4 rounded-lg overflow-x-auto mb-4',
   table: 'w-full border-collapse border border-border mb-4',
-  th: 'border border-border p-2 bg-muted font-bold text-left text-foreground',
-  td: 'border border-border p-2 text-foreground',
+  th: 'border border-border p-2 bg-muted font-bold text-left',
+  td: 'border border-border p-2',
   img: 'max-w-full h-auto rounded-lg mb-4',
   hr: 'border-border my-8',
 }
@@ -109,35 +64,40 @@ export function CourseDetail(props: TCourse) {
   }
 
   return (
-    <div className={styles.root}>
-      <div className={styles.headerWrapper}>
-        <div className={styles.headerContainer}>
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <div className="bg-[#F9F5F2] border-b-2 border-black">
+        <div className="container mx-auto px-6 py-8">
           <PageBreadcrumb
-            className={styles.breadcrumb}
+            className="mb-8"
             segments={[
               { label: 'Courses', href: '/courses', search: { page: 1 } },
               { label: title },
             ]}
           />
 
-          <div className={styles.titleWrapper}>
-            <h1 className={styles.title}>{title}</h1>
+          <div className="flex items-center gap-4 mb-4">
+            <Text as="h2">{title}</Text>
             {isPremium && (
-              <Badge variant="default" className={styles.premiumBadge}>
+              <Badge size="sm" className="bg-[#C4A1FF] text-black border-2 border-black">
                 Premium
               </Badge>
             )}
           </div>
-          {description && <p className={styles.description}>{description}</p>}
+          {description && (
+            <Text className="text-lg text-muted-foreground max-w-2xl">
+              {description}
+            </Text>
+          )}
         </div>
       </div>
 
-      <div className={styles.mainContainer}>
-        <div className={styles.contentGrid}>
+      <div className="container mx-auto px-6 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Video and Content Section */}
-          <div className={styles.videoSection}>
+          <div className="lg:col-span-2">
             {/* Video Player */}
-            <div className={styles.videoWrapper}>
+            <div className="aspect-video bg-black border-4 border-black overflow-hidden mb-6">
               {currentLesson?.videoUrl ? (
                 <ReactPlayer
                   src={currentLesson.videoUrl}
@@ -146,9 +106,9 @@ export function CourseDetail(props: TCourse) {
                   controls
                 />
               ) : (
-                <div className={styles.videoPlaceholder}>
+                <div className="w-full h-full flex items-center justify-center text-white/60">
                   {isLessonLoading ? (
-                    <div className={styles.spinner} />
+                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <span>No video available</span>
                   )}
@@ -158,34 +118,36 @@ export function CourseDetail(props: TCourse) {
 
             {/* Current Lesson Info */}
             {currentLesson && (
-              <div className={styles.lessonInfo}>
-                <h2 className={styles.lessonTitle}>
+              <div className="mb-6">
+                <Text as="h3" className="mb-2">
                   Lesson {selectedIndex + 1}: {currentLesson.title}
-                </h2>
+                </Text>
                 {currentLesson.description && (
-                  <p className={styles.lessonDescription}>
+                  <Text className="text-muted-foreground">
                     {currentLesson.description}
-                  </p>
+                  </Text>
                 )}
               </div>
             )}
 
             {/* Lesson Content */}
-            <Card className={styles.contentCard}>
+            <div className="bg-white border-4 border-black p-6 lg:p-8 shadow-md">
               {isLessonLoading ? (
-                <div className={styles.loadingState}>
-                  <div className={styles.spinner} />
+                <div className="flex items-center justify-center py-12">
+                  <div className="w-6 h-6 border-2 border-black border-t-transparent rounded-full animate-spin" />
                 </div>
               ) : currentLesson?.content ? (
                 <>
-                  <h3 className={styles.contentTitle}>Lesson Content</h3>
+                  <Text as="h4" className="mb-4">Lesson Content</Text>
                   <MarkdownContent
                     content={currentLesson.content}
                     styles={markdownStyles}
                   />
                   {currentLesson.resources && (
                     <>
-                      <h3 className={styles.resourcesTitle}>Resources</h3>
+                      <Text as="h4" className="mt-8 pt-8 border-t-2 border-dashed border-black mb-4">
+                        Resources
+                      </Text>
                       <MarkdownContent
                         content={currentLesson.resources}
                         styles={markdownStyles}
@@ -194,58 +156,78 @@ export function CourseDetail(props: TCourse) {
                   )}
                 </>
               ) : (
-                <p className="text-muted-foreground">
+                <Text className="text-muted-foreground">
                   Select a lesson to view its content.
-                </p>
+                </Text>
               )}
-            </Card>
+            </div>
           </div>
 
-          {/* Lessons Sidebar */}
-          <div className={styles.sidebar}>
-            <div className={styles.lessonsCard}>
-              <div className={styles.lessonsHeader}>
-                <h3 className={styles.lessonsTitle}>Course Lessons</h3>
-                <p className={styles.lessonsCount}>
+          {/* Lessons Sidebar - FAQ Style */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-4">
+              <div className="bg-[#E7F193] border-4 border-black p-4 mb-4">
+                <Text as="h4">Course Lessons</Text>
+                <Text className="text-sm text-muted-foreground">
                   {lessons?.length || 0} lessons
-                </p>
+                </Text>
               </div>
-              <div className={styles.lessonsList}>
+
+              <div className="space-y-3">
                 {lessons?.map((lesson, index) => {
                   const isActive = lesson.slug === selectedLessonSlug
                   return (
-                    <button
+                    <div
                       key={lesson.documentId}
-                      onClick={() => handleLessonSelect(lesson)}
-                      className={cn(
-                        styles.lessonItem,
-                        isActive && styles.lessonItemActive
-                      )}
+                      className={`border-4 border-black transition-all duration-200 ease-in bg-white ${
+                        isActive ? 'shadow-lg' : 'shadow-md'
+                      }`}
                     >
-                      <span
-                        className={cn(
-                          styles.lessonNumber,
-                          isActive
-                            ? styles.lessonNumberActive
-                            : styles.lessonNumberDefault
-                        )}
+                      <button
+                        className="flex justify-between items-center w-full p-4 text-left font-bold focus:outline-none"
+                        onClick={() => handleLessonSelect(lesson)}
+                        aria-expanded={isActive}
                       >
-                        {index + 1}
-                      </span>
-                      <div className={styles.lessonContent}>
-                        <h4 className={styles.lessonItemTitle}>{lesson.title}</h4>
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <span
+                            className={`flex items-center justify-center w-8 h-8 flex-shrink-0 border-2 border-black font-bold text-sm ${
+                              isActive
+                                ? 'bg-[#C4A1FF] text-black'
+                                : 'bg-white text-black'
+                            }`}
+                          >
+                            {index + 1}
+                          </span>
+                          <span className="truncate">{lesson.title}</span>
+                        </div>
+                        <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                          {lesson.videoTimecode && (
+                            <span className="text-xs text-muted-foreground whitespace-nowrap">
+                              {formatDuration(lesson.videoTimecode)}
+                            </span>
+                          )}
+                          <ChevronDown
+                            className={`transition-transform duration-200 flex-shrink-0 ${
+                              isActive ? 'rotate-180' : ''
+                            }`}
+                            size={20}
+                          />
+                        </div>
+                      </button>
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ${
+                          isActive ? 'max-h-96 pb-4' : 'max-h-0'
+                        }`}
+                      >
                         {lesson.description && (
-                          <p className={styles.lessonItemDescription}>
-                            {lesson.description}
-                          </p>
+                          <div className="px-4 border-t-2 border-dashed border-black pt-3">
+                            <Text className="text-sm text-muted-foreground">
+                              {lesson.description}
+                            </Text>
+                          </div>
                         )}
                       </div>
-                      {lesson.videoTimecode && (
-                        <span className={styles.lessonDuration}>
-                          {formatDuration(lesson.videoTimecode)}
-                        </span>
-                      )}
-                    </button>
+                    </div>
                   )
                 })}
               </div>

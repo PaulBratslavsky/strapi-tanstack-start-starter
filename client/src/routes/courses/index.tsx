@@ -1,168 +1,205 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { z } from 'zod'
-import { strapiApi } from '@/data/server-functions'
-
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-
-import { StrapiImage } from '@/components/custom/strapi-image'
-import { Search } from '@/components/custom/search'
-import { PaginationComponent } from '@/components/custom/pagination-component'
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
+import { ArrowRight } from "lucide-react";
+import { strapiApi } from "@/data/server-functions";
+import { Text } from "@/components/retroui/Text";
+import { StrapiImage } from "@/components/custom/strapi-image";
+import { Search } from "@/components/custom/search";
+import { PaginationComponent } from "@/components/custom/pagination-component";
 
 const coursesSearchSchema = z.object({
   query: z.string().optional(),
   page: z.number().default(1),
   tag: z.string().optional(),
-})
+});
 
-export const Route = createFileRoute('/courses/')({
+export const Route = createFileRoute("/courses/")({
   validateSearch: coursesSearchSchema,
   loaderDeps: ({ search }) => ({ search }),
   loader: async ({ deps }) => {
-    const { query, page, tag } = deps.search
+    const { query, page, tag } = deps.search;
     const coursesData = await strapiApi.courses.getCoursesData({
       data: {
         query,
         page,
         tag,
       },
-    })
-    return { coursesData }
+    });
+
+    return { coursesData };
   },
   head: () => ({
     meta: [
-      { title: 'Courses' },
+      { title: "Courses" },
       {
-        name: 'description',
-        content: 'Discover insights, tutorials, and stories from our team',
+        name: "description",
+        content: "Discover courses, tutorials, and lessons from our team",
       },
     ],
   }),
   component: Courses,
-})
+});
 
-const styles = {
-  root: 'min-h-screen bg-secondary mb-16',
-  container: 'container mx-auto px-4 py-16',
-  search: 'container mx-auto py-4',
+function formatDate(dateString?: string): string {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffTime = Math.abs(now.getTime() - date.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-  header: 'text-center mb-12',
-  title: 'text-4xl font-bold text-foreground mb-4',
-  subtitle: 'text-xl text-foreground/70 max-w-2xl mx-auto',
-
-  emptyWrap: 'text-center py-12',
-  emptyText: 'text-foreground/70 text-lg',
-
-  grid: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6',
-
-  card: 'pt-0 pb-8 group hover:shadow-shadow transition-all overflow-hidden block-bg-secondary border-2 border-border rounded-lg',
-  imageWrapper: 'overflow-hidden',
-  image: 'group-hover:scale-105 transition-transform duration-300',
-
-  cardHeader: 'pb-3',
-  metaRow: 'flex items-center gap-2 text-sm text-foreground/60 mb-2',
-  badge: 'text-xs',
-  cardTitle:
-    'text-xl font-semibold group-hover:text-main transition-colors line-clamp-2 text-foreground',
-
-  cardContent: 'pt-0',
-  description: 'text-foreground/70 line-clamp-3 leading-relaxed',
-
-  cardFooter: 'pt-0',
-  readMoreBtn: 'p-0 h-auto font-medium group/button',
-  readMoreIcon:
-    'w-4 h-4 ml-2 group-hover/button:translate-x-1 transition-transform',
+  if (diffDays < 7) return `${diffDays} Days Ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} Weeks Ago`;
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)} Months Ago`;
+  return `${Math.floor(diffDays / 365)} Years Ago`;
 }
 
 function Courses() {
-  const { coursesData } = Route.useLoaderData()
-  const courses = coursesData.data
-  const totalPages = coursesData.meta?.pagination?.pageCount || 1
+  const { coursesData } = Route.useLoaderData();
+  const courses = coursesData.data;
+  const totalPages = coursesData.meta?.pagination?.pageCount || 1;
+
+  const featuredCourse = courses.length > 0 ? courses[0] : null;
+  const mainCourses = courses.slice(1);
 
   return (
-    <div className={styles.root}>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>courses</h1>
-          <p className={styles.subtitle}>
-            Discover insights, tutorials, and stories from our team
-          </p>
-          <div className={styles.search}>
-            <Search />
+    <section className="py-24 bg-white">
+      <div className="container max-w-5xl px-4 mx-auto">
+        {/* Header with Search */}
+        <div className="mb-12">
+          <Text as="h2" className="mb-4">
+            Latest Courses
+          </Text>
+          <div className="flex flex-col gap-6 my-10">
+            <Search className="w-full" />
           </div>
         </div>
 
-        {courses.length === 0 ? (
-          <div className={styles.emptyWrap}>
-            <p className={styles.emptyText}>No courses found.</p>
+        {/* Empty State */}
+        {courses.length === 0 && (
+          <div className="text-center py-12">
+            <Text as="h3" className="mb-2">
+              No Courses Found
+            </Text>
+            <Text className="text-muted-foreground">
+              Try adjusting your search or filter to find what you're looking for.
+            </Text>
           </div>
-        ) : (
-          <div className={styles.grid}>
-            {courses.map((course: any) => (
-              <Card key={course.documentId} className={styles.card}>
-                {course.image?.url && (
-                  <div className={styles.imageWrapper}>
-                    <StrapiImage
-                      src={course.image.url}
-                      alt={course.image.alternativeText || course.title}
-                      aspectRatio="16:9"
-                      className={styles.image}
-                    />
-                  </div>
+        )}
+
+        {/* Featured Course */}
+        {featuredCourse?.slug && (
+          <Link
+            to="/courses/$slug"
+            params={{ slug: featuredCourse.slug }}
+            className="block"
+          >
+            <article className="bg-card grid grid-cols-1 md:grid-cols-2 md:gap-8 border-2 border-black group transition-all mb-8">
+              <div className="relative overflow-hidden border-b-2 md:border-b-0 md:border-r-2 border-black h-64 md:h-auto">
+                {featuredCourse.image && (
+                  <StrapiImage
+                    src={featuredCourse.image.url}
+                    alt={
+                      featuredCourse.image.alternativeText ||
+                      featuredCourse.title ||
+                      "Featured course"
+                    }
+                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                  />
                 )}
+              </div>
+              <div className="p-8 md:pl-0">
+                <div className="flex items-center gap-4 mb-4">
+                  <Text className="text-sm font-medium">
+                    {formatDate(featuredCourse.publishedAt)}
+                  </Text>
+                </div>
+                <Text as="h3" className="mb-2 font-sans">
+                  {featuredCourse.title}
+                </Text>
+                <Text className="text-muted-foreground text-sm mb-6 leading-relaxed">
+                  {featuredCourse.description}
+                </Text>
 
-                <CardHeader className={styles.cardHeader}>
-                  <div className={styles.metaRow}>
-                    <time dateTime={course.publishedAt}>
-                      {course.publishedAt
-                        ? new Date(course.publishedAt).toLocaleDateString(
-                            'en-US',
-                            {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                            },
-                          )
-                        : 'No date'}
-                    </time>
+                <div className="flex items-center justify-between bg-[#C4A1FF] border-2 border-black px-2">
+                  <Text className="text-sm font-medium text-black">
+                    {formatDate(featuredCourse.publishedAt)}
+                  </Text>
+                  <span className="border-x-2 border-black px-3 py-1 bg-background flex items-center gap-2 font-medium text-sm text-black">
+                    View Course
+                    <ArrowRight
+                      size={16}
+                      className="group-hover:-rotate-45 transition-transform duration-300"
+                    />
+                  </span>
+                </div>
+              </div>
+            </article>
+          </Link>
+        )}
+
+        {/* Main Courses Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          {mainCourses.map((course: any) => {
+            if (!course.slug) return null;
+            return (
+              <Link
+                key={course.documentId}
+                to="/courses/$slug"
+                params={{ slug: course.slug }}
+                className="block"
+              >
+                <article className="bg-card border-2 border-black group transition-all">
+                  <div className="relative h-64 overflow-hidden border-b-2 border-black">
+                    {course.image && (
+                      <StrapiImage
+                        src={course.image.url}
+                        alt={
+                          course.image.alternativeText ||
+                          course.title ||
+                          "Course"
+                        }
+                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                      />
+                    )}
                   </div>
-
-                  <h2 className={styles.cardTitle}>{course.title}</h2>
-                </CardHeader>
-                <CardContent className={styles.cardContent}>
-                  <p className={styles.description}>{course.description}</p>
-                </CardContent>
-
-                <CardFooter className={styles.cardFooter}>
-                  <Button asChild>
-                    <Link
-                      key={course.documentId}
-                      to="/courses/$slug"
-                      params={{ slug: course.slug || '' }}
-                    >
-                      Read more
-                      <svg
-                        className={styles.readMoreIcon}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
+                  <div className="p-8">
+                    <div className="flex items-center gap-4 mb-4">
+                      <Text className="text-sm font-medium">
+                        {formatDate(course.publishedAt)}
+                      </Text>
+                    </div>
+                    <Text as="h3" className="mb-3 font-sans">
+                      {course.title}
+                    </Text>
+                    <Text className="text-muted-foreground text-sm mb-4 leading-relaxed">
+                      {course.description}
+                    </Text>
+                    <div className="flex items-center justify-between bg-[#C4A1FF] border-2 border-black px-2">
+                      <Text className="text-sm font-medium text-black">
+                        {formatDate(course.publishedAt)}
+                      </Text>
+                      <span className="border-x-2 border-black px-3 py-1 bg-background flex items-center gap-2 font-medium text-sm text-black">
+                        View Course
+                        <ArrowRight
+                          size={16}
+                          className="group-hover:-rotate-45 transition-transform duration-300"
                         />
-                      </svg>
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+                      </span>
+                    </div>
+                  </div>
+                </article>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-12">
+            <PaginationComponent pageCount={totalPages} />
           </div>
         )}
       </div>
-      <PaginationComponent pageCount={totalPages} />
-    </div>
-  )
+    </section>
+  );
 }

@@ -1,13 +1,6 @@
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
-
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Button } from '@/components/retroui/Button'
+import { Text } from '@/components/retroui/Text'
 import { cn } from '@/lib/utils'
 
 interface CommentPaginationProps {
@@ -23,97 +16,42 @@ export function CommentPagination({
   onPageChange,
   className,
 }: Readonly<CommentPaginationProps>) {
-  // Generate page numbers to display
-  const getPageNumbers = () => {
-    const pages: Array<number | "ellipsis"> = [];
-    const showEllipsis = totalPages > 7;
-
-    if (showEllipsis) {
-      pages.push(1);
-
-      if (currentPage > 3) {
-        pages.push("ellipsis");
-      }
-
-      // Show pages around current page
-      const start = Math.max(2, currentPage - 1);
-      const end = Math.min(totalPages - 1, currentPage + 1);
-
-      for (let i = start; i <= end; i++) {
-        pages.push(i);
-      }
-
-      if (currentPage < totalPages - 2) {
-        pages.push("ellipsis");
-      }
-
-      // Always show last page
-      if (totalPages > 1) {
-        pages.push(totalPages);
-      }
-    } else {
-      // Show all pages if 7 or fewer
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    }
-
-    return pages;
-  };
-
-  const pageNumbers = getPageNumbers();
+  const canGoPrevious = currentPage > 1
+  const canGoNext = currentPage < totalPages
 
   return (
-    <Pagination className={cn('', className)}>
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              if (currentPage > 1) {
-                onPageChange(currentPage - 1);
-              }
-            }}
-            aria-disabled={currentPage <= 1}
-            className={currentPage <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-          />
-        </PaginationItem>
+    <div className={cn('flex items-center justify-center gap-4', className)}>
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={!canGoPrevious}
+        className={cn(
+          "border-2 border-black",
+          !canGoPrevious && "opacity-50 cursor-not-allowed"
+        )}
+      >
+        <ChevronLeft className="w-4 h-4 mr-1" />
+        Previous
+      </Button>
 
-        {pageNumbers.map((page, index) => (
-          <PaginationItem key={index} className={typeof page === "number" ? "" : "hidden md:block"}>
-            {page === "ellipsis" ? (
-              <PaginationEllipsis />
-            ) : (
-              <PaginationLink
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onPageChange(page);
-                }}
-                isActive={currentPage === page}
-                className="cursor-pointer"
-              >
-                {page}
-              </PaginationLink>
-            )}
-          </PaginationItem>
-        ))}
+      <Text className="text-sm font-medium">
+        Page {currentPage} of {totalPages}
+      </Text>
 
-        <PaginationItem>
-          <PaginationNext
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              if (currentPage < totalPages) {
-                onPageChange(currentPage + 1);
-              }
-            }}
-            aria-disabled={currentPage >= totalPages}
-            className={currentPage >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={!canGoNext}
+        className={cn(
+          "border-2 border-black",
+          !canGoNext && "opacity-50 cursor-not-allowed"
+        )}
+      >
+        Next
+        <ChevronRight className="w-4 h-4 ml-1" />
+      </Button>
+    </div>
   )
 }

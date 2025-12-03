@@ -11,10 +11,10 @@ import type { IMarkdownText } from './markdown-text'
 import type { IPersonCard } from './person-card'
 import type { IContentWithImage } from './content-with-image'
 import type { ISectionHeading } from './section-heading'
-import type { ICardGrid } from './card-grid'
 import type { IHero } from './hero'
 import type { IFeaturedArticles } from './featured-articles'
 import type { IFaqs } from './faqs'
+import type { ICardGrid } from './card-grid'
 
 export type Block =
   | IHero
@@ -37,8 +37,6 @@ export function BlockRenderer({ blocks }: Readonly<BlockRendererProps>) {
         return <Hero {...block} />
       case 'blocks.section-heading':
         return <SectionHeading {...block} />
-      case 'blocks.card-grid':
-        return <CardGrid {...block} />
       case 'blocks.content-with-image':
         return <ContentWithImage {...block} />
       case 'blocks.markdown':
@@ -49,6 +47,8 @@ export function BlockRenderer({ blocks }: Readonly<BlockRendererProps>) {
         return <FeaturedArticles {...block} />
       case 'blocks.faqs':
         return <Faqs {...block} />
+      case 'blocks.card-grid':
+        return <CardGrid {...block} />
       default:
         return null
     }

@@ -1,14 +1,37 @@
 import { useState } from 'react'
 import { formatDistanceToNow } from 'date-fns'
+import { Pencil, Trash2 } from 'lucide-react'
 import type { TComment } from '@/types'
-import type {CurrentUser} from '@/lib/comment-auth';
+import type { CurrentUser } from '@/lib/comment-auth'
 import { strapiApi } from '@/data/server-functions'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/retroui/Button'
+import { Avatar } from '@/components/retroui/Avatar'
+import { Text } from '@/components/retroui/Text'
+import { cn } from '@/lib/utils'
 
 interface CommentFeedItemProps {
   readonly comment: TComment
   readonly currentUser?: CurrentUser | null
   readonly onUpdate?: () => void
+}
+
+// Color palette for avatars based on username
+const avatarColors = [
+  'bg-[#C4A1FF]', // Purple
+  'bg-[#E7F193]', // Lime
+  'bg-[#C4FF83]', // Green
+  'bg-[#FFB3BA]', // Coral Pink
+  'bg-[#A1D4FF]', // Sky Blue
+  'bg-[#FFDAA1]', // Peach
+] as const
+
+function getAvatarColor(username: string): string {
+  let hash = 0
+  for (let i = 0; i < username.length; i++) {
+    hash = username.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  const index = Math.abs(hash) % avatarColors.length
+  return avatarColors[index]
 }
 
 export function CommentFeedItem({
@@ -21,6 +44,8 @@ export function CommentFeedItem({
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isOwner = currentUser?.id === comment.user?.id
+  const username = comment.user?.username || 'Unknown User'
+  const avatarColor = getAvatarColor(username)
 
   const handleUpdate = async () => {
     if (!editContent.trim() || isSubmitting) return
@@ -73,36 +98,36 @@ export function CommentFeedItem({
   })
 
   return (
-    <div className="px-6 py-4 hover:bg-muted/30 transition-colors">
-      <div className="flex items-start space-x-3">
+    <div className="p-4 hover:bg-muted/30 transition-colors">
+      <div className="flex gap-3">
         {/* Avatar */}
-        <div className="flex-shrink-0">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold">
-            {(comment.user?.username || 'U').charAt(0).toUpperCase()}
-          </div>
-        </div>
+        <Avatar className={cn("w-10 h-10 flex-shrink-0 border-2 border-black", avatarColor)}>
+          <Avatar.Fallback className={cn(avatarColor, "text-black font-bold")}>
+            {username.charAt(0).toUpperCase()}
+          </Avatar.Fallback>
+        </Avatar>
 
         {/* Content */}
         <div className="flex-1 min-w-0">
           {/* Header */}
-          <div className="flex items-center space-x-2 mb-1">
-            <span className="font-semibold text-foreground">
-              {comment.user?.username || 'Unknown User'}
-            </span>
+          <div className="flex items-center gap-2 mb-1">
+            <Text className="font-bold text-sm">
+              {username}
+            </Text>
             <span className="text-xs text-muted-foreground">•</span>
-            <span className="text-xs text-muted-foreground">{timeAgo}</span>
+            <Text className="text-xs text-muted-foreground">{timeAgo}</Text>
           </div>
 
           {/* Comment Content */}
           {isEditing ? (
-            <div className="space-y-2">
+            <div className="space-y-3">
               <textarea
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
-                className="w-full min-h-[80px] px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md resize-none bg-white dark:bg-gray-800 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full min-h-[80px] px-4 py-3 border-2 border-black rounded shadow-md resize-none focus:outline-none focus:shadow-sm"
                 disabled={isSubmitting}
               />
-              <div className="flex space-x-2">
+              <div className="flex gap-2">
                 <Button
                   size="sm"
                   onClick={handleUpdate}
@@ -112,7 +137,7 @@ export function CommentFeedItem({
                 </Button>
                 <Button
                   size="sm"
-                  variant="neutral"
+                  variant="outline"
                   onClick={() => {
                     setIsEditing(false)
                     setEditContent(comment.content)
@@ -125,25 +150,30 @@ export function CommentFeedItem({
             </div>
           ) : (
             <>
-              <p className="text-foreground whitespace-pre-wrap break-words">
-                {comment.content}
-              </p>
+              {/* Message Bubble */}
+              <div className="bg-[#F9F5F2] border-2 border-black rounded-lg p-3 shadow-sm">
+                <Text className="whitespace-pre-wrap break-words text-sm">
+                  {comment.content}
+                </Text>
+              </div>
 
               {/* Actions */}
               {isOwner && (
-                <div className="flex items-center space-x-4 mt-2">
+                <div className="flex items-center gap-2 mt-2">
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                    className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
                     disabled={isSubmitting}
                   >
+                    <Pencil className="w-3 h-3" />
                     Edit
                   </button>
                   <button
                     onClick={handleDelete}
-                    className="text-xs text-muted-foreground hover:text-red-600 transition-colors"
+                    className="flex items-center gap-1 text-xs text-muted-foreground hover:text-red-600 transition-colors"
                     disabled={isSubmitting}
                   >
+                    <Trash2 className="w-3 h-3" />
                     Delete
                   </button>
                 </div>

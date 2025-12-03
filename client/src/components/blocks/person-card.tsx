@@ -1,7 +1,6 @@
-import { getStrapiMedia } from '../../lib/utils'
-import { Card, CardContent } from '../ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import type { TImage } from '../../types'
+import type { TImage } from '@/types'
+import { Text } from '@/components/retroui/Text'
+import { StrapiImage } from '@/components/custom/strapi-image'
 
 export interface IPersonCard {
   __component: 'blocks.person-card'
@@ -12,49 +11,38 @@ export interface IPersonCard {
   image: TImage
 }
 
-const styles = {
-  section: 'block-section block-bg-card',
-  container: 'block-container',
-  wrapper: 'max-w-4xl mx-auto text-center',
-  card: 'block-card-padding',
-  cardContent: 'pt-6',
-  avatar: 'w-24 h-24 mx-auto mb-6',
-  quote: 'text-xl text-muted-foreground mb-6 italic leading-relaxed',
-  name: 'text-lg font-semibold text-foreground',
-  job: 'text-main font-medium',
-}
-
 export function PersonCard(props: Readonly<IPersonCard>) {
   const { text, personName, personJob, image } = props
+  const alt = image.alternativeText || personName || 'Person image'
 
   return (
-    <section className={styles.section}>
-      <div className={styles.container}>
-        <div className={styles.wrapper}>
-          <Card className={styles.card}>
-            <CardContent className={styles.cardContent}>
-              <Avatar className={styles.avatar}>
-                <AvatarImage
-                  src={getStrapiMedia(image.url)}
-                  alt={image.alternativeText || personName}
-                />
-                <AvatarFallback>
-                  {personName
-                    .split(' ')
-                    .map((n) => n[0])
-                    .join('')
-                    .toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
+    <section className="bg-white py-20">
+      <div className="w-full border-y-2 bg-[#F9F5F2] py-12 xl:py-16">
+        <div className="max-w-6xl container px-4 mx-auto w-full flex flex-col md:flex-row gap-12 xl:gap-28 justify-between items-center">
+          {/* Image Section */}
+          <div className="flex flex-col w-full md:w-2/5">
+            <StrapiImage
+              src={image.url}
+              alt={alt}
+              className="w-full h-auto px-4 md:px-0"
+            />
+          </div>
 
-              <blockquote className={styles.quote}>"{text}"</blockquote>
+          {/* Content Section */}
+          <div className="flex flex-col items-start md:w-3/5 justify-center">
 
-              <div>
-                <h3 className={styles.name}>{personName}</h3>
-                <p className={styles.job}>{personJob}</p>
-              </div>
-            </CardContent>
-          </Card>
+            <Text as="h2" className="lg:text-6xl  mb-4 md:mb-6">
+              {personName}
+            </Text>
+
+            <div className="space-y-2 mb-4 md:mb-6">
+              <Text>{text}</Text>
+            </div>
+
+            <div className="bg-[#C4A1FF] text-primary-foreground px-3 py-1.5 font-medium shadow-md border-2">
+              <Text className="leading-relaxed">{personJob}</Text>
+            </div>
+          </div>
         </div>
       </div>
     </section>

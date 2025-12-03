@@ -24,7 +24,7 @@ export const Route = createFileRoute('/articles/$slug')({
   head: ({ loaderData }) => ({
     meta: [
       { title: loaderData?.article.title },
-      { name: 'description', content: loaderData?.article?.description },
+      { name: 'description', content: loaderData?.article.description },
     ],
   }),
   notFoundComponent: () => {

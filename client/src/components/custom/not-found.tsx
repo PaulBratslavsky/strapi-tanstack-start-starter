@@ -26,7 +26,10 @@ export function NotFound({
   message = "The page you're looking for doesn't exist or has been moved.",
 }: Readonly<INotFoundProps>) {
   const router = useRouter()
-  const handleBack = () => router.history.back()
+
+  const handleBack = () => {
+    router.history.back()
+  }
 
   return (
     <div className={styles.root}>

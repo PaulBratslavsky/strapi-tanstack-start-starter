@@ -2,7 +2,24 @@ import { useQuery } from '@tanstack/react-query'
 import { useRouter, useSearch } from '@tanstack/react-router'
 import { strapiApi } from '@/data/server-functions'
 import { cn } from '@/lib/utils'
-import { Badge } from '@/components/ui/badge'
+import { Badge } from '@/components/retroui/Badge'
+
+const tagColors = [
+  "bg-[#C4A1FF] text-black", // Purple
+  "bg-[#E7F193] text-black", // Lime
+  "bg-[#C4FF83] text-black", // Green
+  "bg-[#FFB3BA] text-black", // Coral Pink
+  "bg-[#A1D4FF] text-black", // Sky Blue
+  "bg-[#FFDAA1] text-black", // Peach
+] as const;
+
+function getTagColor(tagName: string): string {
+  let hash = 0;
+  for (let i = 0; i < tagName.length; i++) {
+    hash = tagName.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return tagColors[Math.abs(hash) % tagColors.length];
+}
 
 interface TagsProps {
   className?: string
@@ -49,26 +66,29 @@ export function Tags({ className }: TagsProps) {
   return (
     <div className={cn('flex flex-wrap gap-2', className)}>
       <Badge
-        asChild
-        variant={isAllActive ? 'default' : 'neutral'}
-        className="cursor-pointer hover:opacity-80 transition-opacity px-3 py-1 text-sm"
+        size="sm"
+        className={cn(
+          "cursor-pointer hover:opacity-80 transition-opacity border-2 border-black",
+          isAllActive ? "bg-black text-white" : "bg-white text-black"
+        )}
+        onClick={() => handleTagClick(null)}
       >
-        <button type="button" onClick={() => handleTagClick(null)}>
-          All
-        </button>
+        All
       </Badge>
       {tags.map((tag) => {
         const isActive = currentTag === tag.title
         return (
           <Badge
-            asChild
             key={tag.documentId}
-            variant={isActive ? 'default' : 'neutral'}
-            className="cursor-pointer hover:opacity-80 transition-opacity px-3 py-1 text-sm"
+            size="sm"
+            className={cn(
+              "cursor-pointer hover:opacity-80 transition-opacity border-2 border-black",
+              isActive ? "ring-2 ring-black ring-offset-1" : "",
+              getTagColor(tag.title)
+            )}
+            onClick={() => handleTagClick(tag.title)}
           >
-            <button type="button" onClick={() => handleTagClick(tag.title)}>
-              {tag.title}
-            </button>
+            {tag.title}
           </Badge>
         )
       })}

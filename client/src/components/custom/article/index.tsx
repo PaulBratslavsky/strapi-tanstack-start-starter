@@ -16,10 +16,15 @@ export interface IArticle {
   featuredImage?: TImage;
   content?: string;
   blocks?: Array<Block>;
+  contentTags?: Array<{
+    id: number;
+    documentId: string;
+    title: string;
+  }>;
 }
 
 export function Article(props: IArticle) {
-  const { title, description, featuredImage, content, author, blocks } = props;
+  const { title, description, featuredImage, content, author, blocks, publishedAt, contentTags } = props;
 
   return (
     <>
@@ -27,6 +32,9 @@ export function Article(props: IArticle) {
         title={title}
         description={description}
         featuredImage={featuredImage}
+        author={author}
+        publishedAt={publishedAt}
+        contentTags={contentTags}
       />
       <ArticleContent
         content={content}

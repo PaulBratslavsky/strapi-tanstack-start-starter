@@ -18,6 +18,7 @@
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-menubar": "^1.1.16",
     "@radix-ui/react-navigation-menu": "^1.2.14",
     "@radix-ui/react-slot": "^1.2.4",
@@ -49,6 +50,7 @@
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.17",
     "use-debounce": "^10.0.6",
+    "vaul": "^1.1.2",
     "vite-tsconfig-paths": "^5.1.4",
     "zod": "^4.1.12"
   },

@@ -8,7 +8,7 @@ export const getPageData = createServerFn({
   method: 'GET',
 })
   .inputValidator((slug: string) => slug)
-  .handler(async ({ data: slug }): Promise<{ data: TPage }> => {
+  .handler(async ({ data: slug }): Promise<{ data: TPage | undefined }> => {
     const response = (await pages.find({
       filters: {
         slug: {

@@ -1,32 +1,21 @@
-import { Badge } from "../ui/badge";
+import { Text } from "@/components/retroui/Text";
 
 export interface ISectionHeading {
   __component: "blocks.section-heading";
   id: number;
   subHeading: string;
   heading: string;
-  anchorLink: string;
-}
-
-const styles = {
-  section: "block-section block-bg-primary",
-  container: "block-container text-center",
-  badge: "mb-4 uppercase tracking-wide",
-  heading: "text-3xl lg:text-5xl font-bold text-foreground max-w-4xl mx-auto"
+  anchorLink?: string;
 }
 
 export function SectionHeading(props: Readonly<ISectionHeading>) {
   const { subHeading, heading, anchorLink } = props;
 
   return (
-    <section id={anchorLink} className={styles.section}>
-      <div className={styles.container}>
-        <Badge variant="default" className={styles.badge}>
-          {subHeading}
-        </Badge>
-        <h2 className={styles.heading}>
-          {heading}
-        </h2>
+    <section id={anchorLink} className="bg-[#F9F5F2]">
+      <div className="w-full container max-w-6xl px-4 xl:px-0 pt-20 pb-10 mx-auto text-start">
+        <Text className="mb-2 text-xl">{subHeading}</Text>
+        <Text as="h2">{heading}</Text>
       </div>
     </section>
   );

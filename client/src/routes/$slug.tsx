@@ -1,16 +1,30 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, notFound } from '@tanstack/react-router'
 import { strapiApi } from '../data/server-functions'
 import { BlockRenderer } from '@/components/blocks/block-renderer'
+import { NotFound } from '@/components/custom/not-found'
 
 export const Route = createFileRoute('/$slug')({
   loader: async ({ params }) => {
     const pageData = await strapiApi.page.getPageData({ data: params.slug })
+    const page = pageData.data
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!page) {
+      throw notFound()
+    }
+
     return {
-      blocks: pageData.data.blocks,
-      title: pageData.data.title,
-      description: pageData.data.description,
+      blocks: page.blocks,
+      title: page.title,
+      description: page.description,
     }
   },
+  notFoundComponent: () => (
+    <NotFound
+      title="Page Not Found"
+      message="The page you're looking for doesn't exist or has been moved."
+    />
+  ),
   head: ({ loaderData }) => ({
     meta: [
       { title: loaderData?.title },

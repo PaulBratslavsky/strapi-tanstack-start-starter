@@ -1,181 +1,238 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { z } from 'zod'
-import { strapiApi } from '@/data/server-functions'
-
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-
-import { StrapiImage } from '@/components/custom/strapi-image'
-import { Search } from '@/components/custom/search'
-import { PaginationComponent } from '@/components/custom/pagination-component'
-import { Tags } from '@/components/custom/tags'
-import { Badge } from '@/components/ui/badge'
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
+import { ArrowRight } from "lucide-react";
+import { strapiApi } from "@/data/server-functions";
+import { Text } from "@/components/retroui/Text";
+import { Badge } from "@/components/retroui/Badge";
+import { StrapiImage } from "@/components/custom/strapi-image";
+import { Search } from "@/components/custom/search";
+import { PaginationComponent } from "@/components/custom/pagination-component";
+import { Tags } from "@/components/custom/tags";
 
 const articlesSearchSchema = z.object({
   query: z.string().optional(),
   page: z.number().default(1),
   tag: z.string().optional(),
-})
+});
 
-export const Route = createFileRoute('/articles/')({
+export const Route = createFileRoute("/articles/")({
   validateSearch: articlesSearchSchema,
   loaderDeps: ({ search }) => ({ search }),
   loader: async ({ deps }) => {
-    const { query, page, tag } = deps.search
+    const { query, page, tag } = deps.search;
     const articlesData = await strapiApi.articles.getArticlesData({
       data: {
         query,
         page,
         tag,
       },
-    })
-    return { articlesData }
+    });
+
+    return { articlesData };
   },
   head: () => ({
     meta: [
-      { title: 'Blog' },
-      { name: 'description', content: 'Discover insights, tutorials, and stories from our team' },
+      { title: "Blog" },
+      {
+        name: "description",
+        content: "Discover insights, tutorials, and stories from our team",
+      },
     ],
   }),
   component: Articles,
-})
+});
 
-const styles = {
-  root: 'min-h-screen bg-secondary mb-16',
-  container: 'container mx-auto px-4 py-16',
-  search: 'container mx-auto py-4',
+const tagColors = [
+  "bg-[#C4A1FF] text-black", // Purple
+  "bg-[#E7F193] text-black", // Lime
+  "bg-[#C4FF83] text-black", // Green
+  "bg-[#FFB3BA] text-black", // Coral Pink
+  "bg-[#A1D4FF] text-black", // Sky Blue
+  "bg-[#FFDAA1] text-black", // Peach
+] as const;
 
-  header: 'text-center mb-12',
-  title: 'text-4xl font-bold text-foreground mb-4',
-  subtitle: 'text-xl text-foreground/70 max-w-2xl mx-auto',
+function getTagColor(tagName: string): string {
+  // Use tag name to generate consistent color
+  let hash = 0;
+  for (let i = 0; i < tagName.length; i++) {
+    hash = tagName.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return tagColors[Math.abs(hash) % tagColors.length];
+}
 
-  emptyWrap: 'text-center py-12',
-  emptyText: 'text-foreground/70 text-lg',
+function formatDate(dateString?: string): string {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffTime = Math.abs(now.getTime() - date.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-  grid: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6',
-
-  card: 'pt-0 pb-8 group hover:shadow-shadow transition-all overflow-hidden block-bg-secondary border-2 border-border rounded-lg',
-  imageWrapper: 'overflow-hidden',
-  image: 'group-hover:scale-105 transition-transform duration-300',
-
-  cardHeader: 'pb-3',
-  metaRow: 'flex items-center gap-2 text-sm text-foreground/60 mb-2',
-  badge: 'text-xs',
-  cardTitle:
-    'text-xl font-semibold group-hover:text-main transition-colors line-clamp-2 text-foreground',
-
-  cardContent: 'pt-0',
-  description: 'text-foreground/70 line-clamp-3 leading-relaxed',
-
-  cardFooter: 'pt-0',
-  readMoreBtn: 'p-0 h-auto font-medium group/button',
-  readMoreIcon:
-    'w-4 h-4 ml-2 group-hover/button:translate-x-1 transition-transform',
+  if (diffDays < 7) return `${diffDays} Days Ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} Weeks Ago`;
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)} Months Ago`;
+  return `${Math.floor(diffDays / 365)} Years Ago`;
 }
 
 function Articles() {
-  const { articlesData } = Route.useLoaderData()
-  const articles = articlesData.data
-  const totalPages = articlesData.meta?.pagination?.pageCount || 1
+  const { articlesData } = Route.useLoaderData();
+  const articles = articlesData.data;
+  const totalPages = articlesData.meta?.pagination?.pageCount || 1;
+
+  const featuredPost = articles.length > 0 ? articles[0] : null;
+  const mainPosts = articles.slice(1);
 
   return (
-    <div className={styles.root}>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>Articles</h1>
-          <p className={styles.subtitle}>
-            Discover insights, tutorials, and stories from our team
-          </p>
-          <Tags className="justify-center mt-4" />
-          <div className={styles.search}>
-            <Search />
+    <section className="py-24 bg-white">
+      <div className="container max-w-5xl px-4 mx-auto">
+        {/* Header with Search */}
+        <div className="mb-12">
+          <Text as="h2" className="mb-4">
+            Latest Articles
+          </Text>
+          <div className="flex flex-col gap-6 my-10">
+            <Search className="w-full" />
+            <Tags className="justify-center" />
           </div>
         </div>
 
-        {articles.length === 0 ? (
-          <div className={styles.emptyWrap}>
-            <p className={styles.emptyText}>No articles found.</p>
+        {/* Empty State */}
+        {articles.length === 0 && (
+          <div className="text-center py-12">
+            <Text as="h3" className="mb-2">
+              No Articles Found
+            </Text>
+            <Text className="text-muted-foreground">
+              Try adjusting your search or filter to find what you're looking for.
+            </Text>
           </div>
-        ) : (
-          <div className={styles.grid}>
-            {articles.map((article) => (
-              <Card key={article.documentId} className={styles.card}>
-                {article.featuredImage?.url && (
-                  <div className={styles.imageWrapper}>
-                    <StrapiImage
-                      src={article.featuredImage.url}
-                      alt={
-                        article.featuredImage.alternativeText || article.title
-                      }
-                      aspectRatio="16:9"
-                      className={styles.image}
-                    />
-                  </div>
+        )}
+
+        {/* Featured Post */}
+        {featuredPost?.slug && (
+          <Link
+            to="/articles/$slug"
+            params={{ slug: featuredPost.slug }}
+            className="block"
+          >
+            <article className="bg-card grid grid-cols-1 md:grid-cols-2 md:gap-8 border-2 border-black group transition-all mb-8">
+              <div className="relative overflow-hidden border-b-2 md:border-b-0 md:border-r-2 border-black h-64 md:h-auto">
+                {featuredPost.featuredImage && (
+                  <StrapiImage
+                    src={featuredPost.featuredImage.url}
+                    alt={
+                      featuredPost.featuredImage.alternativeText ||
+                      featuredPost.title ||
+                      "Featured article"
+                    }
+                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                  />
                 )}
-
-                <CardHeader className={styles.cardHeader}>
-                  <div className={styles.metaRow}>
-                    <time dateTime={article.publishedAt}>
-                      {article.publishedAt
-                        ? new Date(article.publishedAt).toLocaleDateString(
-                          'en-US',
-                          {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                          },
-                        )
-                        : 'No date'}
-                    </time>
-                  </div>
-
-                  <h2 className={styles.cardTitle}>{article.title}</h2>
-
-                  {article.contentTags && article.contentTags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {article.contentTags.map((tag) => (
-                        <Badge key={tag.documentId} variant="neutral" className="text-xs">
-                          {tag.title}
-                        </Badge>
-                      ))}
-                    </div>
+              </div>
+              <div className="p-8 md:pl-0">
+                <div className="flex items-center gap-4 mb-4">
+                  {featuredPost.contentTags?.[0] && (
+                    <Badge size="sm" className={`${getTagColor(featuredPost.contentTags[0].title)} border-2 border-black`}>
+                      {featuredPost.contentTags[0].title}
+                    </Badge>
                   )}
-                </CardHeader>
+                  <span className="text-[#C4A1FF] text-2xl">•</span>
+                  <Text className="text-sm font-medium">
+                    {formatDate(featuredPost.publishedAt)}
+                  </Text>
+                </div>
+                <Text as="h3" className="mb-2 font-sans">
+                  {featuredPost.title}
+                </Text>
+                <Text className="text-muted-foreground text-sm mb-6 leading-relaxed">
+                  {featuredPost.description}
+                </Text>
 
-                <CardContent className={styles.cardContent}>
-                  <p className={styles.description}>{article.description}</p>
-                </CardContent>
+                <div className="flex items-center justify-between bg-[#C4A1FF] border-2 border-black px-2">
+                  <Text className="text-sm font-medium text-black">
+                    {formatDate(featuredPost.publishedAt)}
+                  </Text>
+                  <span className="border-x-2 border-black px-3 py-1 bg-background flex items-center gap-2 font-medium text-sm text-black">
+                    Read Full
+                    <ArrowRight
+                      size={16}
+                      className="group-hover:-rotate-45 transition-transform duration-300"
+                    />
+                  </span>
+                </div>
+              </div>
+            </article>
+          </Link>
+        )}
 
-                <CardFooter className={styles.cardFooter}>
-                  <Button asChild>
-                    <Link
-                      key={article.documentId}
-                      to="/articles/$slug"
-                      params={{ slug: article.slug || '' }}
-                    >
-                      Read more
-                      <svg
-                        className={styles.readMoreIcon}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
+        {/* Main Posts Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          {mainPosts.map((post) => {
+            if (!post.slug) return null;
+            return (
+              <Link
+                key={post.documentId}
+                to="/articles/$slug"
+                params={{ slug: post.slug }}
+                className="block"
+              >
+                <article className="bg-card border-2 border-black group transition-all">
+                  <div className="relative h-64 overflow-hidden border-b-2 border-black">
+                    {post.featuredImage && (
+                      <StrapiImage
+                        src={post.featuredImage.url}
+                        alt={
+                          post.featuredImage.alternativeText ||
+                          post.title ||
+                          "Article"
+                        }
+                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                      />
+                    )}
+                  </div>
+                  <div className="p-8">
+                    <div className="flex items-center gap-4 mb-4">
+                      {post.contentTags?.[0] && (
+                        <Badge size="sm" className={`${getTagColor(post.contentTags[0].title)} border-2 border-black`}>
+                          {post.contentTags[0].title}
+                        </Badge>
+                      )}
+                      <span className="text-[#C4A1FF] text-2xl">•</span>
+                      <Text className="text-sm font-medium">
+                        {formatDate(post.publishedAt)}
+                      </Text>
+                    </div>
+                    <Text as="h3" className="mb-3 font-sans">
+                      {post.title}
+                    </Text>
+                    <Text className="text-muted-foreground text-sm mb-4 leading-relaxed">
+                      {post.description}
+                    </Text>
+                    <div className="flex items-center justify-between bg-[#C4A1FF] border-2 border-black px-2">
+                      <Text className="text-sm font-medium text-black">
+                        {formatDate(post.publishedAt)}
+                      </Text>
+                      <span className="border-x-2 border-black px-3 py-1 bg-background flex items-center gap-2 font-medium text-sm text-black">
+                        Read Full
+                        <ArrowRight
+                          size={16}
+                          className="group-hover:-rotate-45 transition-transform duration-300"
                         />
-                      </svg>
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+                      </span>
+                    </div>
+                  </div>
+                </article>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-12">
+            <PaginationComponent pageCount={totalPages} />
           </div>
         )}
       </div>
-      <PaginationComponent pageCount={totalPages} />
-    </div>
-  )
+    </section>
+  );
 }

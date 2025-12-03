@@ -1,31 +1,20 @@
-import { useState } from 'react'
-import { Menu } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
-import { ThemeToggle } from './theme-toggle'
-import { StrapiImage } from './strapi-image'
-import { LoggedInUser } from './logged-in-user'
-import type { THeader, TLink } from '../../types'
+import { Bell, Menu, MessageCircleIcon } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import type { THeader } from '@/types'
+import { Avatar } from "@/components/retroui/Avatar";
+import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { Button } from "@/components/retroui/Button";
+import { StrapiImage } from "@/components/custom/strapi-image";
+import { LogoutButton } from "@/components/custom/logout-button";
+import { SmartLink } from "@/components/custom/smart-link";
 
-import { Button } from '@/components/ui/button'
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from '@/components/ui/navigation-menu'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet'
-
-// Simplified user type - only what we need for navigation
 interface NavigationUser {
   username: string
   email: string
+  image?: {
+    url: string
+    alternativeText?: string | null
+  }
 }
 
 interface ITopNavigationProps {
@@ -33,234 +22,220 @@ interface ITopNavigationProps {
   currentUser?: NavigationUser | null
 }
 
-const styles = {
-  section: 'bg-white dark:bg-dark p-6 flex justify-center items-center',
-  desktopNav: 'container mx-auto w-full bg-background shadow-shadow border-2 border-border rounded-lg px-6 hidden lg:block',
-  desktopNavInner: 'flex items-center justify-between h-20',
-  logoLink: 'flex items-center gap-3 text-foreground hover:text-main transition-all duration-300 ease-in-out',
-  logoText: 'text-2xl font-bold tracking-tight font-heading',
-  navItemsContainer: 'flex items-center space-x-8',
-  navList: 'flex items-center space-x-8',
-  ctaContainer: 'flex gap-2 items-center',
-  mobileNav: 'w-full bg-background shadow-shadow border-2 border-border rounded-lg px-4 block lg:hidden',
-  mobileNavInner: 'flex items-center justify-between h-16',
-  mobileActionsContainer: 'flex gap-2',
-  mobileMenuButton: 'size-4',
-  sheetContent: 'overflow-y-auto',
-  sheetHeaderLink: 'flex items-center gap-2',
-  sheetDescription: 'sr-only',
-  mobileNavItems: 'flex flex-col gap-6 p-4',
-  mobileNavList: 'flex w-full flex-col gap-4',
-  mobileCtaContainer: 'flex flex-col gap-3',
-  navMenuLink: 'bg-transparent hover:bg-transparent focus:bg-transparent data-[active]:bg-transparent data-[state=open]:bg-transparent',
-  navItemLink: 'text-xl font-bold text-foreground hover:text-main transition-all duration-300 ease-in-out hover:translate-x-boxShadowX hover:translate-y-boxShadowY',
-  mobileNavButton: 'w-full justify-start',
+function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .map(part => part[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
 }
 
-export function TopNavigation({
-  header,
-  currentUser,
-}: Readonly<ITopNavigationProps>) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+export function TopNavigation({ header, currentUser }: ITopNavigationProps) {
+  const logoLabel = header?.logo.label || "SING";
+  const logoHref = header?.logo.href || "/";
+  const logoImage = header?.logo.image;
+  const navItems = header?.navItems || [];
+  const cta = header?.cta;
 
-  if (!header) return null
-  const { logo, navItems = [], cta } = header
+  const userDisplayName = currentUser?.username || "Guest";
+  const userInitials = getInitials(userDisplayName);
 
   return (
-    <section className={styles.section}>
-      {/* Desktop Menu */}
-      <nav className={styles.desktopNav}>
-        <div className={styles.desktopNavInner}>
-          {/* Logo */}
-          <Link
-            to={logo.href}
-            className={styles.logoLink}
-            target={logo.isExternal ? '_blank' : undefined}
-            rel={logo.isExternal ? 'noopener noreferrer' : undefined}
-          >
-            {logo.image && (
-              <StrapiImage
-                src={logo.image.url}
-                alt={logo.image.alternativeText || logo.label}
-                aspectRatio="square"
-                height={32}
-                width={32}
-              />
-            )}
-            <span className={styles.logoText}>
-              {logo.label}
-            </span>
-          </Link>
-
-          {/* Navigation Items */}
-          <div className={styles.navItemsContainer}>
-            <NavigationMenu>
-              <NavigationMenuList className={styles.navList}>
-                {navItems.map((item) => renderNavItem(item))}
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
-
-          {/* CTA / User Actions */}
-          <div className={styles.ctaContainer}>
-            {currentUser ? (
-              <LoggedInUser
-                userData={{
-                  username: currentUser.username || '',
-                  email: currentUser.email || '',
-                }}
-              />
-            ) : cta ? (
-              <Button
-                asChild
-                variant={cta.type === 'PRIMARY' ? 'default' : 'neutral'}
-                size="default"
-              >
-                <Link
-                  to={cta.href}
-                  target={cta.isExternal ? '_blank' : undefined}
-                  rel={cta.isExternal ? 'noopener noreferrer' : undefined}
-                >
-                  {cta.label}
-                </Link>
-              </Button>
-            ) : null}
-            <ThemeToggle />
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Menu */}
-      <nav className={styles.mobileNav}>
-        <div className={styles.mobileNavInner}>
-          {/* Logo */}
-          <Link
-            to={logo.href}
-            className={styles.logoLink}
-            target={logo.isExternal ? '_blank' : undefined}
-            rel={logo.isExternal ? 'noopener noreferrer' : undefined}
-          >
-            {logo.image && (
-              <StrapiImage
-                src={logo.image.url}
-                alt={logo.image.alternativeText || logo.label}
-                aspectRatio="square"
-                height={40}
-                width={40}
-              />
-            )}
-          </Link>
-          <div className={styles.mobileActionsContainer}>
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild>
-                <Button variant="default" size="icon">
-                  <Menu className={styles.mobileMenuButton} />
-                </Button>
-              </SheetTrigger>
-
-              <SheetContent className={styles.sheetContent}>
-                <SheetHeader>
-                  <SheetTitle>
-                    <Link
-                      to={logo.href}
-                      className={styles.sheetHeaderLink}
-                      target={logo.isExternal ? '_blank' : undefined}
-                      rel={logo.isExternal ? 'noopener noreferrer' : undefined}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {logo.image && (
-                        <StrapiImage
-                          src={logo.image.url}
-                          alt={logo.image.alternativeText || logo.label}
-                          aspectRatio="square"
-                        />
-                      )}
-                    </Link>
-                  </SheetTitle>
-                  <SheetDescription className={styles.sheetDescription}>
-                    Mobile navigation menu
-                  </SheetDescription>
-                </SheetHeader>
-                <div className={styles.mobileNavItems}>
-                  <div className={styles.mobileNavList}>
-                    {navItems.map((item) =>
-                      renderMobileNavItem(item, () => setMobileMenuOpen(false)),
-                    )}
-                  </div>
-
-                  <div className={styles.mobileCtaContainer}>
-                    {currentUser ? (
-                      <LoggedInUser
-                        userData={{
-                          username: currentUser.username || '',
-                          email: currentUser.email || '',
-                        }}
-                      />
-                    ) : cta ? (
-                      <Button
-                        asChild
-                        variant={cta.type === 'PRIMARY' ? 'default' : 'neutral'}
-                      >
-                        <Link
-                          to={cta.href}
-                          target={cta.isExternal ? '_blank' : undefined}
-                          rel={
-                            cta.isExternal ? 'noopener noreferrer' : undefined
-                          }
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          {cta.label}
-                        </Link>
-                      </Button>
-                    ) : null}
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-            <ThemeToggle />
-          </div>
-        </div>
-      </nav>
-    </section>
-  )
-}
-
-const renderNavItem = (item: TLink) => {
-  return (
-    <NavigationMenuItem key={item.id}>
-      <NavigationMenuLink
-        asChild
-        className={styles.navMenuLink}
-      >
-        <Link
-          to={item.href}
-          target={item.isExternal ? '_blank' : undefined}
-          rel={item.isExternal ? 'noopener noreferrer' : undefined}
-          className={styles.navItemLink}
-        >
-          {item.label}
+    <nav className="bg-[#F9F5F2] border-y-3">
+      <div className="container h-14 max-w-6xl mx-auto flex items-stretch justify-between px-4 xl:px-0">
+        {/* Logo */}
+        <Link to={logoHref} className="text-2xl font-head border-x-3 px-4 border-black flex items-center">
+          {logoImage ? (
+            <StrapiImage
+              src={logoImage.url}
+              alt={logoImage.alternativeText || logoLabel}
+              height={32}
+              className="h-8 w-auto"
+            />
+          ) : (
+            logoLabel
+          )}
         </Link>
-      </NavigationMenuLink>
-    </NavigationMenuItem>
-  )
+
+        {/* Desktop Navigation Items */}
+        {navItems.length > 0 && (
+          <div className="hidden md:flex items-center gap-8 font-medium">
+            {navItems.map((item) => (
+              <SmartLink
+                key={item.id}
+                href={item.href}
+                className="hover:underline underline-offset-4 decoration-primary decoration-2"
+              >
+                {item.label}
+              </SmartLink>
+            ))}
+          </div>
+        )}
+
+        {/* Right Actions */}
+        <div className="flex">
+          {/* Notifications - only show when logged in */}
+          {currentUser && (
+            <div className="hidden md:flex items-center gap-3 px-4">
+              <div className="relative cursor-pointer hover:opacity-80">
+                <MessageCircleIcon className="h-5 w-5" />
+              </div>
+              <div className="relative cursor-pointer hover:opacity-80">
+                <Bell className="h-5 w-5" />
+                <span className="bg-[#C4A1FF] rounded-full h-2.5 w-2.5 border-2 border-[#F9F5F2] absolute -top-px -right-px"></span>
+              </div>
+            </div>
+          )}
+
+          <div className="flex items-stretch border-x-3 border-black">
+            {currentUser ? (
+              <>
+                <Link
+                  to="/"
+                  className="flex items-center px-4 gap-2 font-medium bg-[#E7F193] hover:bg-[#d9e484] transition-colors"
+                >
+                  <Avatar className="h-9 w-9">
+                    {currentUser.image ? (
+                      <Avatar.Image>
+                        <StrapiImage
+                          src={currentUser.image.url}
+                          alt={currentUser.image.alternativeText || userDisplayName}
+                          className="h-full w-full object-cover rounded-full"
+                        />
+                      </Avatar.Image>
+                    ) : (
+                      <Avatar.Fallback>{userInitials}</Avatar.Fallback>
+                    )}
+                  </Avatar>
+                  <span className="hidden md:inline">{userDisplayName}</span>
+                </Link>
+                <LogoutButton variant="full" />
+              </>
+            ) : (
+              <>
+                {cta && (
+                  <SmartLink
+                    href={cta.href}
+                    className="flex items-center px-4 gap-2 font-medium bg-[#E7F193] hover:bg-[#d9e484] transition-colors"
+                  >
+                    {cta.label}
+                  </SmartLink>
+                )}
+              </>
+            )}
+
+            {/* Mobile Menu */}
+            <div className="md:hidden border-l-3 border-black">
+              <Drawer direction="left">
+                <DrawerTrigger asChild>
+                  <Button size="icon" className="bg-[#C4FF83] rounded-none h-full px-4 shadow-none border-none">
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </DrawerTrigger>
+                <DrawerContent className="bg-[#F9F5F2] border-l-3 border-black h-full w-80 ml-auto flex flex-col">
+                  <DrawerHeader className="border-b-3 border-black">
+                    <DrawerTitle className="text-2xl font-head">
+                      <DrawerClose asChild>
+                        <Link to={logoHref}>
+                          {logoImage ? (
+                            <StrapiImage
+                              src={logoImage.url}
+                              alt={logoImage.alternativeText || logoLabel}
+                              height={32}
+                              className="h-8 w-auto"
+                            />
+                          ) : (
+                            logoLabel
+                          )}
+                        </Link>
+                      </DrawerClose>
+                    </DrawerTitle>
+                  </DrawerHeader>
+
+                  <div className="flex-1 flex flex-col p-4 space-y-6">
+                    {/* User Profile Section */}
+                    {currentUser && (
+                      <div className="flex items-center gap-3 p-4 bg-[#E7F193] border-3 border-black rounded-lg">
+                        <Avatar className="h-12 w-12">
+                          {currentUser.image ? (
+                            <Avatar.Image>
+                              <StrapiImage
+                                src={currentUser.image.url}
+                                alt={currentUser.image.alternativeText || userDisplayName}
+                                className="h-full w-full object-cover rounded-full"
+                              />
+                            </Avatar.Image>
+                          ) : (
+                            <Avatar.Fallback>{userInitials}</Avatar.Fallback>
+                          )}
+                        </Avatar>
+                        <div>
+                          <p className="font-medium text-lg">{userDisplayName}</p>
+                          <p className="text-sm text-muted-foreground">Welcome back!</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Navigation Items */}
+                    {navItems.length > 0 && (
+                      <div className="space-y-3">
+                        <h3 className="font-medium text-lg">Navigation</h3>
+                        {navItems.map((item) => (
+                          <DrawerClose key={item.id} asChild>
+                            <Button
+                              asChild
+                              variant="outline"
+                              className="w-full justify-start"
+                            >
+                              <SmartLink href={item.href}>
+                                {item.label}
+                              </SmartLink>
+                            </Button>
+                          </DrawerClose>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* CTA for non-logged in users */}
+                    {!currentUser && cta && (
+                      <DrawerClose asChild>
+                        <Button asChild className="w-full">
+                          <SmartLink href={cta.href}>
+                            {cta.label}
+                          </SmartLink>
+                        </Button>
+                      </DrawerClose>
+                    )}
+
+                    {/* Notifications */}
+                    <div className="space-y-3">
+                      <h3 className="font-medium text-lg">Notifications</h3>
+                      <div className="flex items-center gap-3 p-3 bg-white border-2 border-black rounded-lg">
+                        <MessageCircleIcon className="h-5 w-5" />
+                        <span>Messages</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-3 bg-white border-2 border-black rounded-lg">
+                        <Bell className="h-5 w-5" />
+                        <span>Notifications</span>
+                        <span className="bg-[#C4A1FF] rounded-full h-2.5 w-2.5 ml-auto"></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Logout Button - Sticky at bottom */}
+                  {currentUser && (
+                    <div className="border-t-3 border-black p-4">
+                      <LogoutButton variant="mobile" />
+                    </div>
+                  )}
+                </DrawerContent>
+              </Drawer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
 }
 
-const renderMobileNavItem = (item: TLink, onNavigate: () => void) => {
-  return (
-    <Button
-      key={item.id}
-      asChild
-      variant="neutral"
-      className={styles.mobileNavButton}
-    >
-      <Link
-        to={item.href}
-        target={item.isExternal ? '_blank' : undefined}
-        rel={item.isExternal ? 'noopener noreferrer' : undefined}
-        onClick={onNavigate}
-      >
-        {item.label}
-      </Link>
-    </Button>
-  )
-}

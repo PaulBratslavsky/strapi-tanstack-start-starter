@@ -9,10 +9,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import globalCss from '../global.css?url'
 
-import { TopNavigation } from '../components/custom/top-navigation'
 import { strapiApi } from '../data/server-functions'
 import { NotFound } from '../components/custom/not-found'
 import type { THeader } from '@/types'
+import { TopNavigation } from '@/components/custom/top-navigation'
 import { ThemeProvider } from '@/components/custom/theme-provider'
 import { ScrollToTop } from '@/components/custom/scroll-to-top'
 
@@ -121,9 +121,11 @@ function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
       </head>
       <body className="h-screen flex flex-col overflow-hidden">
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
             <TopNavigation header={header} currentUser={currentUser} />
-            <main id="main-content" className="flex-1 overflow-y-auto">{children}</main>
+            <main id="main-content" className="flex-1 overflow-y-auto">
+              {children}
+            </main>
             <ScrollToTop />
             {process.env.NODE_ENV !== 'production' && (
               <TanStackDevtools
