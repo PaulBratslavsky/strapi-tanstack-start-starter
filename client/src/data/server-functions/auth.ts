@@ -1,7 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { registerUserService, loginUserService, isAuthError } from '@/lib/services/auth'
-import { SignupFormSchema, SigninFormSchema, type FormState } from '@/lib/validations/auth'
+import type {FormState} from '@/lib/validations/auth';
+import { isAuthError, loginUserService, registerUserService } from '@/lib/services/auth'
+import {  SigninFormSchema, SignupFormSchema } from '@/lib/validations/auth'
 import { useAppSession } from '@/lib/session'
 
 export const registerUserServerFunction = createServerFn({

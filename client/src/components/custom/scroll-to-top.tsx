@@ -43,6 +43,7 @@ export function ScrollToTop() {
         shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
         flex items-center justify-center
         transition-all duration-300 ease-in-out
+        hover:bg-[#E7F193]
         hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
         hover:translate-x-[2px] hover:translate-y-[2px]
         active:shadow-none active:translate-x-[4px] active:translate-y-[4px]

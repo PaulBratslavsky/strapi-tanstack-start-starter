@@ -39,7 +39,6 @@ export function CommentForm({
       return result
     },
     onSuccess: (result) => {
-      console.log(result)
       queryClient.invalidateQueries({ queryKey: ['comments', articleDocumentId] })
       setContent('')
       setError(null)

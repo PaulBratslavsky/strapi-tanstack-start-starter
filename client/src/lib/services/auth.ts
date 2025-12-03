@@ -59,7 +59,7 @@ export async function registerUserService(
 
 export async function loginUserService(
   userData: TLoginUser
-): Promise<TAuthServiceResponse> {
+): Promise<TAuthServiceResponse | undefined> {
   const url = new URL("/api/auth/local", baseUrl);
 
   try {
@@ -71,9 +71,10 @@ export async function loginUserService(
       body: JSON.stringify({ ...userData }),
     });
 
-    return response.json() as Promise<TAuthServiceResponse>;
+    const data = (await response.json()) as TAuthServiceResponse;
+    return data;
   } catch (error) {
     console.error("Login Service Error:", error);
-    throw error;
+    return undefined;
   }
 }
