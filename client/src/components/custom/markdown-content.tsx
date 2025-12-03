@@ -163,7 +163,14 @@ export function MarkdownContent({ content, styles }: Readonly<MarkdownContentPro
             // Pre is handled by SyntaxHighlighter, just return children
             return <>{children}</>;
           },
-          table: ({ ...props }) => <table className={styles.table} {...props} />,
+          table: ({ ...props }) => (
+            <div className="overflow-x-auto my-4">
+              <table className={styles.table} {...props} />
+            </div>
+          ),
+          thead: ({ ...props }) => <thead {...props} />,
+          tbody: ({ ...props }) => <tbody {...props} />,
+          tr: ({ ...props }) => <tr className="border-b border-border" {...props} />,
           th: ({ ...props }) => <th className={styles.th} {...props} />,
           td: ({ ...props }) => <td className={styles.td} {...props} />,
           img: ({ ...props }) => <img className={styles.img} {...props} />,

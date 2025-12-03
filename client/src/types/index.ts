@@ -211,3 +211,21 @@ export type TCourseResponse = TStrapiResponseCollection<TCourse>
 export type TCourseSingleResponse = TStrapiResponseSingle<TCourse>
 export type TLessonResponse = TStrapiResponseCollection<TLesson>
 export type TLessonSingleResponse = TStrapiResponseSingle<TLesson>
+
+export type TRelatedArticle = {
+  id: number
+  documentId: string
+  title: string
+  description: string | null
+  slug: string
+  featuredImage: TImage | null
+  author: {
+    id: number
+    documentId: string
+    fullName: string
+    bio: string | null
+  } | null
+  createdAt: string
+  updatedAt: string
+  publishedAt: string
+}

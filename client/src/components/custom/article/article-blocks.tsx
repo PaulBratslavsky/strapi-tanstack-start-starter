@@ -1,4 +1,5 @@
-import { BlockRenderer, type Block } from '@/components/blocks/block-renderer'
+import type {Block} from '@/components/blocks/block-renderer';
+import {  BlockRenderer } from '@/components/blocks/block-renderer'
 
 interface ArticleBlocksProps {
   blocks?: Array<Block>
