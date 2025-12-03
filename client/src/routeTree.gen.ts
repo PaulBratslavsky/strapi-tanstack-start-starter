@@ -18,6 +18,7 @@ import { Route as CoursesSlugRouteImport } from './routes/courses/$slug'
 import { Route as ArticlesSlugRouteImport } from './routes/articles/$slug'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthSigninRouteImport } from './routes/_auth/signin'
+import { Route as ApiConnectProviderRouteImport } from './routes/api.connect.$provider'
 import { Route as ApiConnectProviderRedirectRouteImport } from './routes/api.connect.$provider.redirect'
 
 const AuthRoute = AuthRouteImport.update({
@@ -64,11 +65,16 @@ const AuthSigninRoute = AuthSigninRouteImport.update({
   path: '/signin',
   getParentRoute: () => AuthRoute,
 } as any)
+const ApiConnectProviderRoute = ApiConnectProviderRouteImport.update({
+  id: '/api/connect/$provider',
+  path: '/api/connect/$provider',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiConnectProviderRedirectRoute =
   ApiConnectProviderRedirectRouteImport.update({
-    id: '/api/connect/$provider/redirect',
-    path: '/api/connect/$provider/redirect',
-    getParentRoute: () => rootRouteImport,
+    id: '/redirect',
+    path: '/redirect',
+    getParentRoute: () => ApiConnectProviderRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/courses/$slug': typeof CoursesSlugRoute
   '/articles': typeof ArticlesIndexRoute
   '/courses': typeof CoursesIndexRoute
+  '/api/connect/$provider': typeof ApiConnectProviderRouteWithChildren
   '/api/connect/$provider/redirect': typeof ApiConnectProviderRedirectRoute
 }
 export interface FileRoutesByTo {
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/courses/$slug': typeof CoursesSlugRoute
   '/articles': typeof ArticlesIndexRoute
   '/courses': typeof CoursesIndexRoute
+  '/api/connect/$provider': typeof ApiConnectProviderRouteWithChildren
   '/api/connect/$provider/redirect': typeof ApiConnectProviderRedirectRoute
 }
 export interface FileRoutesById {
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/courses/$slug': typeof CoursesSlugRoute
   '/articles/': typeof ArticlesIndexRoute
   '/courses/': typeof CoursesIndexRoute
+  '/api/connect/$provider': typeof ApiConnectProviderRouteWithChildren
   '/api/connect/$provider/redirect': typeof ApiConnectProviderRedirectRoute
 }
 export interface FileRouteTypes {
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/courses/$slug'
     | '/articles'
     | '/courses'
+    | '/api/connect/$provider'
     | '/api/connect/$provider/redirect'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/courses/$slug'
     | '/articles'
     | '/courses'
+    | '/api/connect/$provider'
     | '/api/connect/$provider/redirect'
   id:
     | '__root__'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/courses/$slug'
     | '/articles/'
     | '/courses/'
+    | '/api/connect/$provider'
     | '/api/connect/$provider/redirect'
   fileRoutesById: FileRoutesById
 }
@@ -151,7 +163,7 @@ export interface RootRouteChildren {
   CoursesSlugRoute: typeof CoursesSlugRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
   CoursesIndexRoute: typeof CoursesIndexRoute
-  ApiConnectProviderRedirectRoute: typeof ApiConnectProviderRedirectRoute
+  ApiConnectProviderRoute: typeof ApiConnectProviderRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -219,12 +231,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSigninRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/api/connect/$provider': {
+      id: '/api/connect/$provider'
+      path: '/api/connect/$provider'
+      fullPath: '/api/connect/$provider'
+      preLoaderRoute: typeof ApiConnectProviderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/connect/$provider/redirect': {
       id: '/api/connect/$provider/redirect'
-      path: '/api/connect/$provider/redirect'
+      path: '/redirect'
       fullPath: '/api/connect/$provider/redirect'
       preLoaderRoute: typeof ApiConnectProviderRedirectRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ApiConnectProviderRoute
     }
   }
 }
@@ -241,6 +260,17 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
+interface ApiConnectProviderRouteChildren {
+  ApiConnectProviderRedirectRoute: typeof ApiConnectProviderRedirectRoute
+}
+
+const ApiConnectProviderRouteChildren: ApiConnectProviderRouteChildren = {
+  ApiConnectProviderRedirectRoute: ApiConnectProviderRedirectRoute,
+}
+
+const ApiConnectProviderRouteWithChildren =
+  ApiConnectProviderRoute._addFileChildren(ApiConnectProviderRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SlugRoute: SlugRoute,
@@ -249,7 +279,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoursesSlugRoute: CoursesSlugRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
   CoursesIndexRoute: CoursesIndexRoute,
-  ApiConnectProviderRedirectRoute: ApiConnectProviderRedirectRoute,
+  ApiConnectProviderRoute: ApiConnectProviderRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -90,7 +90,7 @@ const config = defineConfig(async ({ mode }) => {
               '/not-found',
               '/signin',
               '/signup',
-              '/api/',
+              '/api/connect',  // OAuth routes
             ]
             return !excludedPaths.some((excluded) => path.startsWith(excluded))
           },
