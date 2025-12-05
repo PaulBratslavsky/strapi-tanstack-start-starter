@@ -1,6 +1,7 @@
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { useEffect, useState } from 'react';
+import rehypeRaw from "rehype-raw";
+import { useEffect, useMemo, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { SyntaxHighlighter } from "./syntax-highlighter";
 import { MermaidDiagram } from "./mermaid-diagram";
@@ -31,8 +32,77 @@ interface MarkdownContentProps {
   styles: MarkdownStyles;
 }
 
+interface Reference {
+  number: number;
+  url: string;
+  title?: string;
+}
+
+// Parse references from the bottom of the content
+// Format: [1](https://example.com) or [1](https://example.com "Title")
+function parseReferences(content: string): { mainContent: string; references: Map<number, Reference> } {
+  const references = new Map<number, Reference>();
+
+  // Find where references section starts (look for consecutive reference lines at the end)
+  const lines = content.split('\n');
+  let refStartIndex = lines.length;
+
+  // Scan from the end to find where references begin
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const line = lines[i].trim();
+    if (line === '') continue; // Skip empty lines
+    if (/^\[\d+\]\([^)]+\)/.test(line)) {
+      refStartIndex = i;
+    } else {
+      break; // Stop when we hit non-reference content
+    }
+  }
+
+  // Extract references
+  const refLines = lines.slice(refStartIndex);
+  for (const line of refLines) {
+    const match = /^\[(\d+)\]\(([^)\s]+)(?:\s+"([^"]+)")?\)/.exec(line.trim());
+    if (match) {
+      references.set(parseInt(match[1], 10), {
+        number: parseInt(match[1], 10),
+        url: match[2],
+        title: match[3],
+      });
+    }
+  }
+
+  // Remove references section from main content
+  const mainContent = lines.slice(0, refStartIndex).join('\n').trimEnd();
+
+  return { mainContent, references };
+}
+
+// Convert inline citations [1], [2][3] to superscript links
+function processCitations(content: string, references: Map<number, Reference>): string {
+  // Match citation patterns like [1], [1][2], [1][2][3]
+  // This regex finds individual [number] patterns
+  return content.replace(/\[(\d+)\](?!\()/g, (match, num) => {
+    const refNum = parseInt(num, 10);
+    if (references.has(refNum)) {
+      // Return a special marker that we'll handle in the component
+      return `<cite-ref data-ref="${refNum}">[${refNum}]</cite-ref>`;
+    }
+    return match; // Keep original if no reference found
+  });
+}
+
 export function MarkdownContent({ content, styles }: Readonly<MarkdownContentProps>) {
   const [isDark, setIsDark] = useState(false);
+
+  // Parse and process content with references
+  const { processedContent, references } = useMemo(() => {
+    if (!content) return { processedContent: '', references: new Map<number, Reference>() };
+
+    const parsed = parseReferences(content);
+    const processed = processCitations(parsed.mainContent, parsed.references);
+
+    return { processedContent: processed, references: parsed.references };
+  }, [content]);
 
   useEffect(() => {
     // Check if dark mode is enabled
@@ -55,10 +125,26 @@ export function MarkdownContent({ content, styles }: Readonly<MarkdownContentPro
 
   if (!content) return null;
 
+  // Sort references by number for display
+  const sortedReferences = useMemo(() => {
+    return Array.from(references.values()).sort((a, b) => a.number - b.number);
+  }, [references]);
+
+  // Get domain name from URL for display
+  const getDomain = (url: string): string => {
+    try {
+      const urlObj = new URL(url);
+      return urlObj.hostname.replace('www.', '');
+    } catch {
+      return url;
+    }
+  };
+
   return (
     <div className={styles.richText}>
       <Markdown
         remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
         components={{
           h1: ({ children, ...props }) => {
             const id = String(children).toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -189,10 +275,64 @@ export function MarkdownContent({ content, styles }: Readonly<MarkdownContentPro
           td: ({ ...props }) => <td className={styles.td} {...props} />,
           img: ({ ...props }) => <img className={styles.img} {...props} />,
           hr: ({ ...props }) => <hr className={styles.hr} {...props} />,
+          // Handle citation references (custom HTML element parsed by rehype-raw)
+          ...({
+            'cite-ref': ({ node, ...props }: { node?: { properties?: { dataRef?: string } }; [key: string]: unknown }) => {
+              const refNum = parseInt(String(node?.properties?.dataRef ?? '0'), 10);
+              const ref = references.get(refNum);
+              if (!ref) return <span {...(props as React.HTMLAttributes<HTMLSpanElement>)} />;
+
+              return (
+                <a
+                  href={`#ref-${refNum}`}
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-xs align-super font-semibold no-underline hover:underline"
+                  title={ref.title || getDomain(ref.url)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const element = document.getElementById(`ref-${refNum}`);
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                  }}
+                >
+                  [{refNum}]
+                </a>
+              );
+            },
+          } as Record<string, unknown>),
         }}
       >
-        {content}
+        {processedContent}
       </Markdown>
+
+      {/* References Section */}
+      {sortedReferences.length > 0 && (
+        <div className="mt-12 pt-8 border-t-2 border-dashed border-border">
+          <h3 className={styles.h3}>References</h3>
+          <ol className="list-none space-y-3 mt-4 text-sm">
+            {sortedReferences.map((ref) => (
+              <li
+                key={ref.number}
+                id={`ref-${ref.number}`}
+                className="flex gap-3 p-2 rounded hover:bg-muted/50 transition-colors"
+              >
+                <span className="font-bold text-blue-600 dark:text-blue-400 min-w-8">[{ref.number}]</span>
+                <a
+                  href={ref.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${styles.a} break-all`}
+                >
+                  {ref.title || getDomain(ref.url)}
+                  <span className="text-muted-foreground ml-2 text-xs">
+                    ({getDomain(ref.url)})
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
     </div>
   );
 }
