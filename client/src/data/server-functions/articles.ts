@@ -3,7 +3,7 @@ import type { TStrapiResponseCollection } from '@/types'
 import type { IArticleDetail } from '@/components/custom/article-detail'
 import { sdk } from '@/data/strapi-sdk'
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 6;
 
 const articles = sdk.collection('articles')
 
