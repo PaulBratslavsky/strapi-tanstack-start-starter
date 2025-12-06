@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start'
 import type { TCourse, TLesson, TStrapiResponseCollection } from '@/types'
 import { sdk } from '@/data/strapi-sdk'
 
-const PAGE_SIZE = 6
+const PAGE_SIZE = 5
 
 const courses = sdk.collection('strapi-plugin-lms/courses')
 
