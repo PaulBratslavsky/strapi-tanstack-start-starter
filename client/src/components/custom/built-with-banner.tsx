@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { X, Github } from 'lucide-react'
 
 const technologies = [
   {
@@ -104,10 +104,16 @@ export function BuiltWithBanner() {
         {/* Divider */}
         <div className="my-3 border-t-2 border-dashed border-black/20" />
 
-        {/* Footer text */}
-        <p className="text-center text-xs text-muted-foreground">
-          Hover for details, click to visit
-        </p>
+        {/* GitHub link */}
+        <a
+          href="https://github.com/PaulBratslavsky/strapi-tanstack-start-starter"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <Github className="w-4 h-4" />
+          <span>View source on GitHub</span>
+        </a>
       </div>
     </div>
   )
