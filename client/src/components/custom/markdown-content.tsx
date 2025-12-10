@@ -39,19 +39,57 @@ interface Reference {
 }
 
 // Parse references from the bottom of the content
-// Format: [1](https://example.com) or [1](https://example.com "Title")
+// Supports multiple formats:
+// - [1](https://example.com) or [1](https://example.com "Title")
+// - - [1](https://example.com) Title text (list format with description after)
 function parseReferences(content: string): { mainContent: string; references: Map<number, Reference> } {
   const references = new Map<number, Reference>();
 
-  // Find where references section starts (look for consecutive reference lines at the end)
   const lines = content.split('\n');
-  let refStartIndex = lines.length;
 
-  // Scan from the end to find where references begin
+  // Find "## Sources" or "## References" section
+  let sourcesStartIndex = -1;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim().toLowerCase();
+    if (line === '## sources' || line === '## references' || line === '---' && i > 0 && lines[i-1].trim().toLowerCase().includes('sources')) {
+      sourcesStartIndex = i;
+      break;
+    }
+  }
+
+  // If we found a sources section, parse from there
+  if (sourcesStartIndex !== -1) {
+    const refLines = lines.slice(sourcesStartIndex);
+    for (const line of refLines) {
+      // Match formats like:
+      // - [1](https://example.com) Title text
+      // [1](https://example.com) Title text
+      // - [1](https://example.com "Title")
+      const match = /^[-*]?\s*\[(\d+)\]\(([^)\s]+)(?:\s+"([^"]+)")?\)\s*(.*)$/.exec(line.trim());
+      if (match) {
+        const refNum = parseInt(match[1], 10);
+        const url = match[2];
+        // Title can come from either the quoted title or the text after the link
+        const title = match[3] || match[4]?.trim() || undefined;
+        references.set(refNum, {
+          number: refNum,
+          url,
+          title,
+        });
+      }
+    }
+
+    // Remove sources section from main content
+    const mainContent = lines.slice(0, sourcesStartIndex).join('\n').trimEnd();
+    return { mainContent, references };
+  }
+
+  // Fallback: scan from the end for consecutive reference lines (original behavior)
+  let refStartIndex = lines.length;
   for (let i = lines.length - 1; i >= 0; i--) {
     const line = lines[i].trim();
     if (line === '') continue; // Skip empty lines
-    if (/^\[\d+\]\([^)]+\)/.test(line)) {
+    if (/^[-*]?\s*\[\d+\]\([^)]+\)/.test(line)) {
       refStartIndex = i;
     } else {
       break; // Stop when we hit non-reference content
@@ -61,12 +99,15 @@ function parseReferences(content: string): { mainContent: string; references: Ma
   // Extract references
   const refLines = lines.slice(refStartIndex);
   for (const line of refLines) {
-    const match = /^\[(\d+)\]\(([^)\s]+)(?:\s+"([^"]+)")?\)/.exec(line.trim());
+    const match = /^[-*]?\s*\[(\d+)\]\(([^)\s]+)(?:\s+"([^"]+)")?\)\s*(.*)$/.exec(line.trim());
     if (match) {
-      references.set(parseInt(match[1], 10), {
-        number: parseInt(match[1], 10),
-        url: match[2],
-        title: match[3],
+      const refNum = parseInt(match[1], 10);
+      const url = match[2];
+      const title = match[3] || match[4]?.trim() || undefined;
+      references.set(refNum, {
+        number: refNum,
+        url,
+        title,
       });
     }
   }
