@@ -182,7 +182,7 @@ export interface SharedLogoLink extends Struct.ComponentSchema {
 }
 
 declare module '@strapi/strapi' {
-  export module Public {
+  export namespace Public {
     export interface ComponentSchemas {
       'blocks.card-grid': BlocksCardGrid;
       'blocks.content-with-image': BlocksContentWithImage;
