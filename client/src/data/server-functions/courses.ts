@@ -72,7 +72,7 @@ const getCoursesBySlug = async (slug: string) =>
 export const getCoursesData = createServerFn({
   method: 'GET',
 })
-  .inputValidator(
+  .validator(
     (input?: { query?: string; page?: number; tag?: string }) => input,
   )
   .handler(async ({ data }): Promise<TStrapiResponseCollection<TCourse>> => {
@@ -83,7 +83,7 @@ export const getCoursesData = createServerFn({
 export const getCoursesDataBySlug = createServerFn({
   method: 'GET',
 })
-  .inputValidator((slug: string) => slug)
+  .validator((slug: string) => slug)
   .handler(async ({ data: slug }): Promise<TStrapiResponseCollection<TCourse>> => {
     const response = await getCoursesBySlug(slug)
     return response
@@ -108,7 +108,7 @@ const getLessonBySlug = async (slug: string) =>
 export const getLessonDataBySlug = createServerFn({
   method: 'GET',
 })
-  .inputValidator((slug: string) => slug)
+  .validator((slug: string) => slug)
   .handler(async ({ data: slug }): Promise<TStrapiResponseCollection<TLesson>> => {
     const response = await getLessonBySlug(slug)
     return response

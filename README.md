@@ -16,7 +16,7 @@ tan-start/
 
 ## 📋 Prerequisites
 
-- [Node.js](https://nodejs.org/) (v20–v24)
+- [Node.js](https://nodejs.org/) (v22.13 or higher)
 - [Yarn](https://yarnpkg.com/) package manager
 
 ## 🛠️ Quick Start
@@ -117,7 +117,7 @@ The setup script automatically copies `.env.example` files to `.env` where they 
 
 ## 🆘 Troubleshooting
 
-- If setup fails, ensure you have Node.js v20+ and Yarn installed
+- If setup fails, ensure you have Node.js v22.13+ and Yarn installed
 - If ports are in use, check for other running applications
 - If database issues occur, try deleting the server's SQLite file and re-seeding
 # strapi-tanstack-start-starter

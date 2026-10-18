@@ -8,7 +8,7 @@ import { useAppSession } from '@/lib/session'
 export const registerUserServerFunction = createServerFn({
   method: 'POST',
 })
-  .inputValidator((formData: FormData) => {
+  .validator((formData: FormData) => {
     const fields = {
       username: formData.get('username') as string,
       email: formData.get('email') as string,
@@ -85,7 +85,7 @@ export const registerUserServerFunction = createServerFn({
 export const loginUserServerFunction = createServerFn({
   method: 'POST',
 })
-  .inputValidator((formData: FormData) => {
+  .validator((formData: FormData) => {
     const fields = {
       identifier: formData.get('identifier') as string,
       password: formData.get('password') as string,

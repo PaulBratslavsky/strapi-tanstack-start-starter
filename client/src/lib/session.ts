@@ -1,4 +1,5 @@
-import { useSession } from '@tanstack/react-start/server'
+import { getIronSession } from 'iron-session'
+import { getCookie, getCookies, setCookie } from '@tanstack/react-start/server'
 import type { TAuthUser } from '@/types'
 
 type SessionData = {
@@ -8,17 +9,48 @@ type SessionData = {
   jwt?: string
 }
 
-export function useAppSession() {
-  return useSession<SessionData>({
-    name: 'auth-session',
-    password: process.env.SESSION_SECRET || 'change-this-to-a-secure-32-char-secret-in-production!',
-    cookie: {
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+// TanStack Start 1.169 removed the built-in useSession, so sessions are
+// sealed into a cookie with iron-session. The wrapper keeps the old
+// `data` / `update` / `clear` shape so callers did not have to change.
+export async function useAppSession() {
+  const session = await getIronSession<SessionData>(
+    {
+      read: getCookie,
+      write: setCookie,
+      names: () => Object.keys(getCookies()),
     },
-  })
+    {
+      // New name: cookies sealed by the old built-in session can't be read
+      cookieName: 'app-session',
+      password: process.env.SESSION_SECRET || 'change-this-to-a-secure-32-char-secret-in-production!',
+      ttl: 60 * 60 * 24 * 7, // 7 days
+      cookieOptions: {
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        httpOnly: true,
+        path: '/',
+      },
+    },
+  )
+
+  return {
+    get data(): SessionData {
+      return {
+        userId: session.userId,
+        email: session.email,
+        username: session.username,
+        jwt: session.jwt,
+      }
+    },
+    async update(data: SessionData) {
+      Object.assign(session, data)
+      await session.save()
+    },
+    clear() {
+      session.destroy()
+      return Promise.resolve()
+    },
+  }
 }
 
 // Cache for validated user data to avoid hitting Strapi on every request
