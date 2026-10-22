@@ -13,6 +13,9 @@
     "format": "prettier",
     "check": "prettier --write . && eslint --fix"
   },
+  "engines": {
+    "node": ">=22.13.0 <=26.x.x"
+  },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-avatar": "^1.1.11",

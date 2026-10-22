@@ -16,7 +16,7 @@ tan-start/
 
 ## 📋 Prerequisites
 
-- [Node.js](https://nodejs.org/) (v22.13 or higher)
+- [Node.js](https://nodejs.org/) (v22.13 – v26)
 - [Yarn](https://yarnpkg.com/) package manager
 
 ## 🛠️ Quick Start
