@@ -7,7 +7,7 @@ const pages = sdk.collection('pages')
 export const getPageData = createServerFn({
   method: 'GET',
 })
-  .inputValidator((slug: string) => slug)
+  .validator((slug: string) => slug)
   .handler(async ({ data: slug }): Promise<{ data: TPage | undefined }> => {
     const response = (await pages.find({
       filters: {
