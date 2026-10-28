@@ -16,8 +16,11 @@
     "export": "cd server && yarn strapi export --no-encrypt -f ../seed-data",
     "repo:upstream": "git fetch upstream && git merge upstream/main"
   },
+  "engines": {
+    "node": ">=22.13.0 <=26.x.x"
+  },
   "dependencies": {
-    "@netlify/vite-plugin-tanstack-start": "^1.2.1",
+    "@netlify/vite-plugin-tanstack-start": "^1.3.19",
     "@types/node": "^22.5.2",
     "concurrently": "^8.2.2",
     "typescript": "^5.0.0",
